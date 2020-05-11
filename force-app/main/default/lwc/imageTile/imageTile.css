@@ -1,0 +1,23 @@
+.title {
+    font-weight: bold;
+    text-transform: uppercase;
+    word-wrap: normal;    
+}
+.tile {
+    border: 1px solid #e6e6e6;
+    border-radius: 0.25rem;
+    transition: all 0.2s ease;
+    text-decoration: none;
+}
+.tile:hover {
+    border: 2px solid #406ec8;
+    border-radius: 0.25rem;
+    transform: scale(1.15);
+}
+.text-info_small {
+    color: #406ec8;
+    font-size: 8pt;
+}
+img {
+    border-radius: 5px;
+}

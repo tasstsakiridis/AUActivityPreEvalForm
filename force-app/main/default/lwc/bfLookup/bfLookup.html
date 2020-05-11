@@ -1,0 +1,22 @@
+<template>
+    <div class="main">
+    <lightning-layout multiple-rows="true">
+        <lightning-layout-item size="12">
+            <div onkeyup={handleKeyUp}>
+                <lightning-input type="search" label={searchLabel} is-loading={isLoading} required={showRequiredIndicator} onchange={handleQueryTermChange} ></lightning-input>
+            </div>
+        </lightning-layout-item>
+        <lightning-layout-item size="12">
+            <template if:true={hasLookupItems}>
+            <div class="content">
+                <template if:true={lookupItems}>
+                    <template for:each={lookupItems} for:item="item">
+                        <c-bf-lookup-item-l-w-c key={item.Id} item={item} onselected={handleItemSelected}></c-bf-lookup-item-l-w-c>
+                    </template>
+                </template>
+            </div>
+            </template>
+        </lightning-layout-item>
+    </lightning-layout>
+    </div>
+</template>
