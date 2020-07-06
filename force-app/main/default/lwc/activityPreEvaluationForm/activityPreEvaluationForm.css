@@ -19,6 +19,7 @@
 .text-instructions {
     color: #9F6000;
     font-size: 10pt;
+    /*font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;*/
 }
 .text-small {
     font-size: 8pt;
@@ -44,4 +45,10 @@ c-product-tile {
 }
 c-selectable-tile {
     margin: 5px 10px;
+}
+c-selectable-tile > .brand {
+    max-width: 150px !important;
+}
+c-activity-communication-method {
+    margin-bottom: 5px;
 }

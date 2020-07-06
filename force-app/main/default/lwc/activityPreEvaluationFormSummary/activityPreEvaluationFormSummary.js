@@ -174,6 +174,9 @@ export default class ActivityPreEvaluationFormSummary extends NavigationMixin(Li
     formattedProposedInMarketEndDate;
     formattedProposedInMarketStartDate;
     totalBudgetedCost;
+    totalBudgetedCostAP;
+    totalBudgetedCostPA;
+    totalBudgetedCostLumpSum;
     incrementalGrossProfit;
     incrementalProfitLoss;
     incrementalProfitLossSales;
@@ -209,8 +212,9 @@ export default class ActivityPreEvaluationFormSummary extends NavigationMixin(Li
         this.channel = this.activity.Channel__c;
         this.isOffChannel = this.activity.Channel__c == 'Off';
         this.isOtherChannel = this.activity.Channel__c == 'Other';
-        this.customerType = this.activity.Customer_Type__c;
-        this.customerBanner = this.activity.National_Banner__r.Name;
+        this.customerType = this.activity.Customer_Type__c;  
+        this.customerBanner = this.activity.Promo_Banner_Groups__c;
+        //this.customerBanner = this.activity.National_Banner__r != undefined ? this.activity.National_Banner__r.Name : '';
         this.channelComments = this.activity.Channel_Comments__c;
         this.activityMechanicDescription = this.activity.Proposal_Mechanics__c;
         this.activityMechanics = this.activity.Activity_Mechanic__c;
@@ -251,33 +255,47 @@ export default class ActivityPreEvaluationFormSummary extends NavigationMixin(Li
             this.formattedActivityApprovalDate = dt.toISOString();    
         }
 
-        this.totalBudgetedCost = this.activity.Activity_Budget__c || 0;
-        this.incrementalGrossProfit = this.activity.Incremental_Gross_Profit__c;
-        this.incrementalProfitLossSales = this.incrementalGrossProfitSales - this.totalBudgetedCost;
-        this.incrementalROISales = this.incrementalProfitLossSales / this.totalBudgetedCost;
+        this.totalBudgetedCost = parseFloat(this.activity.Activity_Budget__c) || 0;
+        this.totalBudgetedCostAP = parseFloat(this.activity.Total_Budgeted_Cost_AP__c) || 0;
+        this.totalBudgetedCostPA = parseFloat(this.activity.Total_Budgeted_Cost_PA__c) || 0;
+        this.totalBudgetedCostLumpSum = parseFloat(this.activity.Total_Budgeted_Cost_LumpSum__c) || 0;
+        this.totalBudgetedCostCOGS = parseFloat(this.activity.Total_Budgeted_Cost_COGS__c) || 0;
+        this.incrementalGrossProfit = parseFloat(this.activity.Incremental_Gross_Profit__c);
+        this.incrementalGrossProfitSales = parseFloat(this.activity.Incremental_Gross_Profit_Sales__c);
         this.incrementalProfitLoss = this.incrementalGrossProfit - this.totalBudgetedCost;
+        this.incrementalProfitLossSales = this.incrementalGrossProfitSales - this.totalBudgetedCost;
         this.incrementalROI = this.totalBudgetedCost == 0 ? 0 : this.incrementalProfitLoss / this.totalBudgetedCost;
+        this.incrementalROISales = this.incrementalProfitLossSales / this.totalBudgetedCost;
 
         
-        const reach = this.forecastedReachCoverage / 1000;
-        this.forecastedCostPerThousand = reach == 0 ? 0 : this.totalBudgetedCost / reach;
+        this.forecastedReachCoverage = parseFloat(this.activity.Forecasted_Reach_Coverage__c) || 0;
+        this.forecastedCostPerThousand = this.forecastedReachCoverage == 0 ? 0 : this.totalBudgetedCost / this.forecastedReachCoverage;
 
-        const apbudget = this.activity.Total_Customer_A_P_Budget__c == undefined ? 0 : this.activity.Total_Customer_A_P_Budget__c;
-        const sns = this.activity.Total_Customer_SNS__c == undefined ? 0 : this.activity.Total_Customer_SNS__c;
-        this.activitySpendPercentage = apbudget == 0 ? 0 : this.totalBudgetedCost / apbudget;
-        this.totalCustomerAPSpendVSSNS = sns == 0 ? 0 : apbudget / sns;
+        this.totalCustomerAPBudget = this.activity.Total_Customer_AP_Budget__c == undefined ? 0 : parseFloat(this.activity.Total_Customer_AP_Budget__c);
+        this.totalCustomerSNS = this.activity.Total_Customer_SNS__c == undefined ? 0 : parseFloat(this.activity.Total_Customer_SNS__c);
+        this.activitySpendPercentage = this.totalCustomerAPBudget == 0 ? 0 : this.totalBudgetedCost / this.totalCustomerAPBudget;
+        this.totalCustomerAPSpendVSSNS = this.totalCustomerSNS == 0 ? 0 : this.totalCustomerAPBudget / this.totalCustomerSNS;
 
         this.activityCommunicationMethods = [];
         if (this.activity.Promotion_Activity_Related_Data__r != undefined) {
-            this.activityCommunicationMethods = this.activity.Promotion_Activity_Related_Data__r.map(pard => ({
-                    Id: pard.Id,
-                    RecordTypeId: pard.RecordTypeId,
-                    Activity__c: pard.Activity__c,
-                    Name: pard.Name,
-                    Primary__c: pard.Primary__c,
-                    Secondary__c: pard.Secondary__c,
-                    Reach__c: pard.Reach__c
-            }));
+            this.activityCommunicationMethods = [];
+            this.customerBanner = '';
+            this.activity.Promotion_Activity_Related_Data__r.forEach(pard => {
+                if (pard.RecordType.Name == 'Banner Group') {
+                    this.customerBanner += pard.Name + ', ';
+                } else if (pard.RecordType.Name == 'Communication Method') {
+                    this.activityCommunicationMethods.push({
+                        Id: pard.Id,
+                        RecordTypeId: pard.RecordTypeId,
+                        Activity__c: pard.Activity__c,
+                        Name: pard.Name,
+                        Primary__c: pard.Primary__c,
+                        Secondary__c: pard.Secondary__c,
+                        Reach__c: pard.Reach__c
+                    });
+                }
+            });
+            this.customerBanner = this.customerBanner.substr(0, this.customerBanner.length - 2);
             const pard = this.activity.Promotion_Activity_Related_Data__r.find(p => p.Name == 'Other');
             if (pard != null) {
                 this.activityCommunicationIncludesOther = true;
@@ -288,14 +306,14 @@ export default class ActivityPreEvaluationFormSummary extends NavigationMixin(Li
         if (this.activity.Promo_Brands__c) {
             const l = this.activity.Promo_Brands__c.split(';');
             l.forEach(pb => {
-                const brand = this.brands.find(b => b.Name == pb);
+                const brand = this.brands.find(b => b.name == pb);
                 this.focusBrands.push({
                     type: 'avatar',
-                    label: brand.Name,
-                    src: 'https://salesforce-static.b-fonline.com/images/brand_logos/'+brand.Primary_Logo__c,
+                    label: brand.name,
+                    src: brand.imageUrl,
                     fallbackIconName: 'standard:user',
                     variant: 'circle',
-                    alternativeText: brand.Name,
+                    alternativeText: brand.name,
                     isLink: false,
 
                 });
@@ -307,7 +325,7 @@ export default class ActivityPreEvaluationFormSummary extends NavigationMixin(Li
                 this.focusProducts.push({
                         type: 'avatar',
                         label: ap.Product_NoFilter__r.Name,
-                        src: 'https://salesforce-static.b-fonline.com/images/'+ap.Product_NoFilter__r.Image_Name__,
+                        src: 'https://salesforce-static.b-fonline.com/images/'+ap.Product_NoFilter__r.Image_Name__c,
                         fallbackIconName: 'standard:user',
                         variant: 'circle',
                         alternativeText: ap.Product_NoFilter__r.Name,
@@ -319,34 +337,36 @@ export default class ActivityPreEvaluationFormSummary extends NavigationMixin(Li
             
         }
 
-        this.attachedFiles = this.activity.ContentDocumentLinks.map(cdl => {
-            //return this.addToAttachedFilesList(cdl.ContentDocumentId, cdl.ContentDocument.LatestPublishedVersionId, cdl.ContentDocument.FileExtension, cdl.ContentDocument.Title);
-            let iconName = 'attachment';
-            if (cdl.ContentDocument.FileExtension === 'png' || cdl.ContentDocument.FileExtension === 'jpg' || cdl.ContentDocument.FileExtension === 'jpeg') {
-                iconName = 'image';
-            } else if (cdl.ContentDocument.FileExtension === 'txt') {
-                iconName = 'txt';
-            } else if (cdl.ContentDocument.FileExtension === 'pdf') {
-                iconName = 'pdf';
-            } else if (cdl.ContentDocument.FileExtension.startsWith('xl')) {
-                iconName = 'excel';
-            } else if (cdl.ContentDocument.FileExtension === 'csv') {
-                iconName = 'csv';
-            } else {
-                iconName = 'attachment';
+            if (this.activity.ContentDocumentLinks) {
+                this.attachedFiles = this.activity.ContentDocumentLinks.map(cdl => {
+                    //return this.addToAttachedFilesList(cdl.ContentDocumentId, cdl.ContentDocument.LatestPublishedVersionId, cdl.ContentDocument.FileExtension, cdl.ContentDocument.Title);
+                    let iconName = 'attachment';
+                    if (cdl.ContentDocument.FileExtension === 'png' || cdl.ContentDocument.FileExtension === 'jpg' || cdl.ContentDocument.FileExtension === 'jpeg') {
+                        iconName = 'image';
+                    } else if (cdl.ContentDocument.FileExtension === 'txt') {
+                        iconName = 'txt';
+                    } else if (cdl.ContentDocument.FileExtension === 'pdf') {
+                        iconName = 'pdf';
+                    } else if (cdl.ContentDocument.FileExtension.startsWith('xl')) {
+                        iconName = 'excel';
+                    } else if (cdl.ContentDocument.FileExtension === 'csv') {
+                        iconName = 'csv';
+                    } else {
+                        iconName = 'attachment';
+                    }
+                    return { type: 'icon',
+                            name: cdl.ContentDocumentId,
+                            label: cdl.ContentDocument.Title,
+                            href: "/lightning/r/ContentDocument/" + cdl.ContentDocumentId + "/view",
+                            src: "/sfc/servlet.shepherd/version/renditionDownload?rendition=THUMB720BY480&versionId=" + cdl.ContentDocument.LatestPublishedVersionId,
+                            iconName: 'doctype:'+iconName,
+                            fallbackIconName: 'doctype:'+iconName,
+                            variant: 'link',
+                            alternativeText: 'Attched document', 
+                            isLink: true 
+                    }
+                });
             }
-            return { type: 'icon',
-                     name: cdl.ContentDocumentId,
-                     label: cdl.ContentDocument.Title,
-                     href: "/lightning/r/ContentDocument/" + cdl.ContentDocumentId + "/view",
-                     src: "/sfc/servlet.shepherd/version/renditionDownload?rendition=THUMB720BY480&versionId=" + cdl.ContentDocument.LatestPublishedVersionId,
-                     iconName: 'doctype:'+iconName,
-                     fallbackIconName: 'doctype:'+iconName,
-                     variant: 'link',
-                     alternativeText: 'Attched document', 
-                     isLink: true 
-            }
-        });
         }catch(ex) {
             console.log('exception', ex);
         }

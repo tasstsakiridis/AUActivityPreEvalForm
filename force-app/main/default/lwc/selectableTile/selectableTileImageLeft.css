@@ -14,6 +14,7 @@ img {
     max-height: 80px;
     max-width: 80px;
     pointer-events: none;
+    object-fit: scale-down;
 }
 
 .title {

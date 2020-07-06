@@ -62,7 +62,7 @@ export default class SelectableTile extends LightningElement {
 
     set isSelected(value) {
         this._isSelected = value;
-        //this.selectTile();
+        this.selectTile();
     }
 
     get isImageTop() {

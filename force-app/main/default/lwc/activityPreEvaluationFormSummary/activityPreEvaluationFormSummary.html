@@ -6,7 +6,7 @@
         </h2>
             
         <lightning-button-group slot="actions">
-            <lightning-button label={labels.cancel.label} name="cancel" onclick={handleCancelButtonClick}></lightning-button>
+            <lightning-button label={labels.cancel.label} name="cancel" onclick={handleBackButtonClick}></lightning-button>
             <lightning-button label={labels.print.label} name="print" class="slds-m-right_x-small" onclick={handlePrintButtonClick}></lightning-button>
             <lightning-button-icon variant="brand" alternative-text={labels.help.label} icon-name="utility:help" class="slds-m-left_x-small" onclick={handleHelpButtonClick}></lightning-button-icon>
         </lightning-button-group>    
@@ -234,7 +234,23 @@
                     <div class="slds-m-horizontal_small">
                         <lightning-layout multiple-rows="true">
                             <lightning-layout-item size="12" padding="around-small">
-                                <h2 class="slds-text-body_small">Total Budgeted Cost (A&amp;P)</h2>
+                                <h2 class="slds-text-body_small">A&amp;P</h2>
+                                <lightning-formatted-number value={totalBudgetedCostAP} format-style="currency"></lightning-formatted-number>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="12" padding="around-small">
+                                <h2 class="slds-text-body_small">Additional COGS</h2>
+                                <lightning-formatted-number value={totalBudgetedCostCOGS} format-style="currency"></lightning-formatted-number>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="12" padding="around-small">
+                                <h2 class="slds-text-body_small">Incremental PA</h2>
+                                <lightning-formatted-number value={totalBudgetedCostPA} format-style="currency"></lightning-formatted-number>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="12" padding="around-small">
+                                <h2 class="slds-text-body_small">LumpSum</h2>
+                                <lightning-formatted-number value={totalBudgetedCostLumpSum} format-style="currency"></lightning-formatted-number>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="12" padding="around-small">
+                                <h2 class="slds-text-body_small">Total Budgeted Cost</h2>
                                 <lightning-formatted-number value={totalBudgetedCost} format-style="currency"></lightning-formatted-number>
                             </lightning-layout-item>
                             <lightning-layout-item size="12" padding="around-small">

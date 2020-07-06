@@ -39,8 +39,12 @@ export default class ActivityCommunicationMethod extends LightningElement {
     }
 
     sendDataToParent(fieldName, fieldValue) {
-        const ev = new CustomEvent('change', { detail: {field: fieldName, name: this.name, value: fieldValue }});
-        console.log('[sendDataToParent', ev);
-        this.dispatchEvent(ev)
+        try {
+            const ev = new CustomEvent('change', { detail: {field: fieldName, name: this.name, value: fieldValue }});
+            console.log('[sendDataToParent', ev);
+            this.dispatchEvent(ev)
+        }catch(ex) {
+            console.log('[activitycommunicationmethod.senddatatoparent] exception', ex);
+        }
     }
 }

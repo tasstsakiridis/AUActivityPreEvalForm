@@ -1,5 +1,6 @@
 import { LightningElement, api, track, wire } from 'lwc';
 import { getObjectInfo, getPicklistValuesByRecordType } from 'lightning/uiObjectInfoApi';
+import { updateRecord } from 'lightning/uiRecordApi';
 import { CurrentPageReference, NavigationMixin } from 'lightning/navigation';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 
@@ -11,13 +12,19 @@ import CLIENT_FORM_FACTOR from '@salesforce/client/formFactor';
 
 import OBJECT_ACTIVITY from '@salesforce/schema/Promotion_Activity__c';
 
+import FIELD_ID from '@salesforce/schema/Promotion_Activity__c.Id';
+import FIELD_STATUS from '@salesforce/schema/Promotion_Activity__c.Status__c';
+
 import getActivity from '@salesforce/apex/PreEvaluationForm_Controller.getActivity';
 import getUserDetails from '@salesforce/apex/PreEvaluationForm_Controller.getUserDetails';
 import getBannerGroups from '@salesforce/apex/PreEvaluationForm_Controller.getBannerGroups';
 import getIsAdminUser from '@salesforce/apex/PreEvaluationForm_Controller.getIsAdminUser';
 import getProducts from '@salesforce/apex/PreEvaluationForm_Controller.getProducts';
 import saveActivity from '@salesforce/apex/PreEvaluationForm_Controller.save';
+import submitForApproval from '@salesforce/apex/PreEvaluationForm_Controller.submitForApproval';
+import recallApproval from '@salesforce/apex/PreEvaluationForm_Controller.recallApproval';
 
+import LABEL_APPROVAL_SUBMITTED from '@salesforce/label/c.Approval_Submitted';
 import LABEL_CANCEL from '@salesforce/label/c.Cancel';
 import LABEL_DETACH_FILE from '@salesforce/label/c.Detach_File';
 import LABEL_DETACH_FILE_CONFIRMATION from '@salesforce/label/c.Detach_File_Confirmation';
@@ -25,8 +32,15 @@ import LABEL_DETACH_FILE_SUCCESS from '@salesforce/label/c.Detach_File_Success';
 import LABEL_FORMINSTRUCTIONS from '@salesforce/label/c.PreEvaluationFormInstructions';
 import LABEL_HELP from '@salesforce/label/c.Help';
 import LABEL_INFO from '@salesforce/label/c.Info';
+import LABEL_RECALL from '@salesforce/label/c.Recall';
+import LABEL_RECALL_SUCCESS from '@salesforce/label/c.Recall_Success';
 import LABEL_SAVE from '@salesforce/label/c.Save';
 import LABEL_SUMMARY from '@salesforce/label/c.Summary';
+import LABEL_SUBMIT_FOR_APPROVAL from '@salesforce/label/c.Submit_For_Approval';
+import LABEL_TOTAL_COST_A_P_HELP from '@salesforce/label/c.Total_Cost_A_P_Help';
+import LABEL_TOTAL_COST_ADDITIONAL_COGS_HELP from '@salesforce/label/c.Total_Cost_Additional_COGS_Help';
+import LABEL_TOTAL_COST_INCREMENTAL_PA_HELP from '@salesforce/label/c.Total_Cost_Incremental_PA_Help';
+import LABEL_TOTAL_COST_LUMP_SUM_HELP from '@salesforce/label/c.Total_Cost_Lump_Sum_Help';
 
 import userId from '@salesforce/user/Id';
 
@@ -50,7 +64,7 @@ const maxNumberOfSteps = 3;
 
 export default class ActivityPreEvaluationForm extends NavigationMixin(LightningElement) {
     labels = {
-        agencyContact   : { label: 'Agency Contact' },
+        agencyContact   : { label: 'Agency / Supplier Contact' },
         cancel          : { label: LABEL_CANCEL },
         customerContact : { label: 'Customer Contact' },
         detachFile              : { label: LABEL_DETACH_FILE, successMessage: LABEL_DETACH_FILE_SUCCESS, confirmation: LABEL_DETACH_FILE_CONFIRMATION},
@@ -60,7 +74,7 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
         projectLeads    : { label: 'Project Leads' },
         projectManager  : { label: 'Project Manager' },
         salesContact    : { label: 'Sales Contact' },        
-        save            : { label: LABEL_SAVE },
+        save            : { label: LABEL_SAVE, message: 'Working! Please wait...' },
         info            : { label: LABEL_INFO },
         instructions    : { label: 'Instructions', message: LABEL_FORMINSTRUCTIONS },
         inMarketStartDate : { label: 'Proposed In-Market Start Date' },
@@ -69,6 +83,7 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
         preEvaluationDeadline : { label: 'Pre-Evaluation Deadline' },
         activityApprovalDate  : { label: 'Activity Approval Date' },
         channel               : { label: 'Channel' },
+        leadChannel           : { label: 'Lead Channel' },
         comments              : { label: 'Comments' },
         customerBanner        : { label: 'Customer Banner' },
         customerType          : { label: 'Customer Type' },
@@ -79,11 +94,20 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
         next                  : { label: 'Next' },
         prev                  : { label: 'Prev' },
         provideDetailsBelow   : { label: 'Provide details below' },
+        publish               : { label: 'Publish', instructions: 'Click the Publish button to make this activity visible to the wider team and available for promotions.', successMessage: 'Activity has been successfully published'},
         yes                   : { label: 'Yes' },
         no                    : { label: 'No' },
+        unpublish             : { label: 'Un Publish', instructions: 'Remove visibility of this activity.', successMessage: 'Activity has been successfully made private'},
         uploadFile            : { label: 'Upload & Attach Files', message: 'Select files to upload and attach', successMessage: 'Files uploaded successfully!' },
         saveSuccess             : { message: 'All changes saved successfully'},
-        summary               : { label: LABEL_SUMMARY }
+        summary               : { label: LABEL_SUMMARY },
+        submitForReview         : { label: 'Submit for Review', submittedMessage: 'Form has been successfully submitted for Review' },
+        submitForApproval       : { label: LABEL_SUBMIT_FOR_APPROVAL, submittedMessage: LABEL_APPROVAL_SUBMITTED.replace('%0', 'Pre-Evaluation Form') },
+        recall                  : { label: LABEL_RECALL, recalledMessage: LABEL_RECALL_SUCCESS.replace('%0', 'Pre-Evaluation Form') },
+        totalCostAP             : { label: 'A&P', help: LABEL_TOTAL_COST_A_P_HELP },
+        totalCostAdditionalCOGS : { label: 'Additional COGS', help: LABEL_TOTAL_COST_ADDITIONAL_COGS_HELP },
+        totalCostIncrementalPA  : { label: 'Incremental PA', help: LABEL_TOTAL_COST_INCREMENTAL_PA_HELP },
+        totalCostLumpSum        : { label: 'Lump Sum Discount', help: '' }
     };
 
     isPhone = (CLIENT_FORM_FACTOR === "Small");
@@ -93,10 +117,43 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
 
     @track
     isEditingForm = true;
+
+    @track
+    isWorking = false;
+
     isSelectingBrands;
     isSelectingProducts;
+    isSelectingBannerGroups;
+
 
     showInstructionDetail = true;
+
+    get requiresBPAReview() {
+        return this.totalBudgetedCost > 100000;
+    }
+    get progressStep() {
+        let step = "draft";
+        if (this.status == 'Review') {
+            step = "review";
+        } else if (this.status == 'BP&A Review') {
+            step = "bpa";
+        } else if (this.status == 'Reviewed') {
+            step = 'reviewed';
+        } else if (this.status == 'Submitted' || this.status == 'Pending Approval') {
+            step = "submitted";
+        } else if (this.status == 'Approved') {
+            step = "approve";
+        } else if (this.status == 'Published') {
+            step = "publish";
+        } else {
+            step = "draft";
+        }
+
+        console.log('[getprogressstep] status, step', this.status, step);
+        return step;
+    }
+
+    workingMessage = '';
 
     projectManager;
     marketingContact;
@@ -109,10 +166,12 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
     preAlignmentDeadline;
     preEvaluationDeadline;
     activityApprovalDate;
-
+    status = 'Draft';
     channel;
     channelOptions;
     channelComments;
+    publishActivity = false;
+    activityCommunicationIncludesOther = false;
 
     customerType;
     customerTypeOptions;
@@ -136,6 +195,10 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
     newExperientialIndex = 0;
     
     totalBudgetedCost;
+    totalBudgetedCostAP;
+    totalBudgetedCostCOGS;
+    totalBudgetedCostPA;
+    totalBudgetedCostLumpSum;
     incrementalGrossProfit;
     incrementalGrossProfitChanged;
     incrementalGrossProfitSales;
@@ -144,6 +207,9 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
     businessOpportunity;
     activityObjectives;
     evaluationComments;
+    salesComments;
+    bpaComments;
+    activityComments;
     natureOfCostDescription;
     activityAdditionalComments;
     incremental9LUplift;
@@ -164,6 +230,7 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
 
     focusBrands = [];
     focusProducts = [];
+    focusBannerGroups = [];
 
     stepIndex = 1;
     get isStepOne() {
@@ -178,12 +245,60 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
     get isLastStep() {
         return this.stepIndex == maxNumberOfSteps;
     }
+    get requiresCommercialLeadReview() {
+        return this.totalBudgetedCost > 20000;
+    }
+    get requiredBPAReview() {
+        return this.totalBudgetedCost > 100000;
+    }
+    get canSubmitForReview() {
+        //return this.theActivity && this.theActivity.Status__c == 'Draft' && this.theActivity.Activity_Budget__c > 0;
+        var canSubmit = false;
+        if (this.theActivity) {
+            if (this.theActivity.Status__c == 'Draft' && this.theActivity.Activity_Budget__c > 20000) {
+                canSubmit = true;
+            } else if (this.theActivity.Status__c == 'Review' && this.theActivity.Activity_Budget__c > 100000 && this.theActivity.Incremental_Gross_Profit_Sales__c > 0) {
+                canSubmit = true;
+            }
+        }
 
+        return canSubmit;
+    }
+    get canSubmitForApproval() {
+        //return this.theActivity && this.theActivity.Activity_Budget__c > 0;
+        let canSubmit = false;
+        if (this.theActivity) {
+            console.log('[canSubmitForApproval] budget: ', this.theActivity.Activity_Budget__c);
+            console.log('[canSubmitForApproval] status', this.status);
+            if (this.theActivity.Activity_Budget__c > 0 && this.theActivity.Activity_Budget__c < 20000 && this.status == 'Draft') {
+                canSubmit = true;
+            } else if (this.theActivity.Activity_Budget__c > 0 && this.theActivity.Activity_Budget__c < 100000 && this.theActivity.Incremental_Gross_Profit_Sales__c > 0 && (this.status == 'Draft' || this.status == 'Review')) {
+                canSubmit = true;
+            } else if (this.theActivity.Activity_Budget__c > 0 && this.theActivity.Activity_Budget__c > 100000 && this.theActivity.Incremental_Gross_Profit__c > 0 && this.status == 'Reviewed') {
+                canSubmit = true;
+            }    
+        }
+        console.log('[canSubmitForApproval] canSubmit', canSubmit);
+
+        return canSubmit;
+        
+    }
+    get canRecallApproval() {
+        return this.theActivity && (this.theActivity.Status__c == 'Submitted' || this.theActivity.Status__c == 'Pending Approval');
+    }
+    get canPublish() {
+        return false;
+        return this.theActivity && this.theActivity.Status__c == 'Approved';
+    }
+    get isPublished() {
+        return false;
+        return this.theActivity && this.theActivity.Status__c == 'Published';
+    }
+    get isLocked() {
+        return this.theActivity && (this.theActivity.Status__c == 'Submitted' || this.theActivity.Status__c == 'Approved');
+    }
     get activityName() {
         return this.theActivity == null ? '' : this.theActivity.Name;
-    }
-    get status() {
-        return this.theActivity == null ? 'New' : this.theActivity.Status__c;
     }
     get panNumber() {
         return this.theActivity == null ? '' : this.theActivity.Promotion_Activity_Number__c;
@@ -197,10 +312,6 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
     get isOtherBanner() {
         return this.customerBanner == 'Other';
     }
-    get activityCommunicationIncludesOther() {
-        return this.activityCommunicationMethods != null && this.activityCommunicationMethods.indexOf('Other') > -1;
-    }
-
     get formattedProposedInMarketStartDate() {        
         return this.proposedInMarketStartDate == null ? null : this.proposedInMarketStartDate.toISOString();
     }
@@ -221,15 +332,21 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
         if (totalAmount == 0) {
             return 0;
         } else {
-            return this.incrementalProfitLossSales / totalAmount;
+            console.log('incrementalROISales', (this.incrementalProfitLossSales / totalAmount));
+            return this.incrementalProfitLossSales / totalAmount;            
         }
     }
     get incrementalROI() {
-        const totalAmount = this.totalBudgetedCost == null ? 0 : this.totalBudgetedCost;
-        const pl = this.incrementalProfitLoss == null ? 0 : this.incrementalProfitLoss;
         let roi = 0;
-        if (totalAmount != 0) {
-            roi = pl / totalAmount;
+        try {
+            const totalAmount = this.totalBudgetedCost == null ? 0 : this.totalBudgetedCost;
+            const pl = this.incrementalProfitLoss == null ? 0 : this.incrementalProfitLoss;
+            if (totalAmount != 0) {
+                roi = pl / totalAmount;
+            }
+            console.log('incrementalROI', roi);
+        }catch(ex) {
+            console.log('incrementalROI exception', ex);            
         }
         return roi;
     }
@@ -267,16 +384,29 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
     isAdminUser;
 
     get isNotAdminUser() {
-        return this.isAdminUser == false;
+        return this.isAdminUser.data == false;
+    }
+    get isProjectManager() {
+        console.log('[isProjectManager] projectManager.id, userId', this.projectManager.id, userId);
+        return this.projectManager == undefined ? false : this.projectManager.id == userId;
     }
     get isSalesManager() {
-        return this.salesContact == undefined ? false : this.salesContact == this.userId;
+        return this.salesContact == undefined ? false : this.salesContact.id == userId;
     }
     get canEditSalesManagerFields() {
-        return this.isEditable && (this.isAdminUser || this.isSalesManager);
+        console.log('[canEditSalesManagerFields] isEditable, isAdminUser, isSalesManager, isProjectManager, requiresCommercialLeadReview', this.isEditable, this.isAdminUser, this.isSalesManager, this.isProjectManager, this.requiresCommercialLeadReview);
+        return this.isEditable && !this.isLocked && (this.isAdminUser.data == true || this.isSalesManager || this.isProjectManager) && this.requiresCommercialLeadReview;
     }
     get cannotEditSalesManagerFields() {
         return !this.canEditSalesManagerFields;
+    }
+    get canEditBPAFields() {
+        console.log('[canEditBPAFields] isEditable, isAdminUser, requiresBPAReview', this.isEditable, this.isAdminUser.data == true, this.requiresBPAReview);
+        return this.isEditable && !this.isLocked && this.isAdminUser.data == true && this.requiresBPAReview;
+    }
+    get cannotEditBPAFields() {
+        console.log('[cannotEditBPAFields] canEditBPAFields', this.canEditBPAFields);
+        return !this.canEditBPAFields;
     }
     get isEditable() {
         return this.objectInfo == undefined || this.objectInfo.data == undefined ? true : this.objectInfo.data.updateable;
@@ -348,6 +478,13 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
         }
     }
 
+    bannerGroups = [];
+    selectedBannerGroups = [];
+    visibleBannerGroups = [];
+    bannerGroupsSelected = [];
+    bannerGroupsToDelete = [];
+    removedBannerGroups = [];
+    bannerGroupOptions = [];
     nationalBannerGroups;
     wiredNationalBannerGroups;
     @wire(getBannerGroups, { market: '$market' })
@@ -360,17 +497,23 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
             this.error = undefined;
             const groups = value.data.map(bg => ({ 
                 label: bg.Name, 
-                value: bg.Id 
+                value: bg.Id,
+                id: bg.Id, 
+                name: bg.Name, 
+                imageUrl: bg.Image_Name__c != null ? 'https://salesforce-static.b-fonline.com/images/'+ bg.Image_Name__c : '',
+                isSelected: false
             }));
-            groups.push({label: 'Other', value: 'Other'});
+            groups.push({label: 'Other', value: 'Other', id: 'Other', name: 'Other', imageUrl: '', isSelected: false});
             groups.sort(function(a, b) {
-                let x = a.label.toLowerCase();
-                let y = b.label.toLowerCase();
+                let x = a.name.toLowerCase();
+                let y = b.name.toLowerCase();
                 if (x < y) { return -1; }
                 if (x > y) { return 1; }
                 return 0; 
             });
             this.nationalBannerGroups = groups;
+            this.bannerGroupOptions = [...groups];
+            //this.visibleBannerGroups = [...groups];
             this.finishedLoadingBannerGroups = true;
             if (this.finishedLoadingForm && this.finishedLoadingObjectInfo && this.finishedLoadingBrandsAndProducts) {
                 this.loadPreEvaluationForm();
@@ -380,9 +523,10 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
 
     brands;
     brandsSelected = [];
+    visibleBrands = [];
     products;
     productsSelected = [];
-    allProducts = [];
+    allProducts = [];    
     wiredProducts;
     @wire(getProducts, { market: '$market' })
     wiredGetProducts(value) {
@@ -424,6 +568,7 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
                 if (x > y) { return 1; }
                 return 0; 
             });
+            this.visibleBrands = [...this.brands];
             console.log('[getproducts] brands', this.brands);
             console.log('[getproducts] products', this.products);
 
@@ -464,6 +609,113 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
         console.log('[savebuttonclick]');
         this.save();
     }
+    handlePublishButtonClick() {
+        this.isWorking = true;
+        const fields = {};
+        fields[FIELD_ID.fieldApiName] = this.recordId;
+        fields[FIELD_STATUS.fieldApiName] = 'Published';
+        const recordInput = { fields };
+        updateRecord(recordInput)
+        .then(() => {
+            this.status = 'Published';
+            this.isWorking = false;
+            this.showToast('success','Success', this.labels.publish.successMessage);
+        })
+        .catch(error => {
+            this.error = error;
+            this.isWorking = false;
+        });
+    }
+    handleUnPublishButtonClick() {
+        this.isWorking = true;
+        const fields = {};
+        fields[FIELD_ID.fieldApiName] = this.recordId;
+        fields[FIELD_STATUS.fieldApiName] = 'Approved';
+        const recordInput = { fields };
+        updateRecord(recordInput)
+        .then(() => {
+            this.status = 'Approved';
+            this.isWorking = false;
+            this.showToast('success','Success', this.labels.unpublish.successMessage);
+        })
+        .catch(error => {
+            this.error = error;
+            this.isWorking = false;
+        });
+    }
+    handleSubmitForReviewButtonClick() {
+        try {
+            this.isWorking = true;
+            console.log('[handleSubmitForReviewButtonClick]');
+            const fields = {};
+            fields[FIELD_ID.fieldApiName] = this.recordId;
+            
+            if (this.theActivity.Incremental_Gross_Profit_Sales__c == null || parseFloat(this.theActivity.Incremental_Gross_Profit_Sales__c) == 0) {
+                this.status = 'Review';
+            } else {
+                console.log('[handleSubmitForReviewButtonClick] incremental gp sales is filled in');
+                this.status = 'BP&A Review';
+            }
+            console.log('[handleSubmitForReviewButtonClick] status, incrementalGrossProfitSales, gp', this.status, this.theActivity.Incremental_Gross_Profit_Sales__c, parseFloat(this.theActivity.Incremental_Gross_Profit_Sales__c));
+            fields[FIELD_STATUS.fieldApiName] = this.status;
+            const recordInput = { fields };
+            updateRecord(recordInput) 
+            .then(() => {
+                this.isWorking = false;
+                console.log('[handleSubmitForReviewButtonClick] success. isWorking', this.isWorking);
+                this.showToast('success','Success', this.labels.submitForReview.submittedMessage);
+            })
+            .catch(error => {
+                this.error = error;
+                this.isWorking = false;
+                this.showToast('error','Error', error.body.message);
+            });    
+        } catch(ex) {
+            console.log('[handleSubmitForReviewButtonClick] exception', ex);
+            this.isWorking = false;
+        }
+
+    }
+    handleSubmitForApprovalButtonClick() {
+        this.isWorking = true;
+        submitForApproval({ activityId: this.recordId })
+            .then(result => {
+                console.log('[submitforapproval] result', result);
+                this.isWorking = false;
+                if (result == 'OK') {
+                    this.status = 'Pending Approval';
+                    this.showToast('success','Success', this.labels.submitForApproval.submittedMessage);
+                } else {
+                    this.showToast('error', 'Warning', result);
+                }
+            })
+            .catch(error => {
+                console.log('[submitforapprova] error', error);
+                this.isWorking = false;
+                this.error = error;
+                this.showToast('error', 'Warning', error);
+            });
+
+    }
+    handleRecallButtonClick() {
+        this.isWorking = true;
+        recallApproval({activityId: this.recordId })
+            .then(result => {
+                this.isWorking = false;
+                if (result == 'OK') {
+                    this.status = 'Reviewed';
+                    this.showToast('success', 'Success', this.labels.recall.recalledMessage);
+                } else {
+                    this.showToast('error', 'Warning', msg);
+                }
+            })
+            .catch(error => {
+                this.isWorking = false;
+                this.error = error;
+                this.showToast('error', 'Warning', error);
+            });
+
+    }
     handleSummaryButtonClick() {
         // navigate to Summary page
         this.isWorking = true;
@@ -485,6 +737,16 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
         this.stepIndex = this.stepIndex + 1;
     }
 
+    handleBrandSearchChange(event) {
+        console.log('[handlebrandsearchchange] brand search', event.detail.value);
+        try {
+            const searchTerm = event.detail.value.toLowerCase();            
+            this.visibleBrands = this.brands.filter(b => b.name.toLowerCase().includes(searchTerm));
+            console.log('[handlebrandsearchchange] visible brands', this.visibleBrands);
+        }catch(ex) {
+            console.log('[handlebrandsearchchange] exception', ex);
+        }
+    }
     handleAddBrandsButtonClick(event) {
         this.isSelectingBrands = true;
         this.isEditingForm = false;
@@ -492,6 +754,11 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
         console.log('iseditingform', this.isEditingForm);
     }
     handleRemoveBrand(event) {
+        if (this.isLocked) {
+            this.showToast('warning', 'Warning', 'You cannot remove brands from the Activity after it has been approved');
+            return;
+        }
+
         const response = confirm(this.labels.detachFile.confirmation.replace('{0}', event.detail.item.label));
         if (response == true) {            
             try {
@@ -608,18 +875,29 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
     }
     handleProductSelected(event) {
         console.log('[handleProductSelection] productId', event.detail.id);
-        if (this.productsSelected.indexOf(event.detail.id) < 0) {
-            this.productsSelected.push(event.detail.id);            
+        console.log('[handleProductSelection] isSelected', event.detail.isSelected);
+        const index = this.productsSelected.indexOf(event.detail.id);
+        console.log('[handleProductSelection] index', index);
+        if (event.detail.isSelected) {
+            if (index < 0) {
+                this.productsSelected.push(event.detail.id);            
+            }    
+        } else {
+            console.log('[handleProductSelection] removing product from list');
+            if (index > -1) {
+                this.productsSelected.splice(index, 1);
+            }    
         }
         console.log('[handleProductSelected] productsSelection', this.productsSelected);
     }
     handleProductDeSelected(event) {
-        const index = this.productsSelected.indexOf(event.detail);
-        if (index > -1) {
-            this.productsSelected.splice(index, 1);
-        }
     }
     handleRemoveProduct(event) {
+        if (this.isLocked) {
+            this.showToast('warning', 'Warning', 'You cannot remove products from the Activity after it has been approved');
+            return;
+        }
+
         const productId = event.detail.item.productId;
         const index = this.productsSelected.indexOf(productId);
         this.productsSelected.splice(index, 1);
@@ -627,6 +905,75 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
         const l = this.focusProducts.filter(fp => fp.productId != productId);
         this.focusProducts = [...l];
     }
+    handleBannerGroupSearchChange(event) {
+        try {
+            const searchTerm = event.detail.value.toLowerCase();
+            this.visibleBannerGroups = this.nationalBannerGroups.filter(bg => bg.name.toLowerCase().includes(searchTerm));
+        }catch(ex) {
+            console.log('[handlebannergroupsearchchange] exception', ex);
+        }
+    }
+    handleAddBannerGroupsButtonClick(event) {
+        this.isSelectingBannerGroups = true;
+        this.isEditingForm = false;
+    }
+    handleCancelBannerGroupSelectionClick() {
+        this.isSelectingBannerGroups = false;
+        this.isEditingForm = true;
+    }
+    handleCloseBannerGroupSelectionClick() {
+        try {
+            console.log('selected bannerGroups', this.bannerGroupsSelected);
+            this.focusBannerGroups = this.bannerGroupsSelected.map(bgs => {
+                const bg = this.nationalBannerGroups.find(bg => bgs == bg.id );
+                console.log('bg', bg);
+                return {
+                        type: 'avatar',
+                        label: bg.name,
+                        src: bg.imageUrl,
+                        fallbackIconName: 'standard:user',
+                        variant: 'circle',
+                        alternativeText: bg.name,
+                        isLink: false,
+                        bannerGroupId: bg.id
+                }
+            });
+            console.log('focus banners', this.focusBannerGroups);
+            this.isSelectingBannerGroups = false;
+            this.isEditingForm = true;
+    
+        }catch(ex) {
+            console.log('exception', ex);
+        }
+    }
+    handleBannerGroupSelected(event) {
+        console.log('[handleBannerGroupSelection] bannerGroupId', event.detail.id);
+        if (this.bannerGroupsSelected.indexOf(event.detail.id) < 0) {
+            this.bannerGroupsSelected.push(event.detail.id);            
+        }
+        console.log('[handleBannerGroupSelected] bannerGroupSelected', this.bannerGroupsSelected);
+    }
+    handleBannerGroupDeSelected(event) {
+        const index = this.bannerGroupsSelected.indexOf(event.detail);
+        if (index > -1) {
+            this.bannerGroupsSelected.splice(index, 1);
+            this.removedBannerGroups.push(event.detail);
+        }
+    }
+    handleRemoveBannerGroup(event) {
+        const bannerId = event.detail.item.bannerGroupId;
+        const index = this.bannerGroupsSelected.indexOf(bannerId);
+
+        this.bannerGroupsSelected.splice(index, 1);
+        this.removedBannerGroups.push(bannerId);
+
+        const l = this.focusBannerGroups.filter(fbg => fbg.bannerGroupId != bannerId);
+        this.focusBannerGroups = [...l];
+        const bg = this.nationalBannerGroups.find(bng => nbg.Id == bannerId);
+        bg.isSelected = false;
+        this.visibleBannerGroups = [...this.nationalBannerGroups];
+    }
+
     handleInstructionsExpandButtonClick(event) {
         this.showInstructionDetail = !this.showInstructionDetail;
     }
@@ -654,6 +1001,11 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
         }
     }
     handleLookupItemChange(event) {
+        if (this.isLocked) {
+            this.showToast("warning", "Warning", "You cannot change contacts after the activity has been approved");
+            return;
+        }
+
         try {
             console.log('[handlelookupchange] event.detail', event.detail);
             if (event.detail == 'projectmanager') {
@@ -661,7 +1013,7 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
             } else if (event.detail == 'marketingcontact') {
                 this.marketingContact = undefined;
             } else if (event.detail == 'salescontact') {
-                this.salesConttact = undefined;
+                this.salesContact = undefined;
             }
         }catch(ex) {
             console.log('[handlelookupchange] exception', ex);
@@ -674,9 +1026,9 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
     handleCustomerTypeChange(event) {
         this.customerType = event.detail.value;
     }
-    handleBannerGroupChange(event) {
-        this.customerBanner = event.detail.value;
-    }
+    //handleBannerGroupChange(event) {
+    //    this.customerBanner = event.detail.value;
+    //}
     handleStateChange(event) {
         this.states = event.detail.value;
         console.log('[handleStateChange] state', this.states);
@@ -704,8 +1056,11 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
         this.channelComments = event.detail.value;        
         console.log('[channelcomments] comments', this.channelComments);
     }
-    handleEvaluationCommentsChange(event) {
-        this.evaluationComments = event.detail.value;
+    handleSalesCommentsChange(event) {
+        this.salesComments = event.detail.value;
+    }
+    handleBPACommentsChange(event) {
+        this.bpaComments = event.detail.value;
     }
     handleActivityMechanicDescriptionChange(event) {
         this.activityMechanicDescription = event.detail.value;
@@ -716,11 +1071,14 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
     handleFocusSKUSChange(event) {
         this.focusSKUS = event.detail.value;
     }
-    activityMechanicChange(event) {
+    handleActivityMechanicChange(event) {
         this.activityMechanics = event.detail.value;
     }
-    handleActivityMechanicCommentsChange(event) {
-        this.activityMechanicComments = event.detail.value;
+    handleBannerGroupChange(event) {
+        this.bannerGroups = event.detail.value;
+    }
+    handleActivityCommentsChange(event) {
+        this.activityComments = event.detail.value;
     }
     handleProposedInMarketStartDateChange(event) {
         this.proposedInMarketStartDate = new Date(event.detail.value);
@@ -755,8 +1113,22 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
     handleExperientialIndexChange(event) {
         this.newExperientialIndex = event.target.value;
     }
-    handleTotalBudgetedCostChange(event) {
-        this.totalBudgetedCost = event.detail.value;
+    handleTotalBudgetedAPChange(event) {
+        console.log('[handletotalbudgetedapchange] value', event.detail.value);
+        this.totalBudgetedCostAP = event.detail.value;
+        this.calcTotalBudgetedCost();
+    }
+    handleTotalBudgetedCOGSChange(event) {
+        this.totalBudgetedCostCOGS = event.detail.value;
+        this.calcTotalBudgetedCost();
+    }
+    handleTotalBudgetedPAChange(event) {
+        this.totalBudgetedCostPA = event.detail.value;
+        this.calcTotalBudgetedCost();
+    }
+    handleTotalBudgetedLumpSumChange(event) {
+        this.totalBudgetedCostLumpSum = event.detail.value;
+        this.calcTotalBudgetedCost();
     }
     handleTotalCustomerAPBudgetChange(event) {
         this.totalCustomerAPBudget = event.detail.value;
@@ -777,22 +1149,33 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
         this.incremental9LUplift = event.detail.value;
     }
     handleCommunicationMethodChange(event) {
-        console.log('[handleCommunicationMethodChange] event', event.detail.name, event.detail.field, event.detail.value);
-        const acm = this.activityCommunicationMethods.find(a => a.Name == event.detail.name);
-        console.log('[handleCommunicationMethodchange] acm', acm);
-        if (event.detail.field == 'primary') {
-            acm.Primary__c = event.detail.value;
-        } else if (event.detail.field == 'secondary') {
-            acm.Secondary__c = event.detail.value;
-        } else if (event.detail.field == 'reach') {
-            acm.Reach__c = event.detail.value;
-            this.forecastedReachCoverage = 0;
-            this.activityCommunicationMethods.forEach(acm => this.forecastedReachCoverage = this.forecastedReachCoverage + parseInt(acm.Reach__c));
+        try {
+            console.log('[handleCommunicationMethodChange] event', event.detail.name, event.detail.field, event.detail.value);
+            if (event.detail == undefined || event.detail.name == undefined) { return; }
+
+            const acm = this.activityCommunicationMethods.find(a => a.Name == event.detail.name);        
+            console.log('[handleCommunicationMethodchange] acm', acm);
+            if (event.detail.field == 'primary') {
+                acm.Primary__c = event.detail.value;
+            } else if (event.detail.field == 'secondary') {
+                acm.Secondary__c = event.detail.value;
+            } else if (event.detail.field == 'reach') {
+                acm.Reach__c = event.detail.value;
+                acm.Primary__c = acm.Reach__c != '';
+                this.forecastedReachCoverage = 0;
+                this.activityCommunicationMethods.forEach(acm => this.forecastedReachCoverage = this.forecastedReachCoverage + parseInt(acm.Reach__c));
+            }
+            this.activityCommunicationIncludesOther = (acm != null && acm.Name == 'Other' && acm.Primary__c);
+            console.log('[handleCommunicationMethodCHange] communication methods', this.activityCommunicationMethods);
+        }catch(ex) {
+            console.log('[handleCommunicationMethodChange] exception', ex);            
         }
-        console.log('[handleCommunicationMethodCHange] communication methods', this.activityCommunicationMethods);
     }
     handleActivityCommunicationMethodChange(event) {
         this.activityCommunicationMethods = event.detail.value;
+    }
+    handlePublishActivityChange(event) {
+        this.publishActivity = event.detail.checked;
     }
     handleActivityRunningLastYearChange(event) {
         this.wasActivityRunningLastYear = event.detail.checked;
@@ -918,6 +1301,14 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
             }),
         );
     }
+    calcTotalBudgetedCost() {
+        const ap = parseFloat(this.totalBudgetedCostAP || 0);
+        const pa = parseFloat(this.totalBudgetedCostPA || 0);
+        const ls = parseFloat(this.totalBudgetedCostLumpSum || 0);
+        const cogs = parseFloat(this.totalBudgetedCostCOGS || 0);
+
+        this.totalBudgetedCost = ap + pa + ls + cogs;
+    }
 
 
     loadPreEvaluationForm() {
@@ -945,15 +1336,17 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
 
         this.smartsheetLink = this.theActivity.Smartsheet_Link__c;
 
+        this.publishActivity = this.theActivity.Publish_Activity__c || false;
+        this.status = this.theActivity.Status__c;
         this.channel = this.theActivity.Channel__c;
         this.customerType = this.theActivity.Customer_Type__c;
-        this.customerBanner = this.theActivity.National_Banner__c;
+        //this.customerBanner = this.theActivity.National_Banner__c;
         this.channelComments = this.theActivity.Channel_Comments__c;
         this.activityMechanicDescription = this.theActivity.Proposal_Mechanics__c;
         if (this.theActivity.Activity_Mechanic__c) {
             this.activityMechanics = [...this.theActivity.Activity_Mechanic__c.split(';')];
         }
-        this.activityMechanicComments = this.theActivity.Activity_Mechanic_Comments__c;
+        this.activityComments = this.theActivity.Activity_Comments__c;
 
         if (this.theActivity.Begin_Date__c) {
             this.proposedInMarketStartDate = new Date(this.theActivity.Begin_Date__c);
@@ -980,15 +1373,22 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
         this.newExperientialIndex = this.theActivity.New_Experiential_Index__c;        
 
         this.totalBudgetedCost = this.theActivity.Activity_Budget__c;
+        this.totalBudgetedCostAP = this.theActivity.Total_Budgeted_Cost_AP__c;
+        this.totalBudgetedCostCOGS = this.theActivity.Total_Budgeted_Cost_COGS__c;
+        this.totalBudgetedCostPA = this.theActivity.Total_Budgeted_Cost_PA__c;
+        this.totalBudgetedCostLumpSum = this.theActivity.Total_Budgeted_Cost_LumpSum__c;
         this.natureOfCostDescription = this.theActivity.Nature_of_Cost_Details__c;
-        this.activityAdditionalComments = this.theActivity.Evaluation_Comments__c;
         this.incrementalDiscountsProvided = this.theActivity.Incremental_Discounts_Provided__c;
+        this.salesComments = this.theActivity.Evaluation_Comments__c;
+        this.bpaComments = this.theActivity.Evaluation_BPA_Comments__c;
 
         this.incrementalGrossProfit = this.theActivity.Incremental_Gross_Profit__c;
         this.incrementalGrossProfitSales = this.theActivity.Incremental_Gross_Profit_Sales__c;
         this.forecastedReachCoverage = this.theActivity.Forecasted_Reach_Coverage__c;
         this.totalCustomerAPBudget = this.theActivity.Total_Customer_AP_Budget__c;
         this.totalCustomerSNS = this.theActivity.Total_Customer_SNS__c;
+
+        this.incremental9LUplift = this.theActivity.Incremental_9L_Uplift__c;
 
         if (this.theActivity.Promo_Brands__c != null) {
             if (this.selectedBrands == undefined) { this.selectedBrands = []; }
@@ -1044,20 +1444,54 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
 
         /* Communication Methods */
         console.log('[load] activitycommunication methods', this.activityCommunicationMethods);
+        console.log('[load] nationalBannerGroups', this.nationalBannerGroups);
+        //this.focusBannerGroups = [];
+        //this.bannerGroupsToDelete = [];
+        //this.selectedBannerGroups = [];
+        //this.removedBannerGroups = [];
+        this.bannerGroups = [];
         if (this.theActivity.Promotion_Activity_Related_Data__r && this.theActivity.Promotion_Activity_Related_Data__r.length > 0) {
-            this.theActivity.Promotion_Activity_Related_Data__r.forEach(pard => {
-                const acm = this.activityCommunicationMethods.find(a => a.Name == pard.Name);
-                if (acm) {
-                    acm.Id = pard.Id;
-                    acm.RecordTypeId = pard.RecordTypeId;
-                    acm.Activity__c = pard.Activity__c;
-                    acm.Primary__c = pard.Primary__c;
-                    acm.Secondary__c = pard.Secondary__c;
-                    acm.Reach__c = pard.Reach__c;
+            this.theActivity.Promotion_Activity_Related_Data__r.forEach(pard => {                
+                if (pard.RecordType.Name == 'Banner Group') {   
+                    this.bannerGroups.push(pard.Banner_Group__c);                 
+                        /*
+                    const bg = this.nationalBannerGroups.find(bg => bg.id == pard.Banner_Group__c);
+                    console.log('[load] bg', bg);                    
+                    if (bg) {
+                        bg.isSelected = true;
+                        this.selectedBannerGroups.push(bg.id);
+                        this.focusBannerGroups.push({
+                            type: 'avatar',
+                            label: bg.name,
+                            src: bg.imageUrl,
+                            fallbackIconName: 'standard:user',
+                            variant: 'circle',
+                            alternativeText: bg.name,
+                            isLink: false,
+                            bannerGroupId: bg.id,
+                            recordId: pard.Id 
+                        });
+                    }                    
+                        */
+                } else if (pard.RecordType.Name == 'Communication Method') {
+                    const acm = this.activityCommunicationMethods.find(a => a.Name == pard.Name);
+                    if (acm) {
+                        acm.Id = pard.Id;
+                        acm.RecordTypeId = pard.RecordTypeId;
+                        acm.Activity__c = pard.Activity__c;
+                        acm.Primary__c = pard.Primary__c;
+                        acm.Secondary__c = pard.Secondary__c;
+                        acm.Reach__c = pard.Reach__c;
+                    }    
+                    this.activityCommunicationIncludesOther = (pard.Name == 'Other' && pard.Primary___c);
                 }
             });
+            console.log('[load] activitycommunication methods', this.activityCommunicationMethods);
+            //this.visibleBannerGroups = [...this.nationalBannerGroups];
+            //console.log('[load] visibleBannerGroups', this.visibleBannerGroups);
         }
 
+        /*
         this.attachedFiles = [];
         if (this.theActivity.ContentDocumentLinks && this.theActivity.ContentDocumentLinks.length > 0) {
             this.attachedFiles = this.theActivity.ContentDocumentLinks.map(cdl => {
@@ -1090,7 +1524,9 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
             });
 
             console.log('[loadAttachedFiles] attachedFiles', this.attachedFiles);
+            
         }
+        */
     }
 
     save() {
@@ -1105,7 +1541,8 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
             evalForm.Market__c = this.market;
             evalForm.Market_Filter__c = this.marketName;
             evalForm.Active__c = true;
-
+            evalForm.Publish_Activity__c = this.publishActivity;
+            evalForm.Promotion_Type__c = 'Sales Promo';
             
             if (this.projectManager) {
                 evalForm.Project_Manager__c = this.projectManager.id;
@@ -1126,11 +1563,11 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
             evalForm.Smartsheet_Link__c = this.smartsheetLink;
             evalForm.Channel__c = this.channel;
             evalForm.Customer_Type__c = this.customerType;
-            evalForm.National_Banner__c = this.customerBanner;
+            //evalForm.National_Banner__c = this.customerBanner;
             evalForm.Channel_Comments__c = this.channelComments;
             evalForm.Proposal_Mechanics__c = this.activityMechanicDescription;
             evalForm.Activity_Mechanic__c = this.activityMechanics == undefined ? null : this.activityMechanics.join(';');
-            evalForm.Activity_Mechanic_Comments__c = this.activityMechanicComments;
+            evalForm.Activity_Comments__c = this.activityComments;
             evalForm.Business_Opportunity__c = this.businessOpportunity;
             evalForm.Proposal_Objectives__c = this.activityObjectives;
             evalForm.Brand_Strategy_Index__c = this.brandStrategyIndex;
@@ -1138,20 +1575,31 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
             evalForm.Customer_Relationship_Index__c = this.customerRelationshipIndex;
             evalForm.New_Experiential_Index__c = this.newExperientialIndex;
             evalForm.Activity_Budget__c = this.totalBudgetedCost;
+            evalForm.Total_Budgeted_Cost_AP__c = this.totalBudgetedCostAP;
+            evalForm.Total_Budgeted_Cost_COGS__c = this.totalBudgetedCostCOGS;
+            evalForm.Total_Budgeted_Cost_PA__c = this.totalBudgetedCostPA;
+            evalForm.Total_Budgeted_Cost_LumpSum__c = this.totalBudgetedCostLumpSum;
             evalForm.Nature_of_Cost_Details__c = this.natureOfCostDescription;
-            evalForm.Evaluation_Comments__c = this.activityAdditionalComments;
             evalForm.Incremental_Discounts_Provided__c = this.incrementalDiscountsProvided;        
             evalForm.Forecasted_Reach_Coverage__c = this.forecastedReachCoverage;
             evalForm.Total_Customer_AP_Budget__c = this.totalCustomerAPBudget;
             evalForm.Total_Customer_SNS__c = this.totalCustomerSNS;
             evalForm.Incremental_Gross_Profit__c = this.incrementalGrossProfit;
             evalForm.Incremental_Gross_Profit_Sales__c = this.incrementalGrossProfitSales;
-            if (this.incrementalGrossProfitSales != this.theActivity.Incremental_Gross_Profit_Sales__c) {
-                evalForm.Status__c = 'Review';
+            evalForm.Incremental_9L_Uplift__c = this.incremental9LUplift;
+            evalForm.Evaluation_Comments__c = this.salesComments;
+            evalForm.Evaluation_BPA_Comments__c = this.bpaComments;
+            console.log('[save] incrementalgrossprofitsales', this.incrementalGrossProfitSales, this.theActivity.Incremental_Gross_Profit_Sales__c);
+            console.log('[save] incrementalGrossProfit', this.incrementalGrossProfit, this.theActivity.Incremental_Gross_Profit__c);
+            evalForm.Status__c = this.status;
+            
+            if (this.totalBudgetedCost > 100000 && this.incrementalGrossProfitSales != undefined && this.incrementalGrossProfitSales > 0 && this.incrementalGrossProfitSales != this.theActivity.Incremental_Gross_Profit_Sales__c) {
+                evalForm.Status__c = 'BP&A Review';
             }
-            if (this.incrementalGrossProfit != this.theActivity.Incremental_Gross_Profit__c) {
+            if (this.totalBudgetedCost > 100000 && this.incrementalGrossProfit != undefined && this.incrementalGrossProfit > 0 && this.incrementalGrossProfit != this.theActivity.Incremental_Gross_Profit__c) {
                 evalForm.Status__c = 'Reviewed';
             }
+            console.log('[save] status', evalForm.Status__c);
 
             if (this.focusBrands && this.focusBrands.length > 0) {
                 let s_FocusBrands = '';
@@ -1163,6 +1611,7 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
 
             evalForm.Promo_Products__c = '';
             const products = [];
+            const productsToDelete = [];
             if (this.focusProducts && this.focusProducts.length > 0) {
                 this.focusProducts.forEach(fp => {
                     evalForm.Promo_Products__c += fp.label + ';';
@@ -1174,13 +1623,86 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
                 });
             }
 
+            
+            let bannerGroupsToDelete = [];
+            let bannerGroupsToUpdate = [];
+            let existingBannerGroups;
+            if (this.theActivity.Promotion_Activity_Related_Data__r && this.theActivity.Promotion_Activity_Related_Data__r.length > 0) {
+                existingBannerGroups = this.theActivity.Promotion_Activity_Related_Data__r.filter(pard => pard.RecordType.Name == 'Banner Group');
+            }
+            if (existingBannerGroups == null) { existingBannerGroups = []; }
+            
+            evalForm.Promo_Banner_Groups__c = '';
+            if (this.bannerGroups && this.bannerGroups.length > 0) {
+                console.log('[save] existingbannergroups', existingBannerGroups);
+                console.log('[save] nationablebannergroups', this.nationalBannerGroups);
+                this.bannerGroups.forEach(bgId => {
+                    const existingBannerGroup = existingBannerGroups.find(ebg => ebg.Banner_Group__c == bgId);
+                    const theBannerGroup = this.nationalBannerGroups.find(nbg => nbg.value == bgId);
+                    evalForm.Promo_Banner_Groups__c += theBannerGroup.label + ';';
+                    if (existingBannerGroup == null) {
+                        bannerGroupsToUpdate.push({
+                            Name: theBannerGroup.label,
+                            Activity__c: this.theActivity.Id,
+                            Banner_Group__c: bgId 
+                        });    
+                    } 
+                    
+                });
+                /*
+                this.bannerGroups.forEach(bg => {
+                    const bg = existingBannerGroups.find(bg => bg.Banner_Group__c == fbg.bannerGroupId);
+                    if (bg == null) {
+                        bannerGroupsToUpdate.push({
+                            Id: fbg.recordId,
+                            Name: fbg.label,
+                            Activity__c: this.theActivity.Id,
+                            Banner_Group__c: fbg.bannerGroupId 
+                        });    
+                    } 
+                });
+                */
+            } else if(existingBannerGroups != null && existingBannerGroups.length > 0) {
+                bannerGroupsToDelete = [...existingBannerGroups];
+            }
+            
+            /*
+            const bannerGroups = [];
+            if (this.focusBannerGroups && this.focusBannerGroups.length > 0) {
+                this.focusBannerGroups.forEach(fbg => {
+                    evalForm.Promo_Banner_Groups__c += fbg.name + ';';
+                    const bg = existingBannerGroups.find(bg => bg.Banner_Group__c == fbg.bannerGroupId);
+                    if (bg == null) {
+                        bannerGroups.push({
+                            Id: fbg.recordId,
+                            Name: fbg.label,
+                            Activity__c: this.theActivity.Id,
+                            Banner_Group__c: fbg.bannerGroupId 
+                        });    
+                    } 
+                });   
+            } else {
+                bannerGroupsToDelete = [...existingBannerGroups];
+            }
+            console.log('[save] removedBannerGroups', this.removedBannerGroups);
+            if (this.removedBannerGroups) {
+                this.removedBannerGroups.forEach(rbg => {
+                    const bg = existingBannerGroups.find(bg => bg.Banner_Group__c == rbg);
+                    if (bg) {
+                        bannerGroupsToDelete.push(bg);
+                    }
+                });
+            }
+            console.log('[save] existing banner groups', existingBannerGroups);
+            console.log('[save] banners to delete', bannerGroupsToDelete);
+            */
             /* Communication Methods */
             const relatedData = this.activityCommunicationMethods;
 
             console.log('[save] activity', evalForm);
             console.log('[save] products', products);
             console.log('[save] relatedData', relatedData);
-            saveActivity({activity: evalForm, products: products, relatedData: relatedData})
+            saveActivity({activity: evalForm, products: products, relatedData: relatedData, bannerGroups: bannerGroupsToUpdate, bannerGroupsToDelete: bannerGroupsToDelete})
             .then(result => {
                 console.log('[save.success] result', result);
                 this.showToast('success', 'Success', this.labels.saveSuccess.message);
