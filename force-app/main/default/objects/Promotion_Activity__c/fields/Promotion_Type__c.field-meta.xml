@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Promotion_Type__c</fullName>
+    <description>INFOWELDERS</description>
+    <externalId>false</externalId>
+    <label>Promotion Type</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>true</sorted>
+            <value>
+                <fullName>Ad Hoc Display</fullName>
+                <default>false</default>
+                <label>Ad Hoc Display</label>
+            </value>
+            <value>
+                <fullName>Agreement</fullName>
+                <default>false</default>
+                <label>Agreement</label>
+            </value>
+            <value>
+                <fullName>BRA Events</fullName>
+                <default>false</default>
+                <label>BRA Events</label>
+            </value>
+            <value>
+                <fullName>Budexpo</fullName>
+                <default>false</default>
+                <label>Budexpo</label>
+            </value>
+            <value>
+                <fullName>Budget</fullName>
+                <default>false</default>
+                <label>Budget</label>
+            </value>
+            <value>
+                <fullName>CAD-Competitive Activity</fullName>
+                <default>false</default>
+                <label>CAD-Competitive Activity</label>
+            </value>
+            <value>
+                <fullName>CAD-JDBA</fullName>
+                <default>false</default>
+                <label>CAD-JDBA</label>
+            </value>
+            <value>
+                <fullName>CAD-On Premise</fullName>
+                <default>false</default>
+                <label>CAD-On Premise</label>
+            </value>
+            <value>
+                <fullName>CAD-Retail</fullName>
+                <default>false</default>
+                <label>CAD-Retail</label>
+            </value>
+            <value>
+                <fullName>CZ OFF AH</fullName>
+                <default>false</default>
+                <label>CZ OFF AH</label>
+            </value>
+            <value>
+                <fullName>CZ OFF SP</fullName>
+                <default>false</default>
+                <label>CZ OFF SP</label>
+            </value>
+            <value>
+                <fullName>DEU-Barrel Ageing</fullName>
+                <default>false</default>
+                <label>DEU-Barrel Ageing</label>
+            </value>
+            <value>
+                <fullName>DEU-Depletion</fullName>
+                <default>false</default>
+                <label>DEU-Depletion</label>
+            </value>
+            <value>
+                <fullName>DEU-DrinkMenuAgreement</fullName>
+                <default>false</default>
+                <label>DEU-DrinkMenuAgreement</label>
+            </value>
+            <value>
+                <fullName>DEU-Pouring</fullName>
+                <default>false</default>
+                <label>DEU-Pouring</label>
+            </value>
+            <value>
+                <fullName>DEU-Tailormade</fullName>
+                <default>false</default>
+                <label>DEU-Tailormade</label>
+            </value>
+            <value>
+                <fullName>DEU-ZP</fullName>
+                <default>false</default>
+                <label>DEU-ZP</label>
+            </value>
+            <value>
+                <fullName>Devolución IVA</fullName>
+                <default>false</default>
+                <label>Devolución IVA</label>
+            </value>
+            <value>
+                <fullName>ESP - On Premise</fullName>
+                <default>false</default>
+                <label>ESP - On Premise</label>
+            </value>
+            <value>
+                <fullName>FRA-Secondary Placement</fullName>
+                <default>false</default>
+                <label>FRA-Secondary Placement</label>
+            </value>
+            <value>
+                <fullName>FRA-Secondary Placement On</fullName>
+                <default>false</default>
+                <label>FRA-Secondary Placement On</label>
+            </value>
+            <value>
+                <fullName>LKA</fullName>
+                <default>false</default>
+                <label>LKA</label>
+            </value>
+            <value>
+                <fullName>Local Promo</fullName>
+                <default>false</default>
+                <label>Local Promo</label>
+            </value>
+            <value>
+                <fullName>Monedero Electrónico</fullName>
+                <default>false</default>
+                <label>Monedero Electrónico</label>
+            </value>
+            <value>
+                <fullName>Multiahorro</fullName>
+                <default>false</default>
+                <label>Multiahorro</label>
+            </value>
+            <value>
+                <fullName>MX Centros de Consumo</fullName>
+                <default>false</default>
+                <label>MX Centros de Consumo</label>
+            </value>
+            <value>
+                <fullName>MX Degustaciones</fullName>
+                <default>false</default>
+                <label>MX Degustaciones</label>
+            </value>
+            <value>
+                <fullName>MX Descuentos</fullName>
+                <default>false</default>
+                <label>MX Descuentos</label>
+            </value>
+            <value>
+                <fullName>MX Exhibiciones Ad</fullName>
+                <default>false</default>
+                <label>MX Exhibiciones Ad</label>
+            </value>
+            <value>
+                <fullName>MX Modern Tasting</fullName>
+                <default>false</default>
+                <label>MX Modern Tasting</label>
+            </value>
+            <value>
+                <fullName>MX Punto de Venta</fullName>
+                <default>false</default>
+                <label>MX Punto de Venta</label>
+            </value>
+            <value>
+                <fullName>Permanent</fullName>
+                <default>false</default>
+                <label>Permanent</label>
+            </value>
+            <value>
+                <fullName>POSM</fullName>
+                <default>false</default>
+                <label>POSM</label>
+            </value>
+            <value>
+                <fullName>POSM On</fullName>
+                <default>false</default>
+                <label>POSM On</label>
+            </value>
+            <value>
+                <fullName>POSM TT</fullName>
+                <default>false</default>
+                <label>POSM TT</label>
+            </value>
+            <value>
+                <fullName>Promo Cruzada</fullName>
+                <default>false</default>
+                <label>Promo Cruzada</label>
+            </value>
+            <value>
+                <fullName>Promo Info</fullName>
+                <default>false</default>
+                <label>Promo Info</label>
+            </value>
+            <value>
+                <fullName>Regional Promotion</fullName>
+                <default>false</default>
+                <label>Regional Promotion</label>
+            </value>
+            <value>
+                <fullName>Rollback</fullName>
+                <default>false</default>
+                <label>Rollback</label>
+            </value>
+            <value>
+                <fullName>Sales Promo</fullName>
+                <default>false</default>
+                <label>Sales Promo</label>
+            </value>
+            <value>
+                <fullName>Secondary Display</fullName>
+                <default>false</default>
+                <label>Secondary Display</label>
+            </value>
+            <value>
+                <fullName>Secondary Placement</fullName>
+                <default>false</default>
+                <label>Secondary Placement</label>
+            </value>
+            <value>
+                <fullName>Settlement</fullName>
+                <default>false</default>
+                <label>Settlement</label>
+            </value>
+            <value>
+                <fullName>Shelf Reset</fullName>
+                <default>false</default>
+                <label>Shelf Reset</label>
+            </value>
+            <value>
+                <fullName>State Brand Spend</fullName>
+                <default>false</default>
+                <label>State Brand Spend</label>
+            </value>
+            <value>
+                <fullName>Theme Promo</fullName>
+                <default>false</default>
+                <label>Theme Promo</label>
+            </value>
+            <value>
+                <fullName>Theme Promotion</fullName>
+                <default>false</default>
+                <label>Theme Promotion</label>
+            </value>
+            <value>
+                <fullName>VAP</fullName>
+                <default>false</default>
+                <label>VAP</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

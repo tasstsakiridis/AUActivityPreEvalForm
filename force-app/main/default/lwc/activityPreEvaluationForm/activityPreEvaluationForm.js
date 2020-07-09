@@ -25,16 +25,21 @@ import submitForApproval from '@salesforce/apex/PreEvaluationForm_Controller.sub
 import recallApproval from '@salesforce/apex/PreEvaluationForm_Controller.recallApproval';
 
 import LABEL_APPROVAL_SUBMITTED from '@salesforce/label/c.Approval_Submitted';
+import LABEL_BRAND from '@salesforce/label/c.Brand';
+import LABEL_BRANDS from '@salesforce/label/c.Brands';
 import LABEL_CANCEL from '@salesforce/label/c.Cancel';
+import LABEL_DESELECT_ALL from '@salesforce/label/c.DeSelect_All';
 import LABEL_DETACH_FILE from '@salesforce/label/c.Detach_File';
 import LABEL_DETACH_FILE_CONFIRMATION from '@salesforce/label/c.Detach_File_Confirmation';
 import LABEL_DETACH_FILE_SUCCESS from '@salesforce/label/c.Detach_File_Success';
 import LABEL_FORMINSTRUCTIONS from '@salesforce/label/c.PreEvaluationFormInstructions';
 import LABEL_HELP from '@salesforce/label/c.Help';
 import LABEL_INFO from '@salesforce/label/c.Info';
+import LABEL_OK from '@salesforce/label/c.OK';
 import LABEL_RECALL from '@salesforce/label/c.Recall';
 import LABEL_RECALL_SUCCESS from '@salesforce/label/c.Recall_Success';
 import LABEL_SAVE from '@salesforce/label/c.Save';
+import LABEL_SELECT_ALL from '@salesforce/label/c.Select_All';
 import LABEL_SUMMARY from '@salesforce/label/c.Summary';
 import LABEL_SUBMIT_FOR_APPROVAL from '@salesforce/label/c.Submit_For_Approval';
 import LABEL_TOTAL_COST_A_P_HELP from '@salesforce/label/c.Total_Cost_A_P_Help';
@@ -64,50 +69,54 @@ const maxNumberOfSteps = 3;
 
 export default class ActivityPreEvaluationForm extends NavigationMixin(LightningElement) {
     labels = {
-        agencyContact   : { label: 'Agency / Supplier Contact' },
-        cancel          : { label: LABEL_CANCEL },
-        customerContact : { label: 'Customer Contact' },
+        activityApprovalDate    : { label: 'Activity Approval Date' },
+        activityDetails         : { label: 'Activity Details' },
+        activityObjectives      : { label: 'Description of Activity Objectives:' },
+        agencyContact           : { label: 'Agency / Supplier Contact' },
+        brand                   : { label: LABEL_BRAND, labelPlural: LABEL_BRANDS },
+        businessOpportunity     : { label: 'What is the Business Opportunity or Challenge?' },
+        cancel                  : { label: LABEL_CANCEL },
+        channel                 : { label: 'Channel' },
+        comments                : { label: 'Comments' },
+        customerBanner          : { label: 'Customer Banner' },
+        customerContact         : { label: 'Customer Contact' },
+        customerType            : { label: 'Customer Type' },
+        deselectAll             : { label: LABEL_DESELECT_ALL },
         detachFile              : { label: LABEL_DETACH_FILE, successMessage: LABEL_DETACH_FILE_SUCCESS, confirmation: LABEL_DETACH_FILE_CONFIRMATION},
-        help            : { label: LABEL_HELP },
-        keyDates        : { label: 'Key Dates & Timings' },
-        marketingContact : { label: 'Marketing Contact' },
-        projectLeads    : { label: 'Project Leads' },
-        projectManager  : { label: 'Project Manager' },
-        salesContact    : { label: 'Sales Contact' },        
-        save            : { label: LABEL_SAVE, message: 'Working! Please wait...' },
-        info            : { label: LABEL_INFO },
-        instructions    : { label: 'Instructions', message: LABEL_FORMINSTRUCTIONS },
-        inMarketStartDate : { label: 'Proposed In-Market Start Date' },
-        inMarketEndDate   : { label: 'Proposed In-Market End Date' },
-        preAlignmentDeadline : { label: 'Pre-Alignment Deadline' },
-        preEvaluationDeadline : { label: 'Pre-Evaluation Deadline' },
-        activityApprovalDate  : { label: 'Activity Approval Date' },
-        channel               : { label: 'Channel' },
-        leadChannel           : { label: 'Lead Channel' },
-        comments              : { label: 'Comments' },
-        customerBanner        : { label: 'Customer Banner' },
-        customerType          : { label: 'Customer Type' },
-        activityDetails       : { label: 'Activity Details' },
-        objectives            : { label: 'Activity Objectives / Qualitative Considerations' },
-        businessOpportunity   : { label: 'What is the Business Opportunity or Challenge?' },
-        activityObjectives    : { label: 'Description of Activity Objectives:' },
-        next                  : { label: 'Next' },
-        prev                  : { label: 'Prev' },
-        provideDetailsBelow   : { label: 'Provide details below' },
-        publish               : { label: 'Publish', instructions: 'Click the Publish button to make this activity visible to the wider team and available for promotions.', successMessage: 'Activity has been successfully published'},
-        yes                   : { label: 'Yes' },
-        no                    : { label: 'No' },
-        unpublish             : { label: 'Un Publish', instructions: 'Remove visibility of this activity.', successMessage: 'Activity has been successfully made private'},
-        uploadFile            : { label: 'Upload & Attach Files', message: 'Select files to upload and attach', successMessage: 'Files uploaded successfully!' },
+        help                    : { label: LABEL_HELP },
+        info                    : { label: LABEL_INFO },
+        inMarketStartDate       : { label: 'Proposed In-Market Start Date' },
+        inMarketEndDate         : { label: 'Proposed In-Market End Date' },
+        instructions            : { label: 'Instructions', message: LABEL_FORMINSTRUCTIONS },
+        keyDates                : { label: 'Key Dates & Timings' },
+        leadChannel             : { label: 'Lead Channel' },
+        marketingContact        : { label: 'Marketing Contact' },
+        next                    : { label: 'Next' },
+        no                      : { label: 'No' },
+        objectives              : { label: 'Activity Objectives / Qualitative Considerations' },
+        ok                      : { label: LABEL_OK },
+        preAlignmentDeadline    : { label: 'Pre-Alignment Deadline' },
+        preEvaluationDeadline   : { label: 'Pre-Evaluation Deadline' },
+        prev                    : { label: 'Prev' },
+        projectLeads            : { label: 'Project Leads' },
+        projectManager          : { label: 'Project Manager' },
+        provideDetailsBelow     : { label: 'Provide details below' },
+        publish                 : { label: 'Publish', instructions: 'Click the Publish button to make this activity visible to the wider team and available for promotions.', successMessage: 'Activity has been successfully published'},
+        recall                  : { label: LABEL_RECALL, recalledMessage: LABEL_RECALL_SUCCESS.replace('%0', 'Pre-Evaluation Form') },
+        salesContact            : { label: 'Sales Contact' },        
+        save                    : { label: LABEL_SAVE, message: 'Working! Please wait...' },
         saveSuccess             : { message: 'All changes saved successfully'},
-        summary               : { label: LABEL_SUMMARY },
+        selectAll               : { label: LABEL_SELECT_ALL },
         submitForReview         : { label: 'Submit for Review', submittedMessage: 'Form has been successfully submitted for Review' },
         submitForApproval       : { label: LABEL_SUBMIT_FOR_APPROVAL, submittedMessage: LABEL_APPROVAL_SUBMITTED.replace('%0', 'Pre-Evaluation Form') },
-        recall                  : { label: LABEL_RECALL, recalledMessage: LABEL_RECALL_SUCCESS.replace('%0', 'Pre-Evaluation Form') },
+        summary                 : { label: LABEL_SUMMARY },
         totalCostAP             : { label: 'A&P', help: LABEL_TOTAL_COST_A_P_HELP },
         totalCostAdditionalCOGS : { label: 'Additional COGS', help: LABEL_TOTAL_COST_ADDITIONAL_COGS_HELP },
         totalCostIncrementalPA  : { label: 'Incremental PA', help: LABEL_TOTAL_COST_INCREMENTAL_PA_HELP },
-        totalCostLumpSum        : { label: 'Lump Sum Discount', help: '' }
+        totalCostLumpSum        : { label: 'Lump Sum Discount', help: '' },
+        unpublish               : { label: 'Un Publish', instructions: 'Remove visibility of this activity.', successMessage: 'Activity has been successfully made private'},
+        uploadFile              : { label: 'Upload & Attach Files', message: 'Select files to upload and attach', successMessage: 'Files uploaded successfully!' },
+        yes                     : { label: 'Yes' },
     };
 
     isPhone = (CLIENT_FORM_FACTOR === "Small");
@@ -375,7 +384,7 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
 
     allProductsSelected = false;
     get selectAllProductsLabel() {
-        return this.allProductsSelected ? 'DeSelect all Products' : 'Select all Products';
+        return this.allProductsSelected ? this.labels.deselectAll.label : this.labels.selectAll.label;
     }
 
     @wire(CurrentPageReference) pageRef;
@@ -1055,6 +1064,9 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
     handleChannelCommentsChange(event) {
         this.channelComments = event.detail.value;        
         console.log('[channelcomments] comments', this.channelComments);
+    }
+    handleEvaluationCommentsChange(event) {
+        this.evaluationComments = event.detail.value;
     }
     handleSalesCommentsChange(event) {
         this.salesComments = event.detail.value;

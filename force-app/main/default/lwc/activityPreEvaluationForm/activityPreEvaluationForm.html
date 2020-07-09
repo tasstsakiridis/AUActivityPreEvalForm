@@ -4,11 +4,11 @@
             <span class="slds-p-around_x-small">Select the Brands that will be the focus of this activity and then click/tap the OK button.</span>
         </div>
         <lightning-card class="slds-m-horizontal_medium">
-            <h1 class="slds-text-title_caps" slot="title">Brands</h1>
+            <h1 class="slds-text-title_caps" slot="title">{!labels.brand.labelPlural}</h1>
             <lightning-button-group slot="actions">
                 <lightning-input label=" " class="slds-m-right_small" type="search" onchange={handleBrandSearchChange}></lightning-input>
-                <lightning-button label="Cancel" variant="brand" class="slds-m-top_medium" onclick={handleCancelBrandSelectionClick}></lightning-button>
-                <lightning-button label="OK" variant="brand" class="slds-m-left_x-small slds-m-top_medium" onclick={handleCloseBrandSelectionClick}></lightning-button>    
+                <lightning-button label={labels.cancel.label} variant="brand" class="slds-m-top_medium" onclick={handleCancelBrandSelectionClick}></lightning-button>
+                <lightning-button label={labels.ok.label} variant="brand" class="slds-m-left_x-small slds-m-top_medium" onclick={handleCloseBrandSelectionClick}></lightning-button>    
             </lightning-button-group>
             <div class="content slds-m-around_large">
                 <template if:true={visibleBrands}>
@@ -24,10 +24,10 @@
             <span class="slds-p-around_x-small">Select the Products that will be the focus of this activity and then click/tap the OK button.</span>
         </div>
         <lightning-card class="slds-m-hotizontal_medium">
-            <h1 class="slds-text-title_caps" slot="title">Products</h1>
+            <h1 class="slds-text-title_caps" slot="title">{labels.product.label}</h1>
             <lightning-button label={selectAllProductsLabel} slot="actions" onclick={handleSelectAllProductForBrandClick}></lightning-button>
-            <lightning-button label="Cancel" variant="brand" slot="actions" class="slds-m-left_x-small" onclick={handleCancelProductSelectionClick}></lightning-button>
-            <lightning-button label="OK" variant="brand" slot="actions" class="slds-m-left_x-small" onclick={handleCloseProductSelectionClick}></lightning-button>
+            <lightning-button label={label.cancel.label} variant="brand" slot="actions" class="slds-m-left_x-small" onclick={handleCancelProductSelectionClick}></lightning-button>
+            <lightning-button label={label.ok.label} variant="brand" slot="actions" class="slds-m-left_x-small" onclick={handleCloseProductSelectionClick}></lightning-button>
             <div class="content slds-m-around_large">
                 <template if:true={products}>
                     <template for:each={products} for:item="product">

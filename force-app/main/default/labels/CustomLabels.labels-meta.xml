@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomLabels xmlns="http://soap.sforce.com/2006/04/metadata">
+    <labels>
+        <fullName>Total_Cost_A_P_Help</fullName>
+        <categories>help text</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Total Cost A&amp;P Help</shortDescription>
+        <value>This line is representative of any expense that is coded to the A&amp;P Brand Budget (eg: Creative Development, GWP items, Samples, Media)</value>
+    </labels>
+    <labels>
+        <fullName>Total_Cost_Additional_COGS_Help</fullName>
+        <categories>help text</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Total Cost Additional COGS Help</shortDescription>
+        <value>To reflect additional COGS costs (packaging, pick and pack) in addition to the product.  Must exclude the product (wet goods).</value>
+    </labels>
+    <labels>
+        <fullName>Total_Cost_Incremental_PA_Help</fullName>
+        <categories>help text</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Total Cost Incremental PA Help</shortDescription>
+        <value>Scan deals, Off Invoice Discount, Customer Rebate</value>
+    </labels>
+    <labels>
+        <fullName>Total_Cost_Lump_Sum_Help</fullName>
+        <categories>help text</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Total Cost Lump Sum Help</shortDescription>
+        <value>Co-op</value>
+    </labels>
+</CustomLabels>

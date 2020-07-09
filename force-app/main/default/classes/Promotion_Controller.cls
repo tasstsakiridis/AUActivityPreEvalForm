@@ -202,10 +202,10 @@ global with sharing class Promotion_Controller {
         String promoType = promotionType;
         String[] salesPromoTypes = new String[]{'Sales Promotion','Merchandiser Request','Educational Request'};
         
-        String whereClause = 'WHERE Active__c = true AND Market__c = \'' + String.escapeSingleQuotes(marketId) + '\' AND Status__c =\'Approved\'';
+        String whereClause = 'WHERE Active__c = true AND Market__c = \'' + String.escapeSingleQuotes(marketId) + '\'';
         if (promotionType == 'Merchandiser Request') {
             promoType = 'Sales Promo';
-            whereClause += ' AND Promotion_Type__c = \'' + String.escapeSingleQuotes(promoType) + '\' AND Can_Request_Merchandiser__c = true';
+            whereClause += ' AND Status__c =\'Approved\' AND Promotion_Type__c = \'' + String.escapeSingleQuotes(promoType) + '\' AND Can_Request_Merchandiser__c = true';
         }
         if (promotionType == 'Educational Request') {
             promoType = 'Sales Promo';
@@ -217,7 +217,7 @@ global with sharing class Promotion_Controller {
                 whereClause += 'AND RecordType.Name = \'' + String.escapeSingleQuotes(promoType) + '\'';
             } else if (promotionType == 'Sales Promotion') {
                 promoType = 'Sales Promo';
-                whereClause += 'AND Promotion_Type__c = \'' + String.escapeSingleQuotes(promoType) + '\'';
+                whereClause += ' AND Status__c =\'Approved\' AND Promotion_Type__c = \'' + String.escapeSingleQuotes(promoType) + '\'';
             }
             whereClause += ' AND Wombat_Active__c = true AND Begin_Date__c <= TODAY AND End_Date__c >= TODAY';
         }
