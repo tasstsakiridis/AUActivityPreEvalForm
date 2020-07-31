@@ -1,10 +1,10 @@
 <template>
     <template if:true={isSelectingBrands}>
        <div class="slds-m-top_x-small slds-m-bottom_x-small panel-info">
-            <span class="slds-p-around_x-small">Select the Brands that will be the focus of this activity and then click/tap the OK button.</span>
+            <span class="slds-p-around_x-small">{labels.selectActivityFocusItems.brands}</span>
         </div>
         <lightning-card class="slds-m-horizontal_medium">
-            <h1 class="slds-text-title_caps" slot="title">{!labels.brand.labelPlural}</h1>
+            <h1 class="slds-text-title_caps" slot="title">{labels.brand.labelPlural}</h1>
             <lightning-button-group slot="actions">
                 <lightning-input label=" " class="slds-m-right_small" type="search" onchange={handleBrandSearchChange}></lightning-input>
                 <lightning-button label={labels.cancel.label} variant="brand" class="slds-m-top_medium" onclick={handleCancelBrandSelectionClick}></lightning-button>
@@ -21,13 +21,13 @@
     </template>
     <template if:true={isSelectingProducts}>        
         <div class="slds-m-top_x-small slds-m-bottom_small panel-info">
-            <span class="slds-p-around_x-small">Select the Products that will be the focus of this activity and then click/tap the OK button.</span>
+            <span class="slds-p-around_x-small">{labels.selectActivityFocusItems.products}</span>
         </div>
         <lightning-card class="slds-m-hotizontal_medium">
-            <h1 class="slds-text-title_caps" slot="title">{labels.product.label}</h1>
+            <h1 class="slds-text-title_caps" slot="title">{labels.product.labelPlural}</h1>
             <lightning-button label={selectAllProductsLabel} slot="actions" onclick={handleSelectAllProductForBrandClick}></lightning-button>
-            <lightning-button label={label.cancel.label} variant="brand" slot="actions" class="slds-m-left_x-small" onclick={handleCancelProductSelectionClick}></lightning-button>
-            <lightning-button label={label.ok.label} variant="brand" slot="actions" class="slds-m-left_x-small" onclick={handleCloseProductSelectionClick}></lightning-button>
+            <lightning-button label={labels.cancel.label} variant="brand" slot="actions" class="slds-m-left_x-small" onclick={handleCancelProductSelectionClick}></lightning-button>
+            <lightning-button label={labels.ok.label} variant="brand" slot="actions" class="slds-m-left_x-small" onclick={handleCloseProductSelectionClick}></lightning-button>
             <div class="content slds-m-around_large">
                 <template if:true={products}>
                     <template for:each={products} for:item="product">
@@ -35,26 +35,6 @@
                     </template>
                 </template>
             </div>
-        </lightning-card>
-    </template>
-    <template if:true={isSelectingBannerGroups}>
-        <div class="slds-m-top_x-small slds-m-bottom_x-small panel-info">
-            <span class="slds-p-around_x-small">Select the Banner Groups that will be the focus of this activity and then click/tap the OK button.</span>
-        </div>
-        <lightning-card class="slds-m-horizontal_medium">
-            <h1 class="slds-text-title_caps" slot="title">Banner Groups</h1>
-            <lightning-button-group slot="actions">
-                <lightning-input label=" " class="slds-m-right_small" type="search" onchange={handleBannerGroupSearchChange}></lightning-input>
-                <lightning-button label="Cancel" variant="brand" class="slds-m-top_medium" onclick={handleCancelBannerGroupSelectionClick}></lightning-button>
-                <lightning-button label="OK" variant="brand" class="slds-m-left_x-small slds-m-top_medium" onclick={handleCloseBannerGroupSelectionClick}></lightning-button>    
-            </lightning-button-group>
-            <div class="content slds-m-around_large">
-                <template if:true={visibleBannerGroups}>
-                    <template for:each={visibleBannerGroups} for:item="bannerGroup">
-                        <c-selectable-tile key={bannerGroup.Id} class="banner-group" obj-record={bannerGroup} obj-record-id={bannerGroup.id} image-position="left" obj-record-api-name="Banner_Group__c" title={bannerGroup.name} image-url={bannerGroup.imageUrl} is-selected={bannerGroup.isSelected} selected-event-name="bannerselected" onbannerselected={handleBannerGroupSelected}></c-selectable-tile>
-                    </template>
-                </template>    
-            </div>    
         </lightning-card>
     </template>
     <template if:true={isEditingForm}>
@@ -79,24 +59,6 @@
                 </div>
             </template>
         </lightning-card>
-        <template if:true={canPublish}>
-            <lightning-card class="slds-m-bottom_small slds-p-horizontal_small panel-info">
-                <h3 class="slds-text-title_caps slds-m-bottom_small" slot="title">{labels.publish.label}</h3>
-                <lightning-button label="Publish" variant="brand" icon-name="utility:groups" slot="actions" onclick={handlePublishButtonClick}></lightning-button>
-                <div style="padding: 0 20px;">
-                    <lightning-formatted-text class="text-instructions" value={labels.publish.instructions}></lightning-formatted-text>
-                </div>
-            </lightning-card>
-        </template>
-        <template if:true={isPublished}>
-            <lightning-card class="slds-m-bottom_small slds-p-horizontal_small panel-info">
-                <h3 class="slds-text-title_caps slds-m-bottom_small" slot="title">{labels.unpublish.label}</h3>
-                <lightning-button label="UnPublish" variant="brand" icon-name="utility:user" slot="actions" onclick={handleUnPublishButtonClick}></lightning-button>
-                <div style="padding: 0 20px;">
-                    <lightning-formatted-text class="text-instructions" value={labels.unpublish.instructions}></lightning-formatted-text>
-                </div>
-            </lightning-card>
-        </template>
         <lightning-card>
             <h2 slot="title">
                 <p>{activityName} [{status}]</p>
@@ -136,19 +98,18 @@
 
             <div class="slds-m-around_small slds-p-horizontal_medium">
                 <lightning-progress-indicator current-step={progressStep} type="path" variant="base">
-                    <lightning-progress-step label="Draft" value="draft"></lightning-progress-step>
+                    <lightning-progress-step label={labels.draft.label} value="draft"></lightning-progress-step>
                     <template if:true={requiresCommercialLeadReview}>
-                        <lightning-progress-step label="Commercial Lead Review" value="review"></lightning-progress-step>
+                        <lightning-progress-step label={labels.commercialLeadReview.label} value="review"></lightning-progress-step>
                     </template>
                     <template if:true={requiresBPAReview}>
-                        <lightning-progress-step label="BP&amp;A Review" value="bpa"></lightning-progress-step>
+                        <lightning-progress-step label={labels.bpaReview.label} value="bpa"></lightning-progress-step>
                     </template>
                     <template if:true={requiresCommercialLeadReview}>
-                        <lightning-progress-step label="Reviewed" value="reviewed"></lightning-progress-step>
+                        <lightning-progress-step label={labels.reviewed.label} value="reviewed"></lightning-progress-step>
                     </template>
-                    <lightning-progress-step label="Pending Approval" value="submitted"></lightning-progress-step>
-                    <lightning-progress-step label="Approved" value="approve"></lightning-progress-step>
-                    <!--<lightning-progress-step label="Published" value="publish"></lightning-progress-step>-->
+                    <lightning-progress-step label={labels.pendingApproval.label} value="submitted"></lightning-progress-step>
+                    <lightning-progress-step label={labels.approved.label} value="approve"></lightning-progress-step>
                 </lightning-progress-indicator>
             </div>
 
@@ -163,22 +124,21 @@
                                         <lightning-layout multiple-rows="true">
                                             <lightning-layout-item size="12">
                                                 <template if:true={projectManager}>
-                                                    <c-image-tile item={projectManager} field="projectmanager" label="Project Manager" onchange={handleLookupItemChange}></c-image-tile>
+                                                    <c-image-tile item={projectManager} field="projectmanager" label={labels.projectManager.label} onchange={handleLookupItemChange}></c-image-tile>
                                                 </template>
                                                 <template if:false={projectManager}>
-                                                    <c-bf-lookup search-label="Project Manager" object-name="User" show-images="true" 
+                                                    <c-bf-lookup search-label={labels.projectManager.label} object-name="User" show-images="true" 
                                                                 image-location="Chatter" field-name="projectmanager" limit-to-market="true"
                                                                 market-id={market} market-name={marketName} market-field-name="Market__c" use-market-id="false"
                                                                 show-required-indicator="true" onlookupselected={handleLookupSelected}></c-bf-lookup>
                                                 </template>
-                                                <!--<lightning-input type="search" label={labels.projectManager.label} value={projectManager}></lightning-input>-->
                                             </lightning-layout-item>
                                             <lightning-layout-item size="12" class="slds-m-top_x-small">
                                                 <template if:true={marketingContact}>
-                                                    <c-image-tile item={marketingContact} field="marketingcontact" label="Marketing Contact" onchange={handleLookupItemChange}></c-image-tile>
+                                                    <c-image-tile item={marketingContact} field="marketingcontact" label={labels.marketingContact.label} onchange={handleLookupItemChange}></c-image-tile>
                                                 </template>
                                                 <template if:false={marketingContact}>
-                                                    <c-bf-lookup search-label="Marketing Contact" object-name="User" show-images="true" 
+                                                    <c-bf-lookup search-label={labels.marketingContact.label} object-name="User" show-images="true" 
                                                                 image-location="Chatter" field-name="marketingcontact" limit-to-market="true"
                                                                 market-id={market} market-name={marketName} market-field-name="Market__c" use-market-id="false"
                                                                 onlookupselected={handleLookupSelected}></c-bf-lookup>
@@ -186,10 +146,10 @@
                                             </lightning-layout-item>
                                             <lightning-layout-item size="12" class="slds-m-top_x-small">
                                                 <template if:true={salesContact}>
-                                                    <c-image-tile item={salesContact} field="salescontact" label="Sales Contact" onchange={handleLookupItemChange}></c-image-tile>
+                                                    <c-image-tile item={salesContact} field="salescontact" label={labels.salesContact.label} onchange={handleLookupItemChange}></c-image-tile>
                                                 </template>
                                                 <template if:false={salesContact}>
-                                                    <c-bf-lookup search-label="Sales Contact" object-name="User" show-images="true" 
+                                                    <c-bf-lookup search-label={labels.salesContact.label} object-name="User" show-images="true" 
                                                                 image-location="Chatter" field-name="salescontact" limit-to-market="true"
                                                                 market-id={market} market-name={marketName} market-field-name="Market__c" use-market-id="false"
                                                                 onlookupselected={handleLookupSelected}></c-bf-lookup>
@@ -205,39 +165,39 @@
                                     </div>
                                 </lightning-card>
                             </lightning-layout-item>
+                            
                             <lightning-layout-item size="12" padding="around-small">
                                 <lightning-layout multiple-rows="true">
                                     <lightning-layout-item size="12">
-                                        <lightning-input name="i_NumberOfStores" label="Total No. of Stores in Customer Banner" value={numberOfStoresInBanner} disabled={isLocked} onchange={handleNumberOfStoresChange}></lightning-input>
+                                        <lightning-input name="i_NumberOfStores" label={labels.numberOfStoresInBanner.label} value={numberOfStoresInBanner} disabled={isLocked} onchange={handleNumberOfStoresChange}></lightning-input>
                                     </lightning-layout-item>
                                     <lightning-layout-item size="12">
-                                        <lightning-input name="i_NumberOfStores2" label="Total No. of Stores in Customer Banner Running Activity" value={numberOfStoresRunningActivity} disabled={isLocked} onchange={handleStoresRunningActivityChange}></lightning-input>
+                                        <lightning-input name="i_NumberOfStores2" label={labels.numberOfStoresInBannerRunningActivity.label} value={numberOfStoresRunningActivity} disabled={isLocked} onchange={handleStoresRunningActivityChange}></lightning-input>
                                     </lightning-layout-item>
                                     <lightning-layout-item size="12">
                                         <div class="slds-m-top_medium">
-                                            <lightning-input name="i_ActivityRunningLastYear" type="toggle" label="Was there an activity running in the same period last year?" checked={wasActivityRunningLastYear} message-toggle-active={labels.yes.label} message-toggle-inactive={labels.no.label} disabled={isLocked} onchange={handleActivityRunningLastYearChange}></lightning-input>
+                                            <lightning-input name="i_ActivityRunningLastYear" type="toggle" label={labels.wasActivityRunningLastYear.label} checked={wasActivityRunningLastYear} message-toggle-active={labels.yes.label} message-toggle-inactive={labels.no.label} disabled={isLocked} onchange={handleActivityRunningLastYearChange}></lightning-input>
                                         </div>
                                     </lightning-layout-item>
                                     <lightning-layout-item size="12">
                                         <template if:true={wasActivityRunningLastYear}>
-                                            <lightning-textarea label="What was the brand(s) and timing" value={lastYearActivityDetails} required onchange={handleLastYearActivityDetailsChange}></lightning-textarea>
+                                            <lightning-textarea label={labels.brandsAndTimings.label} value={lastYearActivityDetails} required onchange={handleLastYearActivityDetailsChange}></lightning-textarea>
                                         </template>
                                     </lightning-layout-item>
                                     <lightning-layout-item size="12">
-                                        <!--<lightning-combobox label="State" options={stateOptions} value={state} multiple required class="slds-m-top_medium" onchange={handleStateChange}></lightning-combobox>-->
-                                        <lightning-dual-listbox name="states" label="State" source-label="Available" selected-label="Selected" options={stateOptions} value={states} disabled={isLocked} onchange={handleStateChange}></lightning-dual-listbox>
+                                        <lightning-dual-listbox name="states" label={labels.state.label} source-label={labels.available.label} selected-label={labels.selected.label} options={stateOptions} value={states} disabled={isLocked} onchange={handleStateChange}></lightning-dual-listbox>
                                     </lightning-layout-item>
                                 </lightning-layout>
                             </lightning-layout-item>
                             <lightning-layout-item size="12" padding="around-small" class="slds-m-top_small slds-border_top">
                                 <h3 class="slds-text-title_caps slds-m-vertical_small">External Systems Links</h3>
-                                <lightning-input type="url" name="i_SmartsheetLink" label="Smartsheet" value={smartsheetLink} placeholder="Enter URL link to the Smartsheet document" onchange={handleSmartsheetLinkChange}></lightning-input>
+                                <lightning-input type="url" name="i_SmartsheetLink" label={labels.smartsheet.label} value={smartsheetLink} placeholder="Enter URL link to the Smartsheet document" onchange={handleSmartsheetLinkChange}></lightning-input>
                             </lightning-layout-item>
                         </lightning-layout>
                     </lightning-layout-item>
                     <lightning-layout-item size="12" small-device-size="12" large-device-size="8" padding="around-small">
                         <lightning-layout multiple-rows="true">
-                            <lightning-layout-item size="12" padding="around-small">
+                            <lightning-layout-item size="12" padding="around-small">                            
                                 <lightning-card>
                                     <h2 class="slds-text-title_caps" slot="title">{labels.activityDetails.label}</h2>
                                     <div class="slds-m-horizontal_small">
@@ -262,15 +222,7 @@
                                             </lightning-layout-item>
                                             <lightning-layout-item size="12" padding="around-small">
                                                 <template if:true={isOffChannel}>
-                                                    <!--<lightning-combobox name="i_CustomerBanner" label={labels.customerBanner.label} value={customerBanner} options={nationalBannerGroups} onchange={handleBannerGroupChange}></lightning-combobox>-->
-                                                    <!--
-                                                    <lightning-layout-item size="12" padding="around-small">
-                                                        <h2 class="slds-text-body_small required-field">Customer Banner Groups</h2>
-                                                        <lightning-button-icon icon-name="action:new" alternative-text="Add Banner Groups" title="Add Banner Groups" class="slds-float_right" onclick={handleAddBannerGroupsButtonClick}></lightning-button-icon>
-                                                        <lightning-pill-container items={focusBannerGroups} onitemremove={handleRemoveBannerGroup}></lightning-pill-container>
-                                                    </lightning-layout-item>
-                                                    -->
-                                                    <lightning-dual-listbox name="i_BannerGroups" label="Banner Groups" source-label="Available" selected-label="Selected" options={bannerGroupOptions} value={bannerGroups} disabled={isLocked} required onchange={handleBannerGroupChange}></lightning-dual-listbox>                                                
+                                                    <lightning-dual-listbox name="i_BannerGroups" label={labels.bannerGroup.labelPlural} source-label={labels.available.label} selected-label={labels.selected.label} options={bannerGroupOptions} value={bannerGroups} disabled={isLocked} required onchange={handleBannerGroupChange}></lightning-dual-listbox>                                                
                                                     <template if:true={isOtherBanner}>
                                                         <div>
                                                             <span class="text-info">{labels.provideDetailsBelow.label}</span>
@@ -289,31 +241,28 @@
                             </lightning-layout-item>
                             <lightning-layout-item size="12" padding="around-small">
                                 <lightning-card>
-                                    <h2 class="slds-text-title_caps" slot="title">Activity Mechanic</h2>
+                                    <h2 class="slds-text-title_caps" slot="title">{labels.activityMechanic.labelPlural}</h2>
                                     <div class="slds-m-horizontal_small">
                                         <lightning-layout multiple-rows="true">
                                             <lightning-layout-item size="12" padding="around-small">
                                                 <lightning-textarea label="Brief Description of Activity Mechanic" value={activityMechanicDescription} required onchange={handleActivityMechanicDescriptionChange}></lightning-textarea>
                                             </lightning-layout-item>
                                             <lightning-layout-item size="12" padding="around-small">
-                                                <h2 class="slds-text-body_small required-field">Focus Brands</h2>
+                                                <h2 class="slds-text-body_small required-field">{labels.focusBrands.label}</h2>
                                                 <template if:false={isLocked}>
                                                     <lightning-button-icon icon-name="action:new" alternative-text="Add Brands" title="Add Brands" class="slds-float_right" onclick={handleAddBrandsButtonClick}></lightning-button-icon>
                                                 </template>
-                                                <!--<lightning-textarea label="Focus Brands" onchange={handleFocusBrandsChange}></lightning-textarea>-->
                                                 <lightning-pill-container items={focusBrands} onitemremove={handleRemoveBrand}></lightning-pill-container>
                                             </lightning-layout-item>
                                             <lightning-layout-item size="12" padding="around-small">
-                                                <h2 class="slds-text-body_small">Focus Products</h2>
+                                                <h2 class="slds-text-body_small">{labels.focusProducts.label}</h2>
                                                 <template if:false={isLocked}>
                                                     <lightning-button-icon icon-name="action:new" alternative-text="Add Products" title="Add Products" class="slds-float_right" onclick={handleAddProductsButtonClick}></lightning-button-icon>
                                                 </template>
                                                 <lightning-pill-container items={focusProducts} onitemremove={handleRemoveProduct}></lightning-pill-container>
-                                                <!--<lightning-textarea label="Focus SKUs" onchange={handleFocusSKUSChange}></lightning-textarea>-->
                                             </lightning-layout-item>
                                             <lightning-layout-item size="12" padding="around-small">
-                                                <!--<lightning-combobox label="Activity Mechanic" options={activityMechanicOptions} value={activityMechanic} required onchange={activityMechanicChange}></lightning-combobox>-->
-                                                <lightning-dual-listbox name="i_ActivityMechanic" label="Activity Mechanic" source-label="Available" selected-label="Selected" options={activityMechanicOptions} value={activityMechanics} disabled={isLocked} required onchange={handleActivityMechanicChange}></lightning-dual-listbox>
+                                                <lightning-dual-listbox name="i_ActivityMechanic" label={labels.activityMechanic.label} source-label="Available" selected-label="Selected" options={activityMechanicOptions} value={activityMechanics} disabled={isLocked} required onchange={handleActivityMechanicChange}></lightning-dual-listbox>
                                             </lightning-layout-item>
                                         </lightning-layout>    
                                     </div>
@@ -375,19 +324,19 @@
                                     <div class="slds-m-horizontal_large">
                                         <lightning-layout multiple-rows="true">
                                             <lightning-layout-item size="12">
-                                                <p class="slds-text-body_small required-field">Brand Strategy - aligned to strategy and delivers brand equity</p>
+                                                <p class="slds-text-body_small required-field">{labels.activityBrandStrategyObjective.label}</p>
                                                 <lightning-slider label="Brand Strategy - aligned to strategy and delivers brand equity"  step="1" max="10" value={brandStrategyIndex} variant="label-hidden" disabled={isLocked} onchange={handleBrandStrategyIndexChange}></lightning-slider>
                                             </lightning-layout-item>
                                             <lightning-layout-item size="12" class="slds-m-top_x-small">
-                                                <p class="slds-text-body_small required-field">Commerical - intended to deliver strong commercial return</p>
+                                                <p class="slds-text-body_small required-field">{labels.activityCommercialObjective.label}</p>
                                                 <lightning-slider label="Commerical - intended to deliver strong commercial return"  step="1" max="10" value={commercialReturnIndex} variant="label-hidden" disabled={isLocked} onchange={handleCommercialReturnIndexChange}></lightning-slider>
                                             </lightning-layout-item>
                                             <lightning-layout-item size="12" class="slds-m-top_x-small">
-                                                <p class="slds-text-body_small required-field">Relationship - builds long term customer relationships</p>
+                                                <p class="slds-text-body_small required-field">{labels.activityRelationshipObjective.label}</p>
                                                 <lightning-slider label="Relationship - builds long term customer relationships"  step="1" max="10" value={customerRelationshipIndex} variant="label-hidden" disabled={isLocked} onchange={handleCustomerRelationshipIndexChange}></lightning-slider>
                                             </lightning-layout-item>
                                             <lightning-layout-item size="12" class="slds-m-top_x-small">
-                                                <p class="slds-text-body_small required-field">Trial New - test new experiential</p>
+                                                <p class="slds-text-body_small required-field">{labels.activityNewTrialObjective.label}</p>
                                                 <lightning-slider label="Trial New - test new experiential"  step="1" max="10" value={newExperientialIndex} variant="label-hidden"  disabled={isLocked} onchange={handleExperientialIndexChange}></lightning-slider>
                                             </lightning-layout-item>
                                         </lightning-layout>    
@@ -420,12 +369,9 @@
                 <lightning-layout multiple-rows="rows">                
                     <lightning-layout-item size="12" small-device-size="12" large-device-size="4" padding="around-small" class="slds-border_right">
                         <lightning-card>
-                            <h2 class="slds-text-title_caps" slot="title">Cost Details (ex GST)</h2>
+                            <h2 class="slds-text-title_caps" slot="title">{labels.costDetails.label}</h2>
                             <div class="slds-m-horizontal_small">
                                 <lightning-layout multiple-rows="true">
-                                    <!--<lightning-layout-item size="12" padding="around-small">
-                                        <span class="text-info_medium">For Activities involving several brands, please provide details and attach GP Modelling Tool workings (if available).	</span>
-                                    </lightning-layout-item>-->
                                     <lightning-layout-item size="12" padding="around-small">
                                         <lightning-layout multiple-rows="true">
                                             <lightning-layout-item size="12">
@@ -441,27 +387,25 @@
                                                 <lightning-input type="number" label={labels.totalCostLumpSum.label} field-level-help={labels.totalCostLumpSum.help} value={totalBudgetedCostLumpSum} formatter="currency" disabled={isLocked} onchange={handleTotalBudgetedLumpSumChange}></lightning-input>
                                             </lightning-layout-item>
                                             <lightning-layout-item size="12" class="slds-m-top_small">
-                                                <!--<span class="slds-text-body_small">Total Budgeted Cost</span>-->
-                                                <span class="slds-text-title_caps">Total Budgeted Cost</span>
+                                                <span class="slds-text-title_caps">{labels.totalBudgetedCost.label}</span>
                                                 <lightning-formatted-number value={totalBudgetedCost} format-style="currency" class="slds-float_right slds-m-right_small"></lightning-formatted-number>
-                                                <!--<lightning-input type="number" label="Total Budgeted Cost" value={totalBudgetedCost} formatter="currency" readonly ></lightning-input>-->
                                             </lightning-layout-item>
                                         </lightning-layout>
                                     </lightning-layout-item>
                                     <lightning-layout-item size="12" padding="around-small">
-                                        <lightning-textarea label="Details on Nature of Cost" value={natureOfCostDescription} onchange={handleNatureOfCostDescription}></lightning-textarea>
+                                        <lightning-textarea label={labels.detailsOnNatureOfCost.label} value={natureOfCostDescription} onchange={handleNatureOfCostDescription}></lightning-textarea>
                                     </lightning-layout-item>
                                     <lightning-layout-item size="12" padding="around-small">
-                                        <lightning-input name="i_TotalCustomerAP" type="number" label="Total Customer A&amp;P Budget for the financial year" value={totalCustomerAPBudget} formatter="currency" disabled={isLocked} onchange={handleTotalCustomerAPBudgetChange}></lightning-input>
+                                        <lightning-input name="i_TotalCustomerAP" type="number" label={labels.totalCustomerAPBudget.label} value={totalCustomerAPBudget} formatter="currency" disabled={isLocked} onchange={handleTotalCustomerAPBudgetChange}></lightning-input>
                                     </lightning-layout-item>
                                     <lightning-layout-item size="12" padding="around-small">
-                                        <lightning-input name="i_TotalCustomerSNS" type="number" label="Total Customer SNS for the financial year" value={totalCustomerSNS} formatter="currency" disabled={isLocked} onchange={handleTotalCustomerSNSChange}></lightning-input>
+                                        <lightning-input name="i_TotalCustomerSNS" type="number" label={labels.totalCustomerSNS.label} value={totalCustomerSNS} formatter="currency" disabled={isLocked} onchange={handleTotalCustomerSNSChange}></lightning-input>
                                     </lightning-layout-item>
                                     <lightning-layout-item size="12" padding="around-small">
-                                        <lightning-input name="i_ActivitySpendPercantage" type="number" label="Activity Spend as a % of total Customer Budget" formatter="percent" value={activitySpendPercentage} disabled></lightning-input>
+                                        <lightning-input name="i_ActivitySpendPercantage" type="number" label={labels.activitySpendVSBudget.label} formatter="percent" value={activitySpendPercentage} disabled></lightning-input>
                                     </lightning-layout-item>
                                     <lightning-layout-item size="12" padding="around-small">
-                                        <lightning-input name="i_APSpendvsSNS" type="number" label="Total Customer A&amp;P Spend as % of SNS" formatter="percent" value={totalCustomerAPSpendVSSNS} disabled></lightning-input>
+                                        <lightning-input name="i_APSpendvsSNS" type="number" label={labels.totalCustomerAPSpendVsSNS.label} formatter="percent" value={totalCustomerAPSpendVSSNS} disabled></lightning-input>
                                     </lightning-layout-item>
                                 </lightning-layout>    
                             </div>
@@ -469,19 +413,9 @@
                     </lightning-layout-item>
                     <lightning-layout-item size="12" small-device-size="12" large-device-size="8" padding="around-small">
                         <lightning-layout multiple-rows="true">
-                            <!--
-                            <lightning-layout-item size="12">
-                                <div class="slds-m-horizontal_large">
-                                    <lightning-input name="i_IncrementalDiscountsProvided" type="toggle" label="Incremental Discounts (PA/Lump Sum) Provided?" checked={incrementalDiscountsProvided} message-toggle-active={labels.yes.label} message-toggle-inactive={labels.no.label} disabled={cannotEditSalesManagerFields} onchange={handleIncrementalDiscountsProvidedChange}></lightning-input>
-                                    <template if:true={incrementalDiscountsProvided}>
-                                        <span class="text-info_medium">For Activities involving several brands, please provide details and attach GP Modelling Tool workings (if available).	</span>
-                                    </template>    
-                                </div>
-                            </lightning-layout-item>
-                            -->
                             <lightning-layout-item size="12" class="slds-m-top_small">
                                 <lightning-card>
-                                    <h2 class="slds-text-title_caps" slot="title">Forecasted Commercial Return</h2>
+                                    <h2 class="slds-text-title_caps" slot="title">{labels.forecastedCommercialReturn.label}</h2>
                                     <div class="slds-m-horizontal_large">
                                         <lightning-textarea label="Incremental 9L Volume Uplift by Brand / SKU (Sales to provide if available)" value={incremental9LUplift} onchange={handleIncremental9LUpliftChange} ></lightning-textarea>
                                         <p class="text-instructions" style="font-style:italic;">* Use scan data if available or warehouse withdrawals to highlight buy up</p>
@@ -493,20 +427,20 @@
                                 <lightning-layout multiple-rows="true">
                                     <lightning-layout-item size="12" small-device-size="12" large-device-size="6" class="slds-m-top_small slds-border_right">
                                         <lightning-card>
-                                            <h2 class="slds-text-title_caps" slot="title">Project or Sales Manager to Complete</h2>
+                                            <h2 class="slds-text-title_caps" slot="title">{labels.projectOrSalesMgrToComplete.label}</h2>
                                             <div class="slds-m-horizontal_small">
                                                 <lightning-layout multiple-rows="true">
                                                     <lightning-layout-item size="12" padding="horizontal-small">
-                                                        <lightning-input type="number" label="Incremental Gross Profit" formatter="currency" disabled={cannotEditSalesManagerFields} value={incrementalGrossProfitSales} onchange={handleIncrementalGrossProfitSalesChange}></lightning-input>
+                                                        <lightning-input type="number" label={labels.incrementalGrossProfit.label} formatter="currency" disabled={cannotEditSalesManagerFields} value={incrementalGrossProfitSales} onchange={handleIncrementalGrossProfitSalesChange}></lightning-input>
                                                     </lightning-layout-item>
                                                     <lightning-layout-item size="12" padding="around-small">
-                                                        <lightning-input type="number" label="Incremental Profit / (Loss)" formatter="currency" disabled value={incrementalProfitLossSales}></lightning-input>
+                                                        <lightning-input type="number" label={labels.incrementalProfitLoss.label} formatter="currency" disabled value={incrementalProfitLossSales}></lightning-input>
                                                     </lightning-layout-item>
                                                     <lightning-layout-item size="12" padding="around-small">
-                                                        <lightning-input type="number" label="ROI %" formatter="percent" disabled value={incrementalROISales}></lightning-input>
+                                                        <lightning-input type="number" label={labels.roiPercentage.label} formatter="percent" disabled value={incrementalROISales}></lightning-input>
                                                     </lightning-layout-item>   
                                                     <lightning-layout-item size="12" class="slds-m-top_small" padding="around-small">
-                                                        <lightning-textarea label="Comments" value={salesComments} onchange={handleSalesCommentsChange}></lightning-textarea>
+                                                        <lightning-textarea label={labels.comments.label} value={salesComments} onchange={handleSalesCommentsChange}></lightning-textarea>
                                                     </lightning-layout-item>                
                                                 </lightning-layout>
                                             </div>
@@ -514,26 +448,26 @@
                                     </lightning-layout-item>
                                     <lightning-layout-item size="12" small-device-size="12" large-device-size="6" class="slds-m-top_small">
                                         <lightning-card>
-                                            <h2 class="slds-text-title_caps" slot="title">BP&amp;A Team to complete</h2>
+                                            <h2 class="slds-text-title_caps" slot="title">{labels.bpaTeamToComplete.label}</h2>
                                             <div class="slds-m-horizontal_small">
                                                 <lightning-layout multiple-rows="true">
                                                     <lightning-layout-item size="12" padding="horizontal-small">
-                                                        <lightning-input type="number" label="Incremental Gross Profit" formatter="currency" disabled={cannotEditBPAFields} value={incrementalGrossProfit} onchange={handleIncrementalGrossProfitChange}></lightning-input>
+                                                        <lightning-input type="number" label={labels.incrementalGrossProfit.label} formatter="currency" disabled={cannotEditBPAFields} value={incrementalGrossProfit} onchange={handleIncrementalGrossProfitChange}></lightning-input>
                                                     </lightning-layout-item>
                                                     <lightning-layout-item size="12" padding="around-small">
-                                                        <lightning-input type="number" label="Incremental Profit / (Loss)" formatter="currency" disabled value={incrementalProfitLoss}></lightning-input>
+                                                        <lightning-input type="number" label={labels.incrementalProfitLoss.label} formatter="currency" disabled value={incrementalProfitLoss}></lightning-input>
                                                     </lightning-layout-item>
                                                     <lightning-layout-item size="12" padding="around-small">
-                                                        <lightning-input type="number" label="ROI %" formatter="percent" disabled value={incrementalROI}></lightning-input>
+                                                        <lightning-input type="number" label={labels.roiPercentage.label} formatter="percent" disabled value={incrementalROI}></lightning-input>
                                                     </lightning-layout-item>        
                                                     <lightning-layout-item size="12" padding="horizontal-small">
-                                                        <lightning-input type="number" label="Forecasted Reach / Coverage" disabled value={forecastedReachCoverage} onchange={handleForecastedReachCoverage}></lightning-input>
+                                                        <lightning-input type="number" label={labels.forecastedReachCoverage.label} disabled value={forecastedReachCoverage} onchange={handleForecastedReachCoverage}></lightning-input>
                                                     </lightning-layout-item>
                                                     <lightning-layout-item size="12" padding="around-small">
-                                                        <lightning-input type="number" label="Cost per Thousand (CPT)" formatter="currency" disabled value={forecastedCostPerThousand}></lightning-input>
+                                                        <lightning-input type="number" label={labels.costPerThousand.label} formatter="currency" disabled value={forecastedCostPerThousand}></lightning-input>
                                                     </lightning-layout-item>        
                                                     <lightning-layout-item size="12" class="slds-m-top_small" padding="around-small">
-                                                        <lightning-textarea label="Comments" value={bpaComments} onchange={handleBPACommentsChange}></lightning-textarea>
+                                                        <lightning-textarea label={labels.comments.label} value={bpaComments} onchange={handleBPACommentsChange}></lightning-textarea>
                                                     </lightning-layout-item>
                                                 </lightning-layout>    
                                             </div>

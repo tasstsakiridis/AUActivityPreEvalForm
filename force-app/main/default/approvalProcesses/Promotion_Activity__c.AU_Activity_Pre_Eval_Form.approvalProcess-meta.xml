@@ -17,11 +17,19 @@
         <allowDelegate>true</allowDelegate>
         <assignedApprover>
             <approver>
-                <name>Project_Manager__c</name>
+                <name>Project_Manager_Manager__c</name>
                 <type>relatedUserField</type>
             </approver>
             <whenMultipleApprovers>FirstResponse</whenMultipleApprovers>
         </assignedApprover>
+        <entryCriteria>
+            <criteriaItems>
+                <field>Promotion_Activity__c.Activity_Budget__c</field>
+                <operation>greaterOrEqual</operation>
+                <value>&quot;AUD 20,000&quot;</value>
+            </criteriaItems>
+        </entryCriteria>
+        <ifCriteriaNotMet>ApproveRecord</ifCriteriaNotMet>
         <label>Manager Approval</label>
         <name>Manager_Approval</name>
     </approvalStep>
@@ -60,8 +68,8 @@
         <allowDelegate>true</allowDelegate>
         <assignedApprover>
             <approver>
-                <name>eveline_albarracin@b-f.com</name>
-                <type>user</type>
+                <name>AU_Managing_Director</name>
+                <type>queue</type>
             </approver>
             <whenMultipleApprovers>FirstResponse</whenMultipleApprovers>
         </assignedApprover>
@@ -78,6 +86,7 @@
             <type>RejectRequest</type>
         </rejectBehavior>
     </approvalStep>
+    <emailTemplate>Workflow_Email_Templates/AU_PreEvaluation_Form_Approval</emailTemplate>
     <enableMobileDeviceAccess>true</enableMobileDeviceAccess>
     <entryCriteria>
         <criteriaItems>
@@ -142,6 +151,7 @@
         <useApproverFieldOfRecordOwner>false</useApproverFieldOfRecordOwner>
         <userHierarchyField>Manager</userHierarchyField>
     </nextAutomatedApprover>
+    <processOrder>6</processOrder>
     <recallActions>
         <action>
             <name>Activity_Recalled</name>

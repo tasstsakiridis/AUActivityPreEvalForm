@@ -25,27 +25,99 @@ import submitForApproval from '@salesforce/apex/PreEvaluationForm_Controller.sub
 import recallApproval from '@salesforce/apex/PreEvaluationForm_Controller.recallApproval';
 
 import LABEL_APPROVAL_SUBMITTED from '@salesforce/label/c.Approval_Submitted';
+import LABEL_ACTIVITY_APPROVAL_DATE from '@salesforce/label/c.Activity_Approval_Date';
+import LABEL_ACTIVITY_BRAND_STRATEGY_OBJECTIVE from '@salesforce/label/c.Activity_Brand_Strategy_Objective';
+import LABEL_ACTIVITY_COMMERCIAL_OBJECTIVE from '@salesforce/label/c.Activity_Commercial_Objective';
+import LABEL_ACTIVITY_RELATIONSHIP_OBJECTIVE from '@salesforce/label/c.Activity_Relationship_Objective';
+import LABEL_ACTIVITY_NEW_TRIAL_OBJECTIVE from '@salesforce/label/c.Activity_New_Trial_Objective';
+import LABEL_ACTIVITY_DETAILS from '@salesforce/label/c.Activity_Details';
+import LABEL_ACTIVITY_MECHANIC from '@salesforce/label/c.Activity_Mechanic';
+import LABEL_ACTIVITY_MECHANICS from '@salesforce/label/c.Activity_Mechanics';
+import LABEL_ACTIVITY_OBJECTIVES_DESCRIPTION from '@salesforce/label/c.Activity_Objectives_Description';
+import LABEL_ACTIVITY_SPEND_VS_BUDGET from '@salesforce/label/c.Activity_Spend_as_a_perc_of_total_Customer_Budget';
+import LABEL_ADDITIONAL_COGS from '@salesforce/label/c.Additional_COGS';
+import LABEL_AGENCY_SUPPLIER_CONTACT from '@salesforce/label/c.Agency_Supplier_Contact';
+import LABEL_APPROVED from '@salesforce/label/c.Approved';
+import LABEL_AVAILABLE from '@salesforce/label/c.Available';
+import LABEL_BANNER_GROUPS from '@salesforce/label/c.Banner_Groups';
 import LABEL_BRAND from '@salesforce/label/c.Brand';
 import LABEL_BRANDS from '@salesforce/label/c.Brands';
+import LABEL_BRANDS_AND_TIMINGS from '@salesforce/label/c.Brands_and_Timings';
+import LABEL_BPA_REVIEW from '@salesforce/label/c.BPA_Review';
+import LABEL_BPA_TEAM_TO_COMPLETE from '@salesforce/label/c.BPA_Team_to_complete';
 import LABEL_CANCEL from '@salesforce/label/c.Cancel';
+import LABEL_CHANGES_SAVED_SUCCESSFULLY from '@salesforce/label/c.Changes_Saved_Successfully';
+import LABEL_CHANNEL from '@salesforce/label/c.Channel';
+import LABEL_COMMENTS from '@salesforce/label/c.Comments';
+import LABEL_COMMERCIAL_LEAD_REVIEW from '@salesforce/label/c.Commercial_Lead_Review';
+import LABEL_COST_DETAILS from '@salesforce/label/c.Cost_Details';
+import LABEL_COST_PER_THOUSAND from '@salesforce/label/c.Cost_per_Thousand';
+import LABEL_CUSTOMER_BANNER from '@salesforce/label/c.Customer_Banner';
+import LABEL_CUSTOMER_CONTACT from '@salesforce/label/c.Customer_Contact';
+import LABEL_CUSTOMER_TYPE from '@salesforce/label/c.Customer_Type';
 import LABEL_DESELECT_ALL from '@salesforce/label/c.DeSelect_All';
 import LABEL_DETACH_FILE from '@salesforce/label/c.Detach_File';
 import LABEL_DETACH_FILE_CONFIRMATION from '@salesforce/label/c.Detach_File_Confirmation';
 import LABEL_DETACH_FILE_SUCCESS from '@salesforce/label/c.Detach_File_Success';
+import LABEL_DETAILS_ON_NATURE_OF_COST from '@salesforce/label/c.Details_on_Nature_of_Cost';
+import LABEL_DRAFT from '@salesforce/label/c.Draft';
+import LABEL_FOCUS_BRANDS from '@salesforce/label/c.Focus_Brands';
+import LABEL_FOCUS_PRODUCTS from '@salesforce/label/c.Focus_Products';
+import LABEL_FORECASTED_COMMERCIAL_RETURN from '@salesforce/label/c.Forecasted_Commercial_Return';
+import LABEL_FORECASTED_REACH_COVERAGE from '@salesforce/label/c.Forecasted_Reach_Coverage';
 import LABEL_FORMINSTRUCTIONS from '@salesforce/label/c.PreEvaluationFormInstructions';
 import LABEL_HELP from '@salesforce/label/c.Help';
+import LABEL_KEYDATES_TIMING from '@salesforce/label/c.Key_Dates_Timings';
+import LABEL_INCREMENTAL_GROSS_PROFIT from '@salesforce/label/c.Incremental_Gross_Profit';
+import LABEL_INCREMENTAL_PROFIT_LOSS from '@salesforce/label/c.Incremental_Profit_Loss';
+import LABEL_INCREMENTAL_PA from '@salesforce/label/c.Incremental_PA';
 import LABEL_INFO from '@salesforce/label/c.Info';
+import LABEL_INSTRUCTIONS from '@salesforce/label/c.Instructions';
+import LABEL_LEAD_CHANNEL from '@salesforce/label/c.Lead_Channel';
+import LABEL_LUMP_SUM_DISCOUNT from '@salesforce/label/c.Lump_Sum_Discount';
+import LABEL_MARKETING_CONTACT from '@salesforce/label/c.Marketing_Contact';
+import LABEL_NEXT from '@salesforce/label/c.Next';
+import LABEL_NO from '@salesforce/label/c.No';
+import LABEL_NUMBER_OF_STORES_IN_BANNER_GROUP from '@salesforce/label/c.Number_of_Stores_in_Banner_Group';
+import LABEL_NUMBER_OF_STORES_IN_BANNER_GROUP_RUNNING_ACTIVITY from '@salesforce/label/c.Number_of_Stores_in_Banner_Group_Running_Activity';
 import LABEL_OK from '@salesforce/label/c.OK';
+import LABEL_PENDING_APPROVAL from '@salesforce/label/c.Pending_Approval';
+import LABEL_PRE_ALIGNMENT_DEADLINE from '@salesforce/label/c.Pre_Alignment_Deadline';
+import LABEL_PRE_EVALUATION_DEADLINE from '@salesforce/label/c.Pre_Evaluation_Deadline';
+import LABEL_PREV from '@salesforce/label/c.PrevAbbrev';
+import LABEL_PRODUCT from '@salesforce/label/c.Product';
+import LABEL_PRODUCTS from '@salesforce/label/c.Products';
+import LABEL_PROJECT_LEADS from '@salesforce/label/c.Project_Leads';
+import LABEL_PROJECT_MANAGER from '@salesforce/label/c.Project_Manager';
+import LABEL_PROJECT_OR_SALES_MGT_TO_COMPLETE from '@salesforce/label/c.Project_or_Sales_Manager_to_Complete'
+import LABEL_PROPOSED_IN_MARKET_END_DATE from '@salesforce/label/c.Proposed_In_Market_End_Date';
+import LABEL_PROPOSED_IN_MARKET_START_DATE from '@salesforce/label/c.Proposed_In_Market_Start_Date';
 import LABEL_RECALL from '@salesforce/label/c.Recall';
 import LABEL_RECALL_SUCCESS from '@salesforce/label/c.Recall_Success';
+import LABEL_REVIEWED from '@salesforce/label/c.Reviewed';
+import LABEL_ROI_PERCENTAGE from '@salesforce/label/c.ROI_Percentage';
+import LABEL_SALES_CONTACT from '@salesforce/label/c.Sales_Contact';
 import LABEL_SAVE from '@salesforce/label/c.Save';
 import LABEL_SELECT_ALL from '@salesforce/label/c.Select_All';
+import LABEL_SELECT_ACTIVITY_FOCUS_ITEMS from '@salesforce/label/c.Select_Activity_Focus_Items';
+import LABEL_SELECTED from '@salesforce/label/c.Selected';
+import LABEL_SMARTSHEET from '@salesforce/label/c.Smartsheet';
+import LABEL_STATE from '@salesforce/label/c.State';
 import LABEL_SUMMARY from '@salesforce/label/c.Summary';
 import LABEL_SUBMIT_FOR_APPROVAL from '@salesforce/label/c.Submit_For_Approval';
+import LABEL_SUBMIT_FOR_REVIEW from '@salesforce/label/c.Submit_for_Review';
+import LABEL_SUBMIT_FOR_REVIEW_SUCCESS from '@salesforce/label/c.Submit_for_Review_Success';
+import LABEL_TOTAL_BUDGETED_COST from '@salesforce/label/c.Total_Budgeted_Cost';
 import LABEL_TOTAL_COST_A_P_HELP from '@salesforce/label/c.Total_Cost_A_P_Help';
 import LABEL_TOTAL_COST_ADDITIONAL_COGS_HELP from '@salesforce/label/c.Total_Cost_Additional_COGS_Help';
 import LABEL_TOTAL_COST_INCREMENTAL_PA_HELP from '@salesforce/label/c.Total_Cost_Incremental_PA_Help';
 import LABEL_TOTAL_COST_LUMP_SUM_HELP from '@salesforce/label/c.Total_Cost_Lump_Sum_Help';
+import LABEL_TOTAL_CUSTOMER_AP_SPEND_VS_SNS from '@salesforce/label/c.Total_Customer_A_P_Spend_as_perc_of_SNS';
+import LABEL_TOTAL_CUSTOMER_AP_BUDGET from '@salesforce/label/c.Total_Customer_A_P_Budget_for_the_financial_year';
+import LABEL_TOTAL_CUSTOMER_SNS from '@salesforce/label/c.Total_Customer_SNS_for_the_financial_year';
+import LABEL_YES from '@salesforce/label/c.Yes';
+import LABEL_WAS_ACTIVITY_RUNNING_LAST_YEAR from '@salesforce/label/c.Was_Activity_Running_Last_Year';
+import LABEL_WORKING_PLEASEWAIT from '@salesforce/label/c.Working_PleaseWait';
 
 import userId from '@salesforce/user/Id';
 
@@ -54,7 +126,7 @@ const yesNoOptions = [
     { label: 'No', value: 'no' }
 ];
 const stateOptions = [
-    { label: 'All', value: 'All' },
+    { label: 'All', value: 'ALL' },
     { label: 'New South Wales', value: 'NSW' },
     { label: 'Victoria', value: 'VIC' },
     { label: 'Queensland', value: 'QLD' },
@@ -69,54 +141,90 @@ const maxNumberOfSteps = 3;
 
 export default class ActivityPreEvaluationForm extends NavigationMixin(LightningElement) {
     labels = {
-        activityApprovalDate    : { label: 'Activity Approval Date' },
-        activityDetails         : { label: 'Activity Details' },
-        activityObjectives      : { label: 'Description of Activity Objectives:' },
-        agencyContact           : { label: 'Agency / Supplier Contact' },
+        activityApprovalDate    : { label: LABEL_ACTIVITY_APPROVAL_DATE },
+        activityBrandStrategyObjective : { label: LABEL_ACTIVITY_BRAND_STRATEGY_OBJECTIVE },
+        activityCommercialObjective : { label: LABEL_ACTIVITY_COMMERCIAL_OBJECTIVE },
+        activityRelationshipObjective : { label: LABEL_ACTIVITY_RELATIONSHIP_OBJECTIVE },
+        activityNewTrialObjective : { label: LABEL_ACTIVITY_NEW_TRIAL_OBJECTIVE },
+        activityDetails         : { label: LABEL_ACTIVITY_DETAILS },
+        activityMechanic        : { label: LABEL_ACTIVITY_MECHANIC, labelPlural: LABEL_ACTIVITY_MECHANICS },
+        activityObjectives      : { label: LABEL_ACTIVITY_OBJECTIVES_DESCRIPTION },
+        activitySpendVSBudget   : { label: LABEL_ACTIVITY_SPEND_VS_BUDGET },        
+        agencyContact           : { label: LABEL_AGENCY_SUPPLIER_CONTACT },
+        approved                : { label: LABEL_APPROVED },
+        available               : { label: LABEL_AVAILABLE },
+        bannerGroup             : { labelPlural: LABEL_BANNER_GROUPS },
         brand                   : { label: LABEL_BRAND, labelPlural: LABEL_BRANDS },
+        brandsAndTimings        : { label: LABEL_BRANDS_AND_TIMINGS },
+        bpaReview               : { label: LABEL_BPA_REVIEW },
+        bpaTeamToComplete       : { label: LABEL_BPA_TEAM_TO_COMPLETE },
         businessOpportunity     : { label: 'What is the Business Opportunity or Challenge?' },
         cancel                  : { label: LABEL_CANCEL },
-        channel                 : { label: 'Channel' },
-        comments                : { label: 'Comments' },
-        customerBanner          : { label: 'Customer Banner' },
-        customerContact         : { label: 'Customer Contact' },
-        customerType            : { label: 'Customer Type' },
+        channel                 : { label: LABEL_CHANNEL },
+        commercialLeadReview    : { label: LABEL_COMMERCIAL_LEAD_REVIEW },
+        comments                : { label: LABEL_COMMENTS },
+        costDetails             : { label: LABEL_COST_DETAILS },
+        costPerThousand         : { label: LABEL_COST_PER_THOUSAND },
+        customerBanner          : { label: LABEL_CUSTOMER_BANNER },
+        customerContact         : { label: LABEL_CUSTOMER_CONTACT },
+        customerType            : { label: LABEL_CUSTOMER_TYPE },
         deselectAll             : { label: LABEL_DESELECT_ALL },
         detachFile              : { label: LABEL_DETACH_FILE, successMessage: LABEL_DETACH_FILE_SUCCESS, confirmation: LABEL_DETACH_FILE_CONFIRMATION},
+        detailsOnNatureOfCost   : { label: LABEL_DETAILS_ON_NATURE_OF_COST },
+        draft                   : { label: LABEL_DRAFT },
+        focusBrands             : { label: LABEL_FOCUS_BRANDS },
+        focusProducts           : { label: LABEL_FOCUS_PRODUCTS },
+        forecastedCommercialReturn : { label: LABEL_FORECASTED_COMMERCIAL_RETURN },
+        forecastedReachCoverage : { label: LABEL_FORECASTED_REACH_COVERAGE },
         help                    : { label: LABEL_HELP },
+        incrementalGrossProfit  : { label: LABEL_INCREMENTAL_GROSS_PROFIT },
+        incrementalProfitLoss   : { label: LABEL_INCREMENTAL_PROFIT_LOSS },
         info                    : { label: LABEL_INFO },
-        inMarketStartDate       : { label: 'Proposed In-Market Start Date' },
-        inMarketEndDate         : { label: 'Proposed In-Market End Date' },
-        instructions            : { label: 'Instructions', message: LABEL_FORMINSTRUCTIONS },
-        keyDates                : { label: 'Key Dates & Timings' },
-        leadChannel             : { label: 'Lead Channel' },
-        marketingContact        : { label: 'Marketing Contact' },
-        next                    : { label: 'Next' },
-        no                      : { label: 'No' },
+        inMarketStartDate       : { label: LABEL_PROPOSED_IN_MARKET_START_DATE },
+        inMarketEndDate         : { label: LABEL_PROPOSED_IN_MARKET_END_DATE },
+        instructions            : { label: LABEL_INSTRUCTIONS, message: LABEL_FORMINSTRUCTIONS },
+        keyDates                : { label: LABEL_KEYDATES_TIMING },
+        leadChannel             : { label: LABEL_LEAD_CHANNEL },
+        marketingContact        : { label: LABEL_MARKETING_CONTACT },
+        next                    : { label: LABEL_NEXT },
+        no                      : { label: LABEL_NO },
+        numberOfStoresInBanner  : { label: LABEL_NUMBER_OF_STORES_IN_BANNER_GROUP },
+        numberOfStoresInBannerRunningActivity  : { label: LABEL_NUMBER_OF_STORES_IN_BANNER_GROUP_RUNNING_ACTIVITY },
         objectives              : { label: 'Activity Objectives / Qualitative Considerations' },
         ok                      : { label: LABEL_OK },
-        preAlignmentDeadline    : { label: 'Pre-Alignment Deadline' },
-        preEvaluationDeadline   : { label: 'Pre-Evaluation Deadline' },
-        prev                    : { label: 'Prev' },
-        projectLeads            : { label: 'Project Leads' },
-        projectManager          : { label: 'Project Manager' },
+        pendingApproval         : { label: LABEL_PENDING_APPROVAL },
+        preAlignmentDeadline    : { label: LABEL_PRE_ALIGNMENT_DEADLINE },
+        preEvaluationDeadline   : { label: LABEL_PRE_EVALUATION_DEADLINE },
+        prev                    : { label: LABEL_PREV },
+        product                 : { label: LABEL_PRODUCT, labelPlural: LABEL_PRODUCTS },
+        projectLeads            : { label: LABEL_PROJECT_LEADS },
+        projectManager          : { label: LABEL_PROJECT_MANAGER },
+        projectOrSalesMgrToComplete : { label: LABEL_PROJECT_OR_SALES_MGT_TO_COMPLETE },
         provideDetailsBelow     : { label: 'Provide details below' },
-        publish                 : { label: 'Publish', instructions: 'Click the Publish button to make this activity visible to the wider team and available for promotions.', successMessage: 'Activity has been successfully published'},
         recall                  : { label: LABEL_RECALL, recalledMessage: LABEL_RECALL_SUCCESS.replace('%0', 'Pre-Evaluation Form') },
-        salesContact            : { label: 'Sales Contact' },        
-        save                    : { label: LABEL_SAVE, message: 'Working! Please wait...' },
-        saveSuccess             : { message: 'All changes saved successfully'},
+        reviewed                : { label: LABEL_REVIEWED },
+        roiPercentage           : { label: LABEL_ROI_PERCENTAGE },
+        salesContact            : { label: LABEL_SALES_CONTACT },        
+        save                    : { label: LABEL_SAVE, message: LABEL_WORKING_PLEASEWAIT },
+        saveSuccess             : { message: LABEL_CHANGES_SAVED_SUCCESSFULLY },
         selectAll               : { label: LABEL_SELECT_ALL },
-        submitForReview         : { label: 'Submit for Review', submittedMessage: 'Form has been successfully submitted for Review' },
+        selectActivityFocusItems : { brands: LABEL_SELECT_ACTIVITY_FOCUS_ITEMS.replace('%0', LABEL_BRANDS), products: LABEL_SELECT_ACTIVITY_FOCUS_ITEMS.replace('%', LABEL_PRODUCTS) },
+        selected                : { label: LABEL_SELECTED },
+        smartsheet              : { label: LABEL_SMARTSHEET },
+        state                   : { label: LABEL_STATE },
+        submitForReview         : { label: LABEL_SUBMIT_FOR_REVIEW, submittedMessage: LABEL_SUBMIT_FOR_REVIEW_SUCCESS.replace('%0', 'Form') },
         submitForApproval       : { label: LABEL_SUBMIT_FOR_APPROVAL, submittedMessage: LABEL_APPROVAL_SUBMITTED.replace('%0', 'Pre-Evaluation Form') },
         summary                 : { label: LABEL_SUMMARY },
+        totalBudgetedCost       : { label: LABEL_TOTAL_BUDGETED_COST },
         totalCostAP             : { label: 'A&P', help: LABEL_TOTAL_COST_A_P_HELP },
-        totalCostAdditionalCOGS : { label: 'Additional COGS', help: LABEL_TOTAL_COST_ADDITIONAL_COGS_HELP },
-        totalCostIncrementalPA  : { label: 'Incremental PA', help: LABEL_TOTAL_COST_INCREMENTAL_PA_HELP },
-        totalCostLumpSum        : { label: 'Lump Sum Discount', help: '' },
-        unpublish               : { label: 'Un Publish', instructions: 'Remove visibility of this activity.', successMessage: 'Activity has been successfully made private'},
-        uploadFile              : { label: 'Upload & Attach Files', message: 'Select files to upload and attach', successMessage: 'Files uploaded successfully!' },
-        yes                     : { label: 'Yes' },
+        totalCostAdditionalCOGS : { label: LABEL_ADDITIONAL_COGS, help: LABEL_TOTAL_COST_ADDITIONAL_COGS_HELP },
+        totalCostIncrementalPA  : { label: LABEL_INCREMENTAL_PA, help: LABEL_TOTAL_COST_INCREMENTAL_PA_HELP },
+        totalCostLumpSum        : { label: LABEL_LUMP_SUM_DISCOUNT, help: '' },
+        totalCustomerAPBudget   : { label: LABEL_TOTAL_CUSTOMER_AP_BUDGET },
+        totalCustomerAPSpendVsSNS : { label: LABEL_TOTAL_CUSTOMER_AP_SPEND_VS_SNS },
+        totalCustomerSNS        : { label: LABEL_TOTAL_CUSTOMER_SNS },
+        wasActivityRunningLastYear : { label: LABEL_WAS_ACTIVITY_RUNNING_LAST_YEAR },
+        yes                     : { label: LABEL_YES },
     };
 
     isPhone = (CLIENT_FORM_FACTOR === "Small");
@@ -138,15 +246,15 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
     showInstructionDetail = true;
 
     get requiresBPAReview() {
-        return this.totalBudgetedCost > 100000;
+        return this.totalBudgetedCost >= 100000;
     }
     get progressStep() {
         let step = "draft";
-        if (this.status == 'Review') {
+        if (this.status == 'Commercial Lead Review' || (this.status == 'Commercial Lead Reviewed' && this.totalBudgetedCost >= 100000)) {
             step = "review";
         } else if (this.status == 'BP&A Review') {
             step = "bpa";
-        } else if (this.status == 'Reviewed') {
+        } else if ((this.status == 'Commercial Lead Reviewed' && this.totalBudgetedCost < 100000) || (this.status == 'BP&A Reviewed' && this.totalBudgetedCost >= 100000)) {
             step = 'reviewed';
         } else if (this.status == 'Submitted' || this.status == 'Pending Approval') {
             step = "submitted";
@@ -264,11 +372,27 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
         //return this.theActivity && this.theActivity.Status__c == 'Draft' && this.theActivity.Activity_Budget__c > 0;
         var canSubmit = false;
         if (this.theActivity) {
-            if (this.theActivity.Status__c == 'Draft' && this.theActivity.Activity_Budget__c > 20000) {
+            if (this.theActivity.Status__c == 'Pending Approval' || this.theActivity.Status__c == 'Approved') {
+                canSubmit = false;
+            } else if (this.theActivity.Project_Manager__c != userId) {
+                canSubmit = false;
+            } else {
+                console.log('budget: ', this.theActivity.Activity_Budget__c);
+                console.log('sales gp', this.theActivity.Incremental_Gross_Profit_Sales__c);
+                console.log('bp&a gp', this.theActivity.Incremental_Gross_Profit__c);
+                if (this.theActivity.Activity_Budget__c > 20000 && (this.theActivity.Incremental_Gross_Profit_Sales__c == undefined || this.theActivity.Incremental_Gross_Profit_Sales__c == 0)) {
+                    canSubmit = true;
+                } else if (this.theActivity.Activity_Budget__c >= 100000 && (this.theActivity.Incremental_Gross_Profit_Sales__c == undefined || this.theActivity.Incremental_Gross_Profit_Sales__c == 0 || this.theActivity.Incremental_Gross_Profit__c == undefined || this.theActivity.Incremental_Gross_Profit__c == 0)) {
+                    canSubmit = true;
+                }
+            }
+            /*
+            if (this.theActivity.Status__c == 'Draft' && this.theActivity.Activity_Budget__c > 20000 && this.theActivity.Incremental_Gross_Profit_Sales__c == 0) {
                 canSubmit = true;
             } else if (this.theActivity.Status__c == 'Review' && this.theActivity.Activity_Budget__c > 100000 && this.theActivity.Incremental_Gross_Profit_Sales__c > 0) {
                 canSubmit = true;
             }
+            */
         }
 
         return canSubmit;
@@ -276,14 +400,14 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
     get canSubmitForApproval() {
         //return this.theActivity && this.theActivity.Activity_Budget__c > 0;
         let canSubmit = false;
-        if (this.theActivity) {
+        if (this.theActivity && this.theActivity.Project_Manager__c == userId && this.theActivity.CreatedById == userId) {
             console.log('[canSubmitForApproval] budget: ', this.theActivity.Activity_Budget__c);
             console.log('[canSubmitForApproval] status', this.status);
             if (this.theActivity.Activity_Budget__c > 0 && this.theActivity.Activity_Budget__c < 20000 && this.status == 'Draft') {
                 canSubmit = true;
-            } else if (this.theActivity.Activity_Budget__c > 0 && this.theActivity.Activity_Budget__c < 100000 && this.theActivity.Incremental_Gross_Profit_Sales__c > 0 && (this.status == 'Draft' || this.status == 'Review')) {
+            } else if (this.theActivity.Activity_Budget__c > 0 && this.theActivity.Activity_Budget__c < 100000 && this.theActivity.Incremental_Gross_Profit_Sales__c > 0 && (this.status == 'Draft' || this.status == 'Commercial Lead Reviewed')) {
                 canSubmit = true;
-            } else if (this.theActivity.Activity_Budget__c > 0 && this.theActivity.Activity_Budget__c > 100000 && this.theActivity.Incremental_Gross_Profit__c > 0 && this.status == 'Reviewed') {
+            } else if (this.theActivity.Activity_Budget__c > 0 && this.theActivity.Activity_Budget__c >= 100000 && this.theActivity.Incremental_Gross_Profit__c > 0 && this.status == 'BP&A Reviewed') {
                 canSubmit = true;
             }    
         }
@@ -294,14 +418,6 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
     }
     get canRecallApproval() {
         return this.theActivity && (this.theActivity.Status__c == 'Submitted' || this.theActivity.Status__c == 'Pending Approval');
-    }
-    get canPublish() {
-        return false;
-        return this.theActivity && this.theActivity.Status__c == 'Approved';
-    }
-    get isPublished() {
-        return false;
-        return this.theActivity && this.theActivity.Status__c == 'Published';
     }
     get isLocked() {
         return this.theActivity && (this.theActivity.Status__c == 'Submitted' || this.theActivity.Status__c == 'Approved');
@@ -409,8 +525,8 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
     get cannotEditSalesManagerFields() {
         return !this.canEditSalesManagerFields;
     }
-    get canEditBPAFields() {
-        console.log('[canEditBPAFields] isEditable, isAdminUser, requiresBPAReview', this.isEditable, this.isAdminUser.data == true, this.requiresBPAReview);
+    get canEditBPAFields() {        
+        console.log('[canEditBPAFields] isEditable, isLocked, isAdminUser, requiresBPAReview', this.isEditable, this.isLocked, this.isAdminUser, this.requiresBPAReview);
         return this.isEditable && !this.isLocked && this.isAdminUser.data == true && this.requiresBPAReview;
     }
     get cannotEditBPAFields() {
@@ -618,40 +734,6 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
         console.log('[savebuttonclick]');
         this.save();
     }
-    handlePublishButtonClick() {
-        this.isWorking = true;
-        const fields = {};
-        fields[FIELD_ID.fieldApiName] = this.recordId;
-        fields[FIELD_STATUS.fieldApiName] = 'Published';
-        const recordInput = { fields };
-        updateRecord(recordInput)
-        .then(() => {
-            this.status = 'Published';
-            this.isWorking = false;
-            this.showToast('success','Success', this.labels.publish.successMessage);
-        })
-        .catch(error => {
-            this.error = error;
-            this.isWorking = false;
-        });
-    }
-    handleUnPublishButtonClick() {
-        this.isWorking = true;
-        const fields = {};
-        fields[FIELD_ID.fieldApiName] = this.recordId;
-        fields[FIELD_STATUS.fieldApiName] = 'Approved';
-        const recordInput = { fields };
-        updateRecord(recordInput)
-        .then(() => {
-            this.status = 'Approved';
-            this.isWorking = false;
-            this.showToast('success','Success', this.labels.unpublish.successMessage);
-        })
-        .catch(error => {
-            this.error = error;
-            this.isWorking = false;
-        });
-    }
     handleSubmitForReviewButtonClick() {
         try {
             this.isWorking = true;
@@ -660,7 +742,7 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
             fields[FIELD_ID.fieldApiName] = this.recordId;
             
             if (this.theActivity.Incremental_Gross_Profit_Sales__c == null || parseFloat(this.theActivity.Incremental_Gross_Profit_Sales__c) == 0) {
-                this.status = 'Review';
+                this.status = 'Commercial Lead Review';
             } else {
                 console.log('[handleSubmitForReviewButtonClick] incremental gp sales is filled in');
                 this.status = 'BP&A Review';
@@ -914,74 +996,6 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
         const l = this.focusProducts.filter(fp => fp.productId != productId);
         this.focusProducts = [...l];
     }
-    handleBannerGroupSearchChange(event) {
-        try {
-            const searchTerm = event.detail.value.toLowerCase();
-            this.visibleBannerGroups = this.nationalBannerGroups.filter(bg => bg.name.toLowerCase().includes(searchTerm));
-        }catch(ex) {
-            console.log('[handlebannergroupsearchchange] exception', ex);
-        }
-    }
-    handleAddBannerGroupsButtonClick(event) {
-        this.isSelectingBannerGroups = true;
-        this.isEditingForm = false;
-    }
-    handleCancelBannerGroupSelectionClick() {
-        this.isSelectingBannerGroups = false;
-        this.isEditingForm = true;
-    }
-    handleCloseBannerGroupSelectionClick() {
-        try {
-            console.log('selected bannerGroups', this.bannerGroupsSelected);
-            this.focusBannerGroups = this.bannerGroupsSelected.map(bgs => {
-                const bg = this.nationalBannerGroups.find(bg => bgs == bg.id );
-                console.log('bg', bg);
-                return {
-                        type: 'avatar',
-                        label: bg.name,
-                        src: bg.imageUrl,
-                        fallbackIconName: 'standard:user',
-                        variant: 'circle',
-                        alternativeText: bg.name,
-                        isLink: false,
-                        bannerGroupId: bg.id
-                }
-            });
-            console.log('focus banners', this.focusBannerGroups);
-            this.isSelectingBannerGroups = false;
-            this.isEditingForm = true;
-    
-        }catch(ex) {
-            console.log('exception', ex);
-        }
-    }
-    handleBannerGroupSelected(event) {
-        console.log('[handleBannerGroupSelection] bannerGroupId', event.detail.id);
-        if (this.bannerGroupsSelected.indexOf(event.detail.id) < 0) {
-            this.bannerGroupsSelected.push(event.detail.id);            
-        }
-        console.log('[handleBannerGroupSelected] bannerGroupSelected', this.bannerGroupsSelected);
-    }
-    handleBannerGroupDeSelected(event) {
-        const index = this.bannerGroupsSelected.indexOf(event.detail);
-        if (index > -1) {
-            this.bannerGroupsSelected.splice(index, 1);
-            this.removedBannerGroups.push(event.detail);
-        }
-    }
-    handleRemoveBannerGroup(event) {
-        const bannerId = event.detail.item.bannerGroupId;
-        const index = this.bannerGroupsSelected.indexOf(bannerId);
-
-        this.bannerGroupsSelected.splice(index, 1);
-        this.removedBannerGroups.push(bannerId);
-
-        const l = this.focusBannerGroups.filter(fbg => fbg.bannerGroupId != bannerId);
-        this.focusBannerGroups = [...l];
-        const bg = this.nationalBannerGroups.find(bng => nbg.Id == bannerId);
-        bg.isSelected = false;
-        this.visibleBannerGroups = [...this.nationalBannerGroups];
-    }
 
     handleInstructionsExpandButtonClick(event) {
         this.showInstructionDetail = !this.showInstructionDetail;
@@ -1035,9 +1049,6 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
     handleCustomerTypeChange(event) {
         this.customerType = event.detail.value;
     }
-    //handleBannerGroupChange(event) {
-    //    this.customerBanner = event.detail.value;
-    //}
     handleStateChange(event) {
         this.states = event.detail.value;
         console.log('[handleStateChange] state', this.states);
@@ -1177,7 +1188,8 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
                 this.forecastedReachCoverage = 0;
                 this.activityCommunicationMethods.forEach(acm => this.forecastedReachCoverage = this.forecastedReachCoverage + parseInt(acm.Reach__c));
             }
-            this.activityCommunicationIncludesOther = (acm != null && acm.Name == 'Other' && acm.Primary__c);
+            this.activityCommunicationIncludesOther = this.activityCommunicationMethods.find(acm => acm.Name == 'Other').Primary__c == true;
+            //this.activityCommunicationIncludesOther = (acm != null && acm.Name == 'Other' && acm.Primary__c);
             console.log('[handleCommunicationMethodCHange] communication methods', this.activityCommunicationMethods);
         }catch(ex) {
             console.log('[handleCommunicationMethodChange] exception', ex);            
@@ -1211,55 +1223,6 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
     handleSmartsheetLinkChange(event) {
         this.smartsheetLink = event.detail.value;
     }    
-    handleFileUploadFinished(event) {
-        try {
-            const files = event.detail.files;  
-            const tempList = [...this.attachedFiles];
-            files.forEach(f => {
-                console.log('[handleFileUploadFinished] file', f);
-                let nameParts = f.name.split('.');
-                const filename = nameParts[0];
-                const fileExtension = nameParts.length == 2 ? nameParts[1].toLowerCase() : '';
-                let iconName = 'attachment';
-                if (fileExtension === 'png' || fileExtension === 'jpg' || fileExtension === 'jpeg') {
-                    iconName = 'image';
-                } else if (fileExtension === 'txt') {
-                    iconName = 'txt';
-                } else if (fileExtension === 'pdf') {
-                    iconName = 'pdf';
-                } else if (fileExtension.startsWith('xl')) {
-                    iconName = 'excel';
-                } else if (fileExtension === 'csv') {
-                    iconName = 'csv';
-                }
-                const attachedFile = {
-                    type: 'icon',
-                    name: f.documentId,
-                    label: filename,
-                    href: "/lightning/r/ContentDocument/" + f.documentId + "/view",
-                    src: "/sfc/servlet.shepherd/version/renditionDownload?rendition=THUMB720BY480&versionId=" + f.documentId,
-                    iconName: 'doctype:'+iconName,
-                    fallbackIconName: 'doctype:'+iconName,
-                    variant: 'link',
-                    alternativeText: 'Attched document', 
-                    isLink: true 
-                }
-                console.log('[handleFileUploadFinished] attachedFile', attachedFile);
-                tempList.push(attachedFile);
-            });
-            this.attachedFiles = [...tempList];
-            this.showToast("success", this.labels.info.label, this.labels.uploadFile.successMessage);
-        }catch(ex) {
-            console.log('[promotionalSalesAgreement.handleFileUploadFinished] exception', ex);
-        }
-
-    }
-    handleRemoveAttachedFile(event) {
-        const response = confirm(this.labels.detachFile.confirmation.replace('{0}', event.detail.item.label));
-        if (response == true) {            
-            this.detachFile(event.detail.item.name, event.detail.item.label, event.detail.index);
-        } 
-    }
 
     /**
      * Helper functions
@@ -1466,25 +1429,6 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
             this.theActivity.Promotion_Activity_Related_Data__r.forEach(pard => {                
                 if (pard.RecordType.Name == 'Banner Group') {   
                     this.bannerGroups.push(pard.Banner_Group__c);                 
-                        /*
-                    const bg = this.nationalBannerGroups.find(bg => bg.id == pard.Banner_Group__c);
-                    console.log('[load] bg', bg);                    
-                    if (bg) {
-                        bg.isSelected = true;
-                        this.selectedBannerGroups.push(bg.id);
-                        this.focusBannerGroups.push({
-                            type: 'avatar',
-                            label: bg.name,
-                            src: bg.imageUrl,
-                            fallbackIconName: 'standard:user',
-                            variant: 'circle',
-                            alternativeText: bg.name,
-                            isLink: false,
-                            bannerGroupId: bg.id,
-                            recordId: pard.Id 
-                        });
-                    }                    
-                        */
                 } else if (pard.RecordType.Name == 'Communication Method') {
                     const acm = this.activityCommunicationMethods.find(a => a.Name == pard.Name);
                     if (acm) {
@@ -1499,46 +1443,8 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
                 }
             });
             console.log('[load] activitycommunication methods', this.activityCommunicationMethods);
-            //this.visibleBannerGroups = [...this.nationalBannerGroups];
-            //console.log('[load] visibleBannerGroups', this.visibleBannerGroups);
         }
 
-        /*
-        this.attachedFiles = [];
-        if (this.theActivity.ContentDocumentLinks && this.theActivity.ContentDocumentLinks.length > 0) {
-            this.attachedFiles = this.theActivity.ContentDocumentLinks.map(cdl => {
-                //return this.addToAttachedFilesList(cdl.ContentDocumentId, cdl.ContentDocument.LatestPublishedVersionId, cdl.ContentDocument.FileExtension, cdl.ContentDocument.Title);
-                let iconName = 'attachment';
-                if (cdl.ContentDocument.FileExtension === 'png' || cdl.ContentDocument.FileExtension === 'jpg' || cdl.ContentDocument.FileExtension === 'jpeg') {
-                    iconName = 'image';
-                } else if (cdl.ContentDocument.FileExtension === 'txt') {
-                    iconName = 'txt';
-                } else if (cdl.ContentDocument.FileExtension === 'pdf') {
-                    iconName = 'pdf';
-                } else if (cdl.ContentDocument.FileExtension.startsWith('xl')) {
-                    iconName = 'excel';
-                } else if (cdl.ContentDocument.FileExtension === 'csv') {
-                    iconName = 'csv';
-                } else {
-                    iconName = 'attachment';
-                }
-                return { type: 'icon',
-                         name: cdl.ContentDocumentId,
-                         label: cdl.ContentDocument.Title,
-                         href: "/lightning/r/ContentDocument/" + cdl.ContentDocumentId + "/view",
-                         src: "/sfc/servlet.shepherd/version/renditionDownload?rendition=THUMB720BY480&versionId=" + cdl.ContentDocument.LatestPublishedVersionId,
-                         iconName: 'doctype:'+iconName,
-                         fallbackIconName: 'doctype:'+iconName,
-                         variant: 'link',
-                         alternativeText: 'Attched document', 
-                         isLink: true 
-                }
-            });
-
-            console.log('[loadAttachedFiles] attachedFiles', this.attachedFiles);
-            
-        }
-        */
     }
 
     save() {
@@ -1564,7 +1470,10 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
             }
             if (this.salesContact) {
                 evalForm.Sales_Manager__c = this.salesContact.id;
+            } else {
+                evalForm.Sales_Manager__c = this.projectManager.id;
             }
+            
             evalForm.Customer_Contact__c = this.customerContact;
             evalForm.Agency_Contact__c = this.agencyContact;
             evalForm.Number_of_Stores_in_Banner_Group__c = this.numberOfStoresInBanner;
@@ -1603,14 +1512,27 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
             evalForm.Evaluation_BPA_Comments__c = this.bpaComments;
             console.log('[save] incrementalgrossprofitsales', this.incrementalGrossProfitSales, this.theActivity.Incremental_Gross_Profit_Sales__c);
             console.log('[save] incrementalGrossProfit', this.incrementalGrossProfit, this.theActivity.Incremental_Gross_Profit__c);
-            evalForm.Status__c = this.status;
+
+            //if (this.isProjectManager) {
+            //    if (this.totalBudgetedCost > 20000 && this.totalBudgetedCost < 100000 && this.incrementalGrossProfitSales != undefined && this.incrementalGrossProfitSales > 0 && this.incrementalGrossProfitSales != this.theActivity.Incremental_Gross_Profit_Sales__c) {
+            //        evalForm.Status__c = 'Commercial Lead Reviewed';
+            //    }
+            //}
+            //if (this.isSalesManager) {
+                if (this.totalBudgetedCost > 20000 && this.incrementalGrossProfitSales != undefined && this.incrementalGrossProfitSales > 0 && this.incrementalGrossProfitSales != this.theActivity.Incremental_Gross_Profit_Sales__c) {
+                    this.status = 'Commercial Lead Reviewed';
+                }    
+            //}
+            if (this.isAdminUser) {
+                if (this.status == 'BP&A Review' && this.totalBudgetedCost >= 100000 && this.incrementalGrossProfit != undefined && this.incrementalGrossProfit > 0 && this.incrementalGrossProfit != this.theActivity.Incremental_Gross_Profit__c) {
+                    this.status = 'BP&A Reviewed';
+                }    
+            }
+            //if ((this.status == 'Draft' || this.status == 'Commercial Lead Review') && this.totalBudgetedCost >= 100000 && this.incrementalGrossProfitSales != undefined && this.incrementalGrossProfitSales > 0 && this.incrementalGrossProfitSales != this.theActivity.Incremental_Gross_Profit_Sales__c) {
+            //    evalForm.Status__c = 'BP&A Review';
+            //}
             
-            if (this.totalBudgetedCost > 100000 && this.incrementalGrossProfitSales != undefined && this.incrementalGrossProfitSales > 0 && this.incrementalGrossProfitSales != this.theActivity.Incremental_Gross_Profit_Sales__c) {
-                evalForm.Status__c = 'BP&A Review';
-            }
-            if (this.totalBudgetedCost > 100000 && this.incrementalGrossProfit != undefined && this.incrementalGrossProfit > 0 && this.incrementalGrossProfit != this.theActivity.Incremental_Gross_Profit__c) {
-                evalForm.Status__c = 'Reviewed';
-            }
+            evalForm.Status__c = this.status;
             console.log('[save] status', evalForm.Status__c);
 
             if (this.focusBrands && this.focusBrands.length > 0) {
@@ -1678,36 +1600,6 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
                 bannerGroupsToDelete = [...existingBannerGroups];
             }
             
-            /*
-            const bannerGroups = [];
-            if (this.focusBannerGroups && this.focusBannerGroups.length > 0) {
-                this.focusBannerGroups.forEach(fbg => {
-                    evalForm.Promo_Banner_Groups__c += fbg.name + ';';
-                    const bg = existingBannerGroups.find(bg => bg.Banner_Group__c == fbg.bannerGroupId);
-                    if (bg == null) {
-                        bannerGroups.push({
-                            Id: fbg.recordId,
-                            Name: fbg.label,
-                            Activity__c: this.theActivity.Id,
-                            Banner_Group__c: fbg.bannerGroupId 
-                        });    
-                    } 
-                });   
-            } else {
-                bannerGroupsToDelete = [...existingBannerGroups];
-            }
-            console.log('[save] removedBannerGroups', this.removedBannerGroups);
-            if (this.removedBannerGroups) {
-                this.removedBannerGroups.forEach(rbg => {
-                    const bg = existingBannerGroups.find(bg => bg.Banner_Group__c == rbg);
-                    if (bg) {
-                        bannerGroupsToDelete.push(bg);
-                    }
-                });
-            }
-            console.log('[save] existing banner groups', existingBannerGroups);
-            console.log('[save] banners to delete', bannerGroupsToDelete);
-            */
             /* Communication Methods */
             const relatedData = this.activityCommunicationMethods;
 

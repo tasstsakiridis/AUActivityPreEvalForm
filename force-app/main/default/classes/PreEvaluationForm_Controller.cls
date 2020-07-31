@@ -1,7 +1,7 @@
 public with sharing class PreEvaluationForm_Controller {
     @AuraEnabled(cacheable=true) 
     public static Promotion_Activity__c getActivity(String activityId) {
-        return [SELECT Id, Name, RecordTypeId, RecordType.Name, Status__c, Promotion_Activity_Number__c, Channel__c, Market__c, Market_Filter__c, Publish_Activity__c,
+        return [SELECT Id, Name, RecordTypeId, RecordType.Name, Status__c, Promotion_Activity_Number__c, Channel__c, Market__c, Market_Filter__c, 
                        Customer_Type__c, National_Banner__c, National_Banner__r.Name, Project_Manager__c, Project_Manager__r.Name,
                        Project_Manager__r.SmallPhotoUrl, Marketing_Manager__c, Marketing_Manager__r.Name, Marketing_Manager__r.SmallPhotoUrl,
                        Sales_Manager__c, Sales_Manager__r.Name, Sales_Manager__r.SmallPhotoUrl, Customer_Contact__c, Agency_Contact__c, Number_of_Stores_in_Banner_Group__c,
@@ -16,6 +16,7 @@ public with sharing class PreEvaluationForm_Controller {
                        Incremental_ROI__c, Incremental_ROI_Sales__c, Activity_Spend_of_Customer_Budget__c, Total_Customer_Spend_of_SNS__c,
                        Forecasted_Cost_per_Thousand__c, Total_Budgeted_Cost_AP__c, Total_Budgeted_Cost_PA__c, Total_Budgeted_Cost_LumpSum__c,
                        Total_Budgeted_Cost_COGS__c, Incremental_9L_Uplift__c, Evaluation_BPA_Comments__c, Activity_Comments__c,
+                       CreatedById,
                        (SELECT Id, Activity__c, RecordTypeId, RecordType.Name, Name, Primary__c, Secondary__c, Reach__c, Banner_Group__c
                           FROM Promotion_Activity_Related_Data__r),
                        (SELECT Id, RecordTypeId, Activity__c, Product_NoFilter__c, Product_NoFilter__r.Name, Product_NoFilter__r.Image_Name__c,
