@@ -1188,7 +1188,7 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
                 this.forecastedReachCoverage = 0;
                 this.activityCommunicationMethods.forEach(acm => this.forecastedReachCoverage = this.forecastedReachCoverage + parseInt(acm.Reach__c));
             }
-            this.activityCommunicationIncludesOther = this.activityCommunicationMethods.find(acm => acm.Name == 'Other').Primary__c == true;
+            //this.activityCommunicationIncludesOther = this.activityCommunicationMethods.find(acm => acm.Name == 'Other').Primary__c == true;
             //this.activityCommunicationIncludesOther = (acm != null && acm.Name == 'Other' && acm.Primary__c);
             console.log('[handleCommunicationMethodCHange] communication methods', this.activityCommunicationMethods);
         }catch(ex) {
