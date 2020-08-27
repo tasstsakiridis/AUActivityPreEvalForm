@@ -276,14 +276,13 @@
             <div style="page-break-before:always;">
                 <apex:outputPanel id="items" title="Items" layout="block">
                     <h3>How is the Activity communicated to the consumer?</h3>
-                    <apex:dataTable cellpadding="5" var="i" value="{!relatedTo.Promotion_Activity_Related_Data__r}">
-                        <apex:column value="{!i.Primary__c}" headerValue="" width="100px" rendered="{!i.RecordTypeName__c=='Communication Method'}" />
-                        <apex:column value="{!i.Name}" headerValue="Catalogue" width="300px" style="color:blue;" rendered="{!i.RecordTypeName__c=='Communication Method'}"/>
-                        <apex:column value="{!i.Reach__c}" headerValue="{!$ObjectType.Promotion_Activity_Related_Data__c.Fields.Reach__c.Label}" width="150px" rendered="{!i.RecordTypeName__c=='Communication Method'}"/>
+                    <apex:dataTable cellpadding="5" var="i" value="{!relatedTo.Promotion_Activity_Related_Data__r}" >
+                        <apex:column value="{!i.Primary__c}" headerValue="" width="100px"/>
+                        <apex:column value="{!i.Name}" headerValue="Catalogue" width="300px" style="color:blue;"/>
+                        <apex:column value="{!i.Reach__c}" headerValue="{!$ObjectType.Promotion_Activity_Related_Data__c.Fields.Reach__c.Label}" width="150px"/>
                     </apex:dataTable>
                 </apex:outputPanel>                
-            </div>            
-            
+            </div>
         </div>
         <br /><br />
         <div style="page-break-before:always;">
@@ -394,7 +393,7 @@
             <br />            
             <div>
                 <h3 class="label">ROI %</h3>
-                <apex:outputText value="{0, number, 0.00%}">
+                <apex:outputText value="{0, number, ##0.00%}">
                     <apex:param value="{!relatedTo.Incremental_ROI_Sales__c/100}" />
                 </apex:outputText>                    
             </div>
@@ -417,7 +416,7 @@
             <br />            
             <div>
                 <h3 class="label">ROI %</h3>
-                <apex:outputText value="{0, number, 0.00%}">
+                <apex:outputText value="{0, number, ##0.00%}">
                     <apex:param value="{!relatedTo.Incremental_ROI__c/100}" />
                 </apex:outputText>                    
             </div>
@@ -440,9 +439,12 @@
     </body>
 </html>
 </messaging:attachment>
-<messaging:plainTextEmailBody >
-Attached are the details of this activity.  Click the link to review.
-
-{!relatedTo.Detail_Link__c}
-</messaging:plainTextEmailBody>
+<messaging:htmlEmailBody >
+    <a href="https://bf.my.salesforce.com/{!relatedTo.Id}"><b>{!relatedTo.Name}</b></a> created by {!relatedTo.createdBy.Name} on {!relatedTo.createdDate} requires approval.
+    <br />
+    <p>
+    The details of this evaluation are attached below for your review, or you can click on the link above to view the order in Salesforce.
+    You can accept or reject this or formder by replying to this email with the word <b>"approve"</b> or <b>"reject"</b> in the first line of your response.  Make sure that any comments that you want to add start from line two (2) of your response.    
+    </p>
+</messaging:htmlEmailBody>
 </messaging:emailTemplate>

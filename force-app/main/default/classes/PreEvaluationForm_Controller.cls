@@ -16,7 +16,7 @@ public with sharing class PreEvaluationForm_Controller {
                        Incremental_ROI__c, Incremental_ROI_Sales__c, Activity_Spend_of_Customer_Budget__c, Total_Customer_Spend_of_SNS__c,
                        Forecasted_Cost_per_Thousand__c, Total_Budgeted_Cost_AP__c, Total_Budgeted_Cost_PA__c, Total_Budgeted_Cost_LumpSum__c,
                        Total_Budgeted_Cost_COGS__c, Incremental_9L_Uplift__c, Evaluation_BPA_Comments__c, Activity_Comments__c,
-                       CreatedById,
+                       CreatedById, Publish_Activity__c,
                        (SELECT Id, Activity__c, RecordTypeId, RecordType.Name, Name, Primary__c, Secondary__c, Reach__c, Banner_Group__c
                           FROM Promotion_Activity_Related_Data__r),
                        (SELECT Id, RecordTypeId, Activity__c, Product_NoFilter__c, Product_NoFilter__r.Name, Product_NoFilter__r.Image_Name__c,

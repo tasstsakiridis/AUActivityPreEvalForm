@@ -400,7 +400,7 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
     get canSubmitForApproval() {
         //return this.theActivity && this.theActivity.Activity_Budget__c > 0;
         let canSubmit = false;
-        if (this.theActivity && this.theActivity.Project_Manager__c == userId && this.theActivity.CreatedById == userId) {
+        if (this.theActivity && (this.theActivity.Project_Manager__c == userId || this.theActivity.CreatedById == userId)) {
             console.log('[canSubmitForApproval] budget: ', this.theActivity.Activity_Budget__c);
             console.log('[canSubmitForApproval] status', this.status);
             if (this.theActivity.Activity_Budget__c > 0 && this.theActivity.Activity_Budget__c < 20000 && this.status == 'Draft') {
@@ -1311,7 +1311,9 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
 
         this.smartsheetLink = this.theActivity.Smartsheet_Link__c;
 
-        this.publishActivity = this.theActivity.Publish_Activity__c || false;
+        this.publishActivity = this.theActivity.Publish_Activity__c == undefined ? false : this.theActivity.Publish_Activity__c;
+        console.log('[load] publishactivity', this.publishActivity, this.theActivity.Publish_Activity__c);
+
         this.status = this.theActivity.Status__c;
         this.channel = this.theActivity.Channel__c;
         this.customerType = this.theActivity.Customer_Type__c;
@@ -1459,8 +1461,11 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
             evalForm.Market__c = this.market;
             evalForm.Market_Filter__c = this.marketName;
             evalForm.Active__c = true;
-            evalForm.Publish_Activity__c = this.publishActivity;
+            evalForm.Publish_Activity__c = this.publishActivity;            
             evalForm.Promotion_Type__c = 'Sales Promo';
+            if (this.status == 'Approved') {
+                evalForm.Wombat_Active__c = this.publishActivity;
+            }
             
             if (this.projectManager) {
                 evalForm.Project_Manager__c = this.projectManager.id;

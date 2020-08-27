@@ -129,8 +129,12 @@ private class PreEvaluationForm_Controller_Test {
             List<Banner_Groups__c> bannerGroups = PreEvaluationForm_Controller.getBannerGroups(mAU.Id);
 
             List<Product__c> l_products = PreEvaluationForm_Controller.getProducts(null);
-
+            
             String msg = PreEvaluationForm_Controller.save(pa1, l_PAP, l_PARD_Comms, l_PARD_Banners, null);
+
+            AU_PreEvalForm_Attachment_Controller controller = new AU_PreEvalForm_Attachment_Controller();
+            controller.setTheEvalForm(pa1);
+
 
             msg = PreEvaluationForm_Controller.submitForApproval(pa1.Id);
             msg = PreEvaluationForm_Controller.recallApproval(pa1.Id);
