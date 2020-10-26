@@ -16,7 +16,8 @@ public with sharing class PreEvaluationForm_Controller {
                        Incremental_ROI__c, Incremental_ROI_Sales__c, Activity_Spend_of_Customer_Budget__c, Total_Customer_Spend_of_SNS__c,
                        Forecasted_Cost_per_Thousand__c, Total_Budgeted_Cost_AP__c, Total_Budgeted_Cost_PA__c, Total_Budgeted_Cost_LumpSum__c,
                        Total_Budgeted_Cost_COGS__c, Incremental_9L_Uplift__c, Evaluation_BPA_Comments__c, Activity_Comments__c,
-                       CreatedById, Publish_Activity__c,
+                       CreatedById, Publish_Activity__c, Is_Rejected__c, Commercial_Lead_Review_Entered_By__c, Commercial_Lead_Review_Entered_By_Name__c,
+                       Incremental_Gross_Profit_Previous__c, Incremental_Gross_Profit_Sales_Previous__c, 
                        (SELECT Id, Activity__c, RecordTypeId, RecordType.Name, Name, Primary__c, Secondary__c, Reach__c, Banner_Group__c
                           FROM Promotion_Activity_Related_Data__r),
                        (SELECT Id, RecordTypeId, Activity__c, Product_NoFilter__c, Product_NoFilter__r.Name, Product_NoFilter__r.Image_Name__c,
@@ -92,6 +93,11 @@ public with sharing class PreEvaluationForm_Controller {
     public static String save(Promotion_Activity__c activity, List<Activity_Product__c> products, List<Promotion_Activity_Related_Data__c> relatedData, List<Promotion_Activity_Related_Data__c> bannerGroups, List<Promotion_Activity_Related_Data__c> bannerGroupsToDelete) {
         String msg = 'OK';
         try {
+            System.debug('status: ' + activity.Status__c);
+            if (activity.Incremental_Gross_Profit_Sales__c > 0 && (activity.Status__c == 'Draft' || activity.Status__c == 'Commercial Lead Review' || activity.Status__c == 'Commercial Lead Reviewed')) {
+                activity.Commercial_Lead_Review_Entered_By__c = UserInfo.getUserId();
+                activity.Commercial_Lead_Review_Entered_By_Name__c = UserInfo.getName();
+            }
             update activity;
 
             String rtCRMAU = '';
@@ -156,9 +162,10 @@ public with sharing class PreEvaluationForm_Controller {
     public static String submitForApproval(String activityId) {
         String msg = 'OK';
         try {
-            Promotion_Activity__c theActivity = [SELECT Id, Status__c FROM Promotion_Activity__c WHERE Id =:activityId];
+            Promotion_Activity__c theActivity = [SELECT Id, Status__c, Is_Rejected__c FROM Promotion_Activity__c WHERE Id =:activityId];
             if (theActivity != null) {
                 theActivity.Status__c = 'Submitted';
+                theActivity.Is_Rejected__c = false;
                 update theActivity;
 
                 /*

@@ -318,8 +318,10 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
     totalBudgetedCostLumpSum;
     incrementalGrossProfit;
     incrementalGrossProfitChanged;
-    incrementalGrossProfitSales;
+    incrementalGrossProfitPrevious = 0;
+    incrementalGrossProfitSales;    
     incrementalGrossProfitSalesChanged;
+    incrementalGrossProfitSalesPrevious = 0;
     forecastedReachCoverage;
     businessOpportunity;
     activityObjectives;
@@ -345,6 +347,9 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
     @track 
     incrementalDiscountsProvided;    
 
+    @track 
+    recordTypeId;
+    
     focusBrands = [];
     focusProducts = [];
     focusBannerGroups = [];
@@ -380,19 +385,35 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
                 console.log('budget: ', this.theActivity.Activity_Budget__c);
                 console.log('sales gp', this.theActivity.Incremental_Gross_Profit_Sales__c);
                 console.log('bp&a gp', this.theActivity.Incremental_Gross_Profit__c);
-                if (this.theActivity.Activity_Budget__c > 20000 && (this.theActivity.Incremental_Gross_Profit_Sales__c == undefined || this.theActivity.Incremental_Gross_Profit_Sales__c == 0)) {
+                console.log('status', this.theActivity.Status__c);
+                console.log('isRejected', this.theActivity.Is_Rejected__c);
+                /*
+                if (this.theActivity.Activity_Budget__c >= 100000) {
+                    if (this.theActivity.Is_Rejected__c && this.theActivity.Status__c != 'BP&A Reviewed') {
+                        canSubmit = true;
+                    } else if (this.theActivity.Incremental_Gross_Profit__c == undefined || this.theActivity.Incremental_Gross_Profit__c == 0) {
+                        canSubmit = true;
+                    } else {
+                        canSubmit = false;
+                    }
+                } else if (this.theActivity.Activity_Budget__c >= 20000) {
+                    if (this.theActivity.Is_Rejected__c && this.theActivity.Project_Manager__c != this.theActivity.Commercial_Lead_Review_Entered_By__c && this.theActivity.Status__c != 'Commercial Lead Reviewed') {
+                        canSubmit = true;
+                    } else if (this.theActivity.Incremental_Gross_Profit_Sales__c == undefined || this.theActivity.Incremental_Gross_Profit_Sales__c == 0) {
+                        canSubmit = true;
+                    } else {
+                        canSubmit = false;
+                    }
+                }
+                */
+                
+                if (this.theActivity.Activity_Budget__c > 20000 && (this.theActivity.Incremental_Gross_Profit_Sales__c == undefined || this.theActivity.Incremental_Gross_Profit_Sales__c == 0)  && this.theActivity.Project_Manager__c != this.theActivity.Commercial_Lead_Review_Entered_By__c) {
                     canSubmit = true;
                 } else if (this.theActivity.Activity_Budget__c >= 100000 && (this.theActivity.Incremental_Gross_Profit_Sales__c == undefined || this.theActivity.Incremental_Gross_Profit_Sales__c == 0 || this.theActivity.Incremental_Gross_Profit__c == undefined || this.theActivity.Incremental_Gross_Profit__c == 0)) {
                     canSubmit = true;
                 }
+                
             }
-            /*
-            if (this.theActivity.Status__c == 'Draft' && this.theActivity.Activity_Budget__c > 20000 && this.theActivity.Incremental_Gross_Profit_Sales__c == 0) {
-                canSubmit = true;
-            } else if (this.theActivity.Status__c == 'Review' && this.theActivity.Activity_Budget__c > 100000 && this.theActivity.Incremental_Gross_Profit_Sales__c > 0) {
-                canSubmit = true;
-            }
-            */
         }
 
         return canSubmit;
@@ -403,7 +424,7 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
         if (this.theActivity && (this.theActivity.Project_Manager__c == userId || this.theActivity.CreatedById == userId)) {
             console.log('[canSubmitForApproval] budget: ', this.theActivity.Activity_Budget__c);
             console.log('[canSubmitForApproval] status', this.status);
-            if (this.theActivity.Activity_Budget__c > 0 && this.theActivity.Activity_Budget__c < 20000 && this.status == 'Draft') {
+            if (this.theActivity.Activity_Budget__c > 0 && this.theActivity.Activity_Budget__c <= 20000 && this.status == 'Draft') {
                 canSubmit = true;
             } else if (this.theActivity.Activity_Budget__c > 0 && this.theActivity.Activity_Budget__c < 100000 && this.theActivity.Incremental_Gross_Profit_Sales__c > 0 && (this.status == 'Draft' || this.status == 'Commercial Lead Reviewed')) {
                 canSubmit = true;
@@ -572,6 +593,7 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
     picklistValuesMap;
     @wire(getPicklistValuesByRecordType, { objectApiName: { objectApiName: 'Promotion_Activity__c' }, recordTypeId: '$recordTypeId' })
     wiredPicklistValues({ error, data }) {
+        console.log('[getPicklistValues] recordtypeid', this.recordTypeId);
         console.log('[getPicklistValues] data', data);
         console.log('[getPicklistValues] error', error);
         if (data) {
@@ -740,8 +762,13 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
             console.log('[handleSubmitForReviewButtonClick]');
             const fields = {};
             fields[FIELD_ID.fieldApiName] = this.recordId;
-            
-            if (this.theActivity.Incremental_Gross_Profit_Sales__c == null || parseFloat(this.theActivity.Incremental_Gross_Profit_Sales__c) == 0) {
+            if (this.theActivity.Is_Rejected__c) {
+                if (this.status == 'Draft' && this.theActivity.Project_Manager__c != this.theActivity.Commercial_Lead_Review_Entered_By__c) {
+                    this.status = 'Commercial Lead Review';
+                } else {
+                    this.status = 'BP&A Review';
+                }
+            } else if (this.theActivity.Incremental_Gross_Profit_Sales__c == null || parseFloat(this.theActivity.Incremental_Gross_Profit_Sales__c) == 0) {
                 this.status = 'Commercial Lead Review';
             } else {
                 console.log('[handleSubmitForReviewButtonClick] incremental gp sales is filled in');
@@ -1360,11 +1387,14 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
         this.bpaComments = this.theActivity.Evaluation_BPA_Comments__c;
 
         this.incrementalGrossProfit = this.theActivity.Incremental_Gross_Profit__c;
+        this.incrementalGrossProfitPrevious = 'previously was ' + this.theActivity.Incremental_Gross_Profit_Previous__c;
         this.incrementalGrossProfitSales = this.theActivity.Incremental_Gross_Profit_Sales__c;
+        this.incrementalGrossProfitSalesPrevious = 'previously was ' + this.theActivity.Incremental_Gross_Profit_Sales_Previous__c;
         this.forecastedReachCoverage = this.theActivity.Forecasted_Reach_Coverage__c;
         this.totalCustomerAPBudget = this.theActivity.Total_Customer_AP_Budget__c;
         this.totalCustomerSNS = this.theActivity.Total_Customer_SNS__c;
-
+        console.log('incrementalGrossProfit', this.incrementalGrossProfit, this.incrementalGrossProfitPrevious);
+        console.log('incrementalGrossProfitSale', this.incrementalGrossProfitSales, this.incrementalGrossProfitSalesPrevious);
         this.incremental9LUplift = this.theActivity.Incremental_9L_Uplift__c;
 
         if (this.theActivity.Promo_Brands__c != null) {
@@ -1518,18 +1548,11 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
             console.log('[save] incrementalgrossprofitsales', this.incrementalGrossProfitSales, this.theActivity.Incremental_Gross_Profit_Sales__c);
             console.log('[save] incrementalGrossProfit', this.incrementalGrossProfit, this.theActivity.Incremental_Gross_Profit__c);
 
-            //if (this.isProjectManager) {
-            //    if (this.totalBudgetedCost > 20000 && this.totalBudgetedCost < 100000 && this.incrementalGrossProfitSales != undefined && this.incrementalGrossProfitSales > 0 && this.incrementalGrossProfitSales != this.theActivity.Incremental_Gross_Profit_Sales__c) {
-            //        evalForm.Status__c = 'Commercial Lead Reviewed';
-            //    }
-            //}
-            //if (this.isSalesManager) {
-                if (this.totalBudgetedCost > 20000 && this.incrementalGrossProfitSales != undefined && this.incrementalGrossProfitSales > 0 && this.incrementalGrossProfitSales != this.theActivity.Incremental_Gross_Profit_Sales__c) {
-                    this.status = 'Commercial Lead Reviewed';
-                }    
-            //}
+            if (this.status == 'Commercial Lead Review' && this.totalBudgetedCost > 20000 && this.incrementalGrossProfitSales != undefined && this.incrementalGrossProfitSales > 0) {
+                this.status = 'Commercial Lead Reviewed';
+            }    
             if (this.isAdminUser) {
-                if (this.status == 'BP&A Review' && this.totalBudgetedCost >= 100000 && this.incrementalGrossProfit != undefined && this.incrementalGrossProfit > 0 && this.incrementalGrossProfit != this.theActivity.Incremental_Gross_Profit__c) {
+                if (this.status == 'BP&A Review' && this.totalBudgetedCost >= 100000 && this.incrementalGrossProfit != undefined && this.incrementalGrossProfit > 0) {
                     this.status = 'BP&A Reviewed';
                 }    
             }

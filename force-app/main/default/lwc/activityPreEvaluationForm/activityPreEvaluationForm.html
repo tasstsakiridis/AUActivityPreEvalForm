@@ -429,7 +429,7 @@
                                             <div class="slds-m-horizontal_small">
                                                 <lightning-layout multiple-rows="true">
                                                     <lightning-layout-item size="12" padding="horizontal-small">
-                                                        <lightning-input type="number" label={labels.incrementalGrossProfit.label} formatter="currency" disabled={cannotEditSalesManagerFields} value={incrementalGrossProfitSales} onchange={handleIncrementalGrossProfitSalesChange}></lightning-input>
+                                                        <lightning-input type="number" label={labels.incrementalGrossProfit.label} placeholder={incrementalGrossProfitSalesPrevious} formatter="currency" disabled={cannotEditSalesManagerFields} value={incrementalGrossProfitSales} onchange={handleIncrementalGrossProfitSalesChange}></lightning-input>
                                                     </lightning-layout-item>
                                                     <lightning-layout-item size="12" padding="around-small">
                                                         <lightning-input type="number" label={labels.incrementalProfitLoss.label} formatter="currency" disabled value={incrementalProfitLossSales}></lightning-input>
@@ -450,7 +450,7 @@
                                             <div class="slds-m-horizontal_small">
                                                 <lightning-layout multiple-rows="true">
                                                     <lightning-layout-item size="12" padding="horizontal-small">
-                                                        <lightning-input type="number" label={labels.incrementalGrossProfit.label} formatter="currency" disabled={cannotEditBPAFields} value={incrementalGrossProfit} onchange={handleIncrementalGrossProfitChange}></lightning-input>
+                                                        <lightning-input type="number" label={labels.incrementalGrossProfit.label} placeholder={incrementalGrossProfitPrevious} formatter="currency" disabled={cannotEditBPAFields} value={incrementalGrossProfit} onchange={handleIncrementalGrossProfitChange}></lightning-input>
                                                     </lightning-layout-item>
                                                     <lightning-layout-item size="12" padding="around-small">
                                                         <lightning-input type="number" label={labels.incrementalProfitLoss.label} formatter="currency" disabled value={incrementalProfitLoss}></lightning-input>
