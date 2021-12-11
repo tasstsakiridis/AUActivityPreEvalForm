@@ -944,9 +944,10 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
 
     handleSelectAllProductForBrandClick() {
         this.allProductsSelected = !this.allProductsSelected;
-        fireEvent(this.pageRef, 'selectTile', this.allProductsSelected);
+        //fireEvent(this.pageRef, 'selectTile', this.allProductsSelected);
         if (this.allProductsSelected) {
             this.products.forEach(p => {
+                this.template.querySelector('c-selectable-tile.'+p.id).select();
                 if (this.productsSelected.indexOf(p.id) <= 0) {
                     this.productsSelected.push(p.id);
                 }

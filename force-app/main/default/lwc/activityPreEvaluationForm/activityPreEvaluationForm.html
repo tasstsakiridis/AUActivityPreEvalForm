@@ -31,7 +31,7 @@
             <div class="content slds-m-around_large">
                 <template if:true={products}>
                     <template for:each={products} for:item="product">
-                        <c-selectable-tile key={product.id} image-position="left" obj-record={product} obj-record-id={product.id} obj-record-api-name="Product__c" text-line-1={product.name} image-url={product.imageUrl} selected-event-name="productselected" onproductselected={handleProductSelected}></c-selectable-tile>
+                        <c-selectable-tile key={product.id} class={product.id} image-position="left" obj-record={product} obj-record-id={product.id} obj-record-api-name="Product__c" text-line-1={product.name} image-url={product.imageUrl} selected-event-name="productselected" onproductselected={handleProductSelected}></c-selectable-tile>
                     </template>
                 </template>
             </div>
