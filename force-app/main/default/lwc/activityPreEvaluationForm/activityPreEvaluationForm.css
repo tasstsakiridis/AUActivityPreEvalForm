@@ -1,0 +1,54 @@
+.panel-info {
+    background-color: #ffe8cc !important;
+    border: 1px solid #999 !important;
+    border-radius: 3px !important;
+    box-shadow: 0 3px 5px 0px #666 !important;
+    padding: 10px !important;
+}
+.background-info {
+    background-color: #ffe8cc;
+}
+.text-info {
+    color: red;
+    font-size: 8pt;
+}
+.text-info_medium {
+    color: red;
+    font-size: large;
+}
+.text-instructions {
+    color: #9F6000;
+    font-size: 10pt;
+    /*font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;*/
+}
+.text-small {
+    font-size: 8pt;
+}
+.content {
+    display: flex;
+    flex-wrap: wrap
+}
+.content-horizontal {
+    max-height: 100px;
+    overflow-y: scroll;
+}
+.required-field::before {
+    color: red;
+    content: '*';
+}
+
+c-brand-tile {
+    margin: 5px 10px;
+}
+c-product-tile {
+    margin: 5px 10px;
+}
+c-selectable-tile {
+    margin: 5px 10px;
+}
+c-selectable-tile > .brand {
+    max-width: 150px !important;
+}
+c-activity-communication-method {
+    margin-bottom: 5px;
+}

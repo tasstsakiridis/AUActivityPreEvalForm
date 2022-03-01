@@ -1,0 +1,26 @@
+<template>
+    <div class="content">
+    <lightning-layout multiple-rows="true">
+        <!--
+        <lightning-layout-item size="12" small-device-size="12" large-device-size="6">
+            <p>&nbsp;</p>
+            <p class="slds-text-title_caps">{name}</p>
+        </lightning-layout-item>
+        -->
+        <lightning-layout-item size="12" small-device-size="12" large-device-size="6">
+            <div>
+                <lightning-input type="checkbox" label={name} name="i_Primary" checked={isPrimary} readonly={isreadonly} onchange={handleIsPrimaryChange}></lightning-input>
+            </div>
+        </lightning-layout-item>
+        <!--
+        <lightning-layout-item size="12" small-device-size="12" large-device-size="2">
+            <h2 class="slds-text-body_small">{labels.secondary.label}</h2>
+            <lightning-input type="checkbox" label="" name="i_Secondary" checked={isSecondary} readonly={isreadonly} onchange={handleIsSecondaryChange}></lightning-input>            
+        </lightning-layout-item>
+        -->
+        <lightning-layout-item size="12" small-device-size="12" large-device-size="6">
+            <lightning-input type="number" label={labels.reach.label} name="i_Reach" value={reachCount} readonly={isreadonly} onchange={handleReachChange}></lightning-input>            
+        </lightning-layout-item>
+    </lightning-layout>
+    </div>
+</template>

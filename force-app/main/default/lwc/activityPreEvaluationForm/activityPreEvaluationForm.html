@@ -1,0 +1,482 @@
+<template>
+    <template if:true={isSelectingBrands}>
+       <div class="slds-m-top_x-small slds-m-bottom_x-small panel-info">
+            <span class="slds-p-around_x-small">{labels.selectActivityFocusItems.brands}</span>
+        </div>
+        <lightning-card class="slds-m-horizontal_medium">
+            <h1 class="slds-text-title_caps" slot="title">{labels.brand.labelPlural}</h1>
+            <lightning-button-group slot="actions">
+                <lightning-input label=" " class="slds-m-right_small" type="search" onchange={handleBrandSearchChange}></lightning-input>
+                <lightning-button label={labels.cancel.label} variant="brand" class="slds-m-top_medium" onclick={handleCancelBrandSelectionClick}></lightning-button>
+                <lightning-button label={labels.ok.label} variant="brand" class="slds-m-left_x-small slds-m-top_medium" onclick={handleCloseBrandSelectionClick}></lightning-button>    
+            </lightning-button-group>
+            <div class="content slds-m-around_large">
+                <template if:true={visibleBrands}>
+                    <template for:each={visibleBrands} for:item="brand">
+                        <c-selectable-tile key={brand.Id} class="brand" obj-record={brand} obj-record-id={brand.id} image-position="left" obj-record-api-name="Brand__c" title={brand.name} image-url={brand.imageUrl} selected-event-name="brandselected" onbrandselected={handleBrandSelected}></c-selectable-tile>
+                    </template>
+                </template>    
+            </div>    
+        </lightning-card>
+    </template>
+    <template if:true={isSelectingProducts}>        
+        <div class="slds-m-top_x-small slds-m-bottom_small panel-info">
+            <span class="slds-p-around_x-small">{labels.selectActivityFocusItems.products}</span>
+        </div>
+        <lightning-card class="slds-m-hotizontal_medium">
+            <h1 class="slds-text-title_caps" slot="title">{labels.product.labelPlural}</h1>
+            <lightning-button label={selectAllProductsLabel} slot="actions" onclick={handleSelectAllProductForBrandClick}></lightning-button>
+            <lightning-button label={labels.cancel.label} variant="brand" slot="actions" class="slds-m-left_x-small" onclick={handleCancelProductSelectionClick}></lightning-button>
+            <lightning-button label={labels.ok.label} variant="brand" slot="actions" class="slds-m-left_x-small" onclick={handleCloseProductSelectionClick}></lightning-button>
+            <div class="content slds-m-around_large">
+                <template if:true={products}>
+                    <template for:each={products} for:item="product">
+                        <c-selectable-tile key={product.id} image-position="left" obj-record={product} obj-record-id={product.id} obj-record-api-name="Product__c" text-line-1={product.name} image-url={product.imageUrl} selected-event-name="productselected" onproductselected={handleProductSelected}></c-selectable-tile>
+                    </template>
+                </template>
+            </div>
+        </lightning-card>
+    </template>
+    <template if:true={isEditingForm}>
+
+        <template if:true={isWorking}>
+            <div class="slds-m-around_medium slds-align_absolute-center">
+                <lightning-spinner alternative-text={labels.save.message}></lightning-spinner>
+                <p class="slds-text-title_caps">{workingMessage}</p>
+            </div>
+        </template>
+            
+        <lightning-card class="slds-m-top_x-small slds-m-bottom_small slds-p-horizontal_small panel-info">
+            
+            <h3 class="slds-text-title_caps slds-m-bottom_small" slot="title">{labels.instructions.label}</h3>
+            <template if:false={showInstructionDetail}>
+                <lightning-button-icon icon-name="utility:chevronright" alternative-text="Expand/Collapse Instructions" slot="actions" onclick={handleInstructionsExpandButtonClick}></lightning-button-icon>
+            </template>            
+            <template if:true={showInstructionDetail}>
+                <lightning-button-icon icon-name="utility:chevrondown" alternative-text="Expand/Collapse Instructions" slot="actions" onclick={handleInstructionsExpandButtonClick}></lightning-button-icon>
+                <div style="padding: 0 20px;">
+                    <lightning-formatted-rich-text class="text-instructions" value={labels.instructions.message}></lightning-formatted-rich-text>
+                </div>
+            </template>
+        </lightning-card>
+        <lightning-card>
+            <h2 slot="title">
+                <p>{activityName} [{status}]</p>
+                <span class="slds-text-title_caps text-small">{panNumber}</span>
+            </h2>
+        
+            <template if:false={isPhone}>
+                <lightning-button-group slot="actions">
+                    <lightning-button label={labels.cancel.label} name="cancel" onclick={handleCancelButtonClick}></lightning-button>
+                    <template if:true={isEditable}>
+                        <lightning-button label={labels.save.label} name="save" onclick={handleSaveButtonClick}></lightning-button>
+                    </template>
+                    <template if:true={canSubmitForReview}>
+                        <lightning-button label={labels.submitForReview.label} name="submitForReview" onclick={handleSubmitForReviewButtonClick}></lightning-button>
+                    </template>
+                    <template if:true={canSubmitForApproval}>
+                        <lightning-button label={labels.submitForApproval.label} name="submit" onclick={handleSubmitForApprovalButtonClick}></lightning-button>
+                    </template>
+                    <template if:true={canRecallApproval}>
+                        <lightning-button label={labels.recall.label} name="recall" onclick={handleRecallButtonClick}></lightning-button>
+                    </template>
+                    <lightning-button label={labels.summary.label} name="summary" class="slds-m-right_x-small" onclick={handleSummaryButtonClick}></lightning-button>
+                    <template if:false={isStepOne}>
+                        <lightning-button label={labels.prev.label} name="prev" onclick={handlePrevButtonClick}></lightning-button>
+                    </template>
+                    <template if:false={isLastStep}>
+                        <lightning-button label={labels.next.label} name="next" class="slds-m-right_x-small" onclick={handleNextButtonClick}></lightning-button>
+                    </template>
+
+                    <!--<lightning-button-icon variant="brand" alternative-text={labels.help.label} icon-name="utility:help" class="slds-m-left_x-small" onclick={handleHelpButtonClick}></lightning-button-icon>-->
+                </lightning-button-group>    
+            </template>
+
+            <template if:true={isPhone}>
+
+            </template>
+
+            <div class="slds-m-around_small slds-p-horizontal_medium">
+                <lightning-progress-indicator current-step={progressStep} type="path" variant="base">
+                    <lightning-progress-step label={labels.draft.label} value="draft"></lightning-progress-step>
+                    <template if:true={requiresCommercialLeadReview}>
+                        <lightning-progress-step label={labels.commercialLeadReview.label} value="review"></lightning-progress-step>
+                    </template>
+                    <template if:true={requiresBPAReview}>
+                        <lightning-progress-step label={labels.bpaReview.label} value="bpa"></lightning-progress-step>
+                    </template>
+                    <template if:true={requiresCommercialLeadReview}>
+                        <lightning-progress-step label={labels.reviewed.label} value="reviewed"></lightning-progress-step>
+                    </template>
+                    <lightning-progress-step label={labels.pendingApproval.label} value="submitted"></lightning-progress-step>
+                    <lightning-progress-step label={labels.approved.label} value="approve"></lightning-progress-step>
+                </lightning-progress-indicator>
+            </div>
+
+            <template if:true={isStepOne}>
+                <lightning-layout>
+                    <lightning-layout-item size="12" small-device-size="12" large-device-size="4" padding="around-small" class="slds-border_right">
+                        <lightning-layout multiple-rows="true">
+                            <lightning-layout-item size="12">
+                                <lightning-card>                                
+                                    <h2 class="slds-text-title_caps" slot="title">{labels.projectLeads.label}</h2>
+                                    <div class="slds-m-horizontal_small">
+                                        <lightning-layout multiple-rows="true">
+                                            <lightning-layout-item size="12">
+                                                <template if:true={projectManager}>
+                                                    <c-image-tile item={projectManager} field="projectmanager" label={labels.projectManager.label} onchange={handleLookupItemChange}></c-image-tile>
+                                                </template>
+                                                <template if:false={projectManager}>
+                                                    <c-bf-lookup search-label={labels.projectManager.label} object-name="User" show-images="true" 
+                                                                image-location="Chatter" field-name="projectmanager" limit-to-market="true"
+                                                                market-id={market} market-name={marketName} market-field-name="Market__c" use-market-id="false"
+                                                                show-required-indicator="true" onlookupselected={handleLookupSelected}></c-bf-lookup>
+                                                </template>
+                                            </lightning-layout-item>
+                                            <lightning-layout-item size="12" class="slds-m-top_x-small">
+                                                <template if:true={marketingContact}>
+                                                    <c-image-tile item={marketingContact} field="marketingcontact" label={labels.marketingContact.label} onchange={handleLookupItemChange}></c-image-tile>
+                                                </template>
+                                                <template if:false={marketingContact}>
+                                                    <c-bf-lookup search-label={labels.marketingContact.label} object-name="User" show-images="true" 
+                                                                image-location="Chatter" field-name="marketingcontact" limit-to-market="true"
+                                                                market-id={market} market-name={marketName} market-field-name="Market__c" use-market-id="false"
+                                                                onlookupselected={handleLookupSelected}></c-bf-lookup>
+                                                </template>
+                                            </lightning-layout-item>
+                                            <lightning-layout-item size="12" class="slds-m-top_x-small">
+                                                <template if:true={salesContact}>
+                                                    <c-image-tile item={salesContact} field="salescontact" label={labels.salesContact.label} onchange={handleLookupItemChange}></c-image-tile>
+                                                </template>
+                                                <template if:false={salesContact}>
+                                                    <c-bf-lookup search-label={labels.salesContact.label} object-name="User" show-images="true" 
+                                                                image-location="Chatter" field-name="salescontact" limit-to-market="true"
+                                                                market-id={market} market-name={marketName} market-field-name="Market__c" use-market-id="false"
+                                                                onlookupselected={handleLookupSelected}></c-bf-lookup>
+                                                </template>
+                                            </lightning-layout-item>
+                                            <lightning-layout-item size="12" class="slds-m-top_x-small">
+                                                <lightning-input type="text" label={labels.customerContact.label} value={customerContact} disabled={isLocked} onchange={handleCustomerContactChange}></lightning-input>
+                                            </lightning-layout-item>
+                                            <lightning-layout-item size="12" class="slds-m-top_x-small">
+                                                <lightning-input type="text" label={labels.agencyContact.label} value={agencyContact} disabled={isLocked} onchange={handleAgencyContactChange}></lightning-input>
+                                            </lightning-layout-item>        
+                                        </lightning-layout>    
+                                    </div>
+                                </lightning-card>
+                            </lightning-layout-item>
+                            
+                            <lightning-layout-item size="12" padding="around-small">
+                                <lightning-layout multiple-rows="true">
+                                    <lightning-layout-item size="12">
+                                        <lightning-input name="i_NumberOfStores" label={labels.numberOfStoresInBanner.label} value={numberOfStoresInBanner} disabled={isLocked} onchange={handleNumberOfStoresChange}></lightning-input>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="12">
+                                        <lightning-input name="i_NumberOfStores2" label={labels.numberOfStoresInBannerRunningActivity.label} value={numberOfStoresRunningActivity} disabled={isLocked} onchange={handleStoresRunningActivityChange}></lightning-input>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="12">
+                                        <div class="slds-m-top_medium">
+                                            <lightning-input name="i_ActivityRunningLastYear" type="toggle" label={labels.wasActivityRunningLastYear.label} checked={wasActivityRunningLastYear} message-toggle-active={labels.yes.label} message-toggle-inactive={labels.no.label} disabled={isLocked} onchange={handleActivityRunningLastYearChange}></lightning-input>
+                                        </div>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="12">
+                                        <template if:true={wasActivityRunningLastYear}>
+                                            <lightning-textarea label={labels.brandsAndTimings.label} value={lastYearActivityDetails} required onchange={handleLastYearActivityDetailsChange}></lightning-textarea>
+                                        </template>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="12">
+                                        <lightning-dual-listbox name="states" label={labels.state.label} source-label={labels.available.label} selected-label={labels.selected.label} options={stateOptions} value={states} disabled={isLocked} onchange={handleStateChange}></lightning-dual-listbox>
+                                    </lightning-layout-item>
+                                </lightning-layout>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="12" padding="around-small" class="slds-m-top_small slds-border_top">
+                                <h3 class="slds-text-title_caps slds-m-vertical_small">External Systems Links</h3>
+                                <lightning-input type="url" name="i_SmartsheetLink" label={labels.smartsheet.label} value={smartsheetLink} placeholder="Enter URL link to the Smartsheet document" onchange={handleSmartsheetLinkChange}></lightning-input>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12" small-device-size="12" large-device-size="8" padding="around-small">
+                        <lightning-layout multiple-rows="true">
+                            <lightning-layout-item size="12" padding="around-small">                            
+                                <lightning-card>
+                                    <h2 class="slds-text-title_caps" slot="title">{labels.activityDetails.label}</h2>
+                                    <div class="slds-m-horizontal_small">
+                                        <lightning-layout multiple-rows="true">
+                                            <lightning-layout-item size="12">
+                                                <div class="slds-m-top_medium">
+                                                    <lightning-input name="i_Publish" type="toggle" label="Make activity available for promotions after it has been approved?" checked={publishActivity} message-toggle-active={labels.yes.label} message-toggle-inactive={labels.no.label} onchange={handlePublishActivityChange}></lightning-input>
+                                                </div>
+                                            </lightning-layout-item>        
+                                            <lightning-layout-item size="12" padding="around-small">
+                                                <div>
+                                                <lightning-combobox name="i_Channel" label={labels.leadChannel.label} value={channel} options={channelOptions} disabled={isLocked} required onchange={handleChannelChange} ></lightning-combobox>
+                                                </div>
+                                                <template if:true={isOtherChannel}>
+                                                    <div>
+                                                        <span class="text-info">{labels.provideDetailsBelow.label}</span>
+                                                    </div>    
+                                                </template>
+                                            </lightning-layout-item>
+                                            <lightning-layout-item size="12" padding="around-small">
+                                                <lightning-combobox name="i_CustomerType" label={labels.customerType.label} value={customerType} options={customerTypeOptions} disabled={isLocked} onchange={handleCustomerTypeChange}></lightning-combobox>
+                                            </lightning-layout-item>
+                                            <lightning-layout-item size="12" padding="around-small">
+                                                <template if:true={isOffChannel}>
+                                                    <lightning-dual-listbox name="i_BannerGroups" label={labels.bannerGroup.labelPlural} source-label={labels.available.label} selected-label={labels.selected.label} options={bannerGroupOptions} value={bannerGroups} disabled={isLocked} required onchange={handleBannerGroupChange}></lightning-dual-listbox>                                                
+                                                    <template if:true={isOtherBanner}>
+                                                        <div>
+                                                            <span class="text-info">{labels.provideDetailsBelow.label}</span>
+                                                        </div>    
+                                                    </template>
+                                                </template>                                        
+                                            </lightning-layout-item>
+                                            <lightning-layout-item size="12" padding="around-small">
+                                                <template if:true={isOtherChannel}>
+                                                    <lightning-textarea name="i_ChannelComments" label={labels.comments.label} value={channelComments} onchange={handleChannelCommentsChange}></lightning-textarea>
+                                                </template>
+                                            </lightning-layout-item>
+                                        </lightning-layout>    
+                                    </div>
+                                </lightning-card>        
+                            </lightning-layout-item>
+                            <lightning-layout-item size="12" padding="around-small">
+                                <lightning-card>
+                                    <h2 class="slds-text-title_caps" slot="title">{labels.activityMechanic.labelPlural}</h2>
+                                    <div class="slds-m-horizontal_small">
+                                        <lightning-layout multiple-rows="true">
+                                            <lightning-layout-item size="12" padding="around-small">
+                                                <lightning-textarea label="Brief Description of Activity Mechanic" value={activityMechanicDescription} required onchange={handleActivityMechanicDescriptionChange}></lightning-textarea>
+                                            </lightning-layout-item>
+                                            <lightning-layout-item size="12" padding="around-small">
+                                                <h2 class="slds-text-body_small required-field">{labels.focusBrands.label}</h2>
+                                                <template if:false={isLocked}>
+                                                    <lightning-button-icon icon-name="action:new" alternative-text="Add Brands" title="Add Brands" class="slds-float_right" onclick={handleAddBrandsButtonClick}></lightning-button-icon>
+                                                </template>
+                                                <lightning-pill-container items={focusBrands} onitemremove={handleRemoveBrand}></lightning-pill-container>
+                                            </lightning-layout-item>
+                                            <lightning-layout-item size="12" padding="around-small">
+                                                <h2 class="slds-text-body_small">{labels.focusProducts.label}</h2>
+                                                <template if:false={isLocked}>
+                                                    <lightning-button-icon icon-name="action:new" alternative-text="Add Products" title="Add Products" class="slds-float_right" onclick={handleAddProductsButtonClick}></lightning-button-icon>
+                                                </template>
+                                                <lightning-pill-container items={focusProducts} onitemremove={handleRemoveProduct}></lightning-pill-container>
+                                            </lightning-layout-item>
+                                            <lightning-layout-item size="12" padding="around-small">
+                                                <lightning-dual-listbox name="i_ActivityMechanic" label={labels.activityMechanic.label} source-label="Available" selected-label="Selected" options={activityMechanicOptions} value={activityMechanics} disabled={isLocked} required onchange={handleActivityMechanicChange}></lightning-dual-listbox>
+                                            </lightning-layout-item>
+                                        </lightning-layout>    
+                                    </div>
+                                </lightning-card>        
+                            </lightning-layout-item>
+                        </lightning-layout>
+                    </lightning-layout-item>
+                </lightning-layout>
+            </template>
+            <template if:true={isStepTwo}>
+                <lightning-layout multiple-rows="true">
+                    <lightning-layout-item size="12" small-device-size="12" large-device-size="4" padding="around-small" class="slds-border_right">
+                        <lightning-card>
+                            <h2 class="slds-text-title_caps" slot="title">{labels.keyDates.label}</h2>
+                            <div class="slds-m-horizontal_small">
+                                <lightning-layout multiple-rows="true">
+                                    <lightning-layout-item size="12" class="slds-m-top_x-small">
+                                        <lightning-input type="date" label={labels.inMarketStartDate.label} name="i_proposedInMarketStartDate" value={formattedProposedInMarketStartDate} required onchange={handleProposedInMarketStartDateChange} ></lightning-input>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="12" class="slds-m-top_x-small">
+                                        <lightning-input type="date" label={labels.inMarketEndDate.label} name="i_proposedInMarketEndDate" value={formattedProposedInMarketEndDate} required onchange={handleProposedInMarketEndDateChange}></lightning-input>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="12" class="slds-m-top_x-small">
+                                        <lightning-input type="date" label={labels.preAlignmentDeadline.label} name="i_preAlignmentDeadline" value={formattedPreAlignmentDeadline} required onchange={handlePreAlignmentDeadlineChange}></lightning-input>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="12" class="slds-m-top_x-small">
+                                        <lightning-input type="date" label={labels.preEvaluationDeadline.label} name="i_preEvaluationDeadline" value={formattedPreEvaluationDeadline} required onchange={handlePreEvaluationDeadline}></lightning-input>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="12" class="slds-m-top_x-small">
+                                        <lightning-input type="date" label={labels.activityApprovalDate.label} name="i_activityApprovalDate" value={formattedActivityApprovalDate} disabled onchange={handleActivityApprovalDate}></lightning-input>
+                                    </lightning-layout-item>   
+                                    <lightning-layout-item size="12" padding="around-small">
+                                        <lightning-textarea label="Activity Timing Comments" value={activityComments} onchange={handleActivityCommentsChange}></lightning-textarea>
+                                    </lightning-layout-item>
+                                </lightning-layout>    
+                            </div>
+                        </lightning-card>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12" small-device-size="12" large-device-size="8" padding="around-small">
+                        <lightning-layout multiple-rows="true">
+                            <lightning-layout-item size="12">
+                                <lightning-card>
+                                    <h2 class="slds-text-title_caps" slot="title">{labels.objectives.label}</h2>
+                                    <div class="slds-m-horizontal_small">
+                                        <lightning-layout multiple-rows="true">
+                                            <lightning-layout-item size="12" padding="around-small">
+                                                <lightning-textarea name="i_BusinessOpportunity" label={labels.businessOpportunity.label} value={businessOpportunity} required onchange={handleBusinessOpportunityChange} ></lightning-textarea>
+                                            </lightning-layout-item>
+                                            <lightning-layout-item size="12" padding="around-small">
+                                                <lightning-textarea name="i_Objectives" label={labels.activityObjectives.label} value={activityObjectives} required onchange={handleActivityObjectivesChange}></lightning-textarea>
+                                            </lightning-layout-item>
+                                        </lightning-layout>    
+                                    </div>
+                                </lightning-card>        
+                            </lightning-layout-item>
+                            <lightning-layout-item size="12" class="slds-border_top">
+                                <lightning-card>
+                                    <h2 class="slds-text-title_caps" slot="title">How does the proposed Activity meet the below objectives?</h2>
+                                    <div class="slds-m-horizontal_large">
+                                        <lightning-layout multiple-rows="true">
+                                            <lightning-layout-item size="12">
+                                                <p class="slds-text-body_small required-field">{labels.activityBrandStrategyObjective.label}</p>
+                                                <lightning-slider label="Brand Strategy - aligned to strategy and delivers brand equity"  step="1" max="10" value={brandStrategyIndex} variant="label-hidden" disabled={isLocked} onchange={handleBrandStrategyIndexChange}></lightning-slider>
+                                            </lightning-layout-item>
+                                            <lightning-layout-item size="12" class="slds-m-top_x-small">
+                                                <p class="slds-text-body_small required-field">{labels.activityCommercialObjective.label}</p>
+                                                <lightning-slider label="Commerical - intended to deliver strong commercial return"  step="1" max="10" value={commercialReturnIndex} variant="label-hidden" disabled={isLocked} onchange={handleCommercialReturnIndexChange}></lightning-slider>
+                                            </lightning-layout-item>
+                                            <lightning-layout-item size="12" class="slds-m-top_x-small">
+                                                <p class="slds-text-body_small required-field">{labels.activityRelationshipObjective.label}</p>
+                                                <lightning-slider label="Relationship - builds long term customer relationships"  step="1" max="10" value={customerRelationshipIndex} variant="label-hidden" disabled={isLocked} onchange={handleCustomerRelationshipIndexChange}></lightning-slider>
+                                            </lightning-layout-item>
+                                            <lightning-layout-item size="12" class="slds-m-top_x-small">
+                                                <p class="slds-text-body_small required-field">{labels.activityNewTrialObjective.label}</p>
+                                                <lightning-slider label="Trial New - test new experiential"  step="1" max="10" value={newExperientialIndex} variant="label-hidden"  disabled={isLocked} onchange={handleExperientialIndexChange}></lightning-slider>
+                                            </lightning-layout-item>
+                                        </lightning-layout>    
+                                    </div>
+                                </lightning-card>        
+                            </lightning-layout-item>
+                            <lightning-layout-item size="12" class="slds-m-top_medium slds-border_top">
+                                <lightning-card>
+                                    <h2 class="slds-text-title_caps" slot="title">How is the activity communicated to the consumer?</h2>
+                                    <div class="slds-m-horizontal_large">
+
+                                        <template if:true={activityCommunicationMethods}>
+                                            <template for:each={activityCommunicationMethods} for:item="acm">
+                                                <c-activity-communication-method key={acm.Name} record={acm} onchange={handleCommunicationMethodChange}></c-activity-communication-method>
+                                            </template>
+                                        </template>
+                                    </div>
+                                </lightning-card>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="12" padding="around-large">
+                                <lightning-textarea name="i_EvaluationComments" label={labels.comments.label} value={evaluationComments} onchange={handleEvaluationCommentsChange}></lightning-textarea>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                    </lightning-layout-item>
+                </lightning-layout>
+            </template>
+            <template if:true={isStepThree}>
+                <lightning-layout multiple-rows="rows">                
+                    <lightning-layout-item size="12" small-device-size="12" large-device-size="4" padding="around-small" class="slds-border_right">
+                        <lightning-card>
+                            <h2 class="slds-text-title_caps" slot="title">{labels.costDetails.label}</h2>
+                            <div class="slds-m-horizontal_small">
+                                <lightning-layout multiple-rows="true">
+                                    <lightning-layout-item size="12" padding="around-small">
+                                        <lightning-layout multiple-rows="true">
+                                            <lightning-layout-item size="12">
+                                                <lightning-input type="number" label={labels.totalCostAP.label} field-level-help={labels.totalCostAP.help} value={totalBudgetedCostAP} formatter="currency" disabled={isLocked} onchange={handleTotalBudgetedAPChange}></lightning-input>
+                                            </lightning-layout-item>
+                                            <lightning-layout-item size="12">
+                                                <lightning-input type="number" label={labels.totalCostAdditionalCOGS.label} field-level-help={labels.totalCostAdditionalCOGS.help} value={totalBudgetedCostCOGS} formatter="currency" disabled={isLocked} onchange={handleTotalBudgetedCOGSChange}></lightning-input>
+                                            </lightning-layout-item>
+                                            <lightning-layout-item size="12">
+                                                <lightning-input type="number" label={labels.totalCostIncrementalPA.label} field-level-help={labels.totalCostIncrementalPA.help} value={totalBudgetedCostPA} formatter="currency" disabled={isLocked} onchange={handleTotalBudgetedPAChange}></lightning-input>
+                                            </lightning-layout-item>
+                                            <lightning-layout-item size="12">
+                                                <lightning-input type="number" label={labels.totalCostLumpSum.label} field-level-help={labels.totalCostLumpSum.help} value={totalBudgetedCostLumpSum} formatter="currency" disabled={isLocked} onchange={handleTotalBudgetedLumpSumChange}></lightning-input>
+                                            </lightning-layout-item>
+                                            <lightning-layout-item size="12" class="slds-m-top_small">
+                                                <span class="slds-text-title_caps">{labels.totalBudgetedCost.label}</span>
+                                                <lightning-formatted-number value={totalBudgetedCost} format-style="currency" class="slds-float_right slds-m-right_small"></lightning-formatted-number>
+                                            </lightning-layout-item>
+                                        </lightning-layout>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="12" padding="around-small">
+                                        <lightning-textarea label={labels.detailsOnNatureOfCost.label} value={natureOfCostDescription} onchange={handleNatureOfCostDescription}></lightning-textarea>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="12" padding="around-small">
+                                        <lightning-input name="i_TotalCustomerAP" type="number" label={labels.totalCustomerAPBudget.label} value={totalCustomerAPBudget} formatter="currency" disabled={isLocked} onchange={handleTotalCustomerAPBudgetChange}></lightning-input>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="12" padding="around-small">
+                                        <lightning-input name="i_TotalCustomerSNS" type="number" label={labels.totalCustomerSNS.label} value={totalCustomerSNS} formatter="currency" disabled={isLocked} onchange={handleTotalCustomerSNSChange}></lightning-input>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="12" padding="around-small">
+                                        <lightning-input name="i_ActivitySpendPercantage" type="number" label={labels.activitySpendVSBudget.label} formatter="percent" value={activitySpendPercentage} disabled></lightning-input>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="12" padding="around-small">
+                                        <lightning-input name="i_APSpendvsSNS" type="number" label={labels.totalCustomerAPSpendVsSNS.label} formatter="percent" value={totalCustomerAPSpendVSSNS} disabled></lightning-input>
+                                    </lightning-layout-item>
+                                </lightning-layout>    
+                            </div>
+                        </lightning-card>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12" small-device-size="12" large-device-size="8" padding="around-small">
+                        <lightning-layout multiple-rows="true">
+                            <lightning-layout-item size="12" class="slds-m-top_small">
+                                <lightning-card>
+                                    <h2 class="slds-text-title_caps" slot="title">{labels.forecastedCommercialReturn.label}</h2>
+                                    <div class="slds-m-horizontal_large">
+                                        <lightning-textarea label="Incremental 9L Volume Uplift by Brand / SKU (Sales to provide if available)" value={incremental9LUplift} onchange={handleIncremental9LUpliftChange} ></lightning-textarea>
+                                        <p class="text-instructions" style="font-style:italic;">* Use scan data if available or warehouse withdrawals to highlight buy up</p>
+                                        <p class="text-instructions" style="font-style:italic;">* For Activities involving several brands, please provide details and attach GP Modelling Tool workings (if available).	</p>
+                                    </div>
+                                </lightning-card>                                    
+                            </lightning-layout-item>
+                            <lightning-layout-item size="12" class="slds-m-top_small slds-border_top">
+                                <lightning-layout multiple-rows="true">
+                                    <lightning-layout-item size="12" small-device-size="12" large-device-size="6" class="slds-m-top_small slds-border_right">
+                                        <lightning-card>
+                                            <h2 class="slds-text-title_caps" slot="title">{labels.projectOrSalesMgrToComplete.label}</h2>
+                                            <div class="slds-m-horizontal_small">
+                                                <lightning-layout multiple-rows="true">
+                                                    <lightning-layout-item size="12" padding="horizontal-small">
+                                                        <lightning-input type="number" label={labels.incrementalGrossProfit.label} placeholder={incrementalGrossProfitSalesPrevious} formatter="currency" disabled={cannotEditSalesManagerFields} value={incrementalGrossProfitSales} onchange={handleIncrementalGrossProfitSalesChange}></lightning-input>
+                                                    </lightning-layout-item>
+                                                    <lightning-layout-item size="12" padding="around-small">
+                                                        <lightning-input type="number" label={labels.incrementalProfitLoss.label} formatter="currency" disabled value={incrementalProfitLossSales}></lightning-input>
+                                                    </lightning-layout-item>
+                                                    <lightning-layout-item size="12" padding="around-small">
+                                                        <lightning-input type="number" label={labels.roiPercentage.label} formatter="percent" disabled value={incrementalROISales}></lightning-input>
+                                                    </lightning-layout-item>   
+                                                    <lightning-layout-item size="12" class="slds-m-top_small" padding="around-small">
+                                                        <lightning-textarea label={labels.comments.label} value={salesComments} onchange={handleSalesCommentsChange}></lightning-textarea>
+                                                    </lightning-layout-item>                
+                                                </lightning-layout>
+                                            </div>
+                                        </lightning-card>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="12" small-device-size="12" large-device-size="6" class="slds-m-top_small">
+                                        <lightning-card>
+                                            <h2 class="slds-text-title_caps" slot="title">{labels.bpaTeamToComplete.label}</h2>
+                                            <div class="slds-m-horizontal_small">
+                                                <lightning-layout multiple-rows="true">
+                                                    <lightning-layout-item size="12" padding="horizontal-small">
+                                                        <lightning-input type="number" label={labels.incrementalGrossProfit.label} placeholder={incrementalGrossProfitPrevious} formatter="currency" disabled={cannotEditBPAFields} value={incrementalGrossProfit} onchange={handleIncrementalGrossProfitChange}></lightning-input>
+                                                    </lightning-layout-item>
+                                                    <lightning-layout-item size="12" padding="around-small">
+                                                        <lightning-input type="number" label={labels.incrementalProfitLoss.label} formatter="currency" disabled value={incrementalProfitLoss}></lightning-input>
+                                                    </lightning-layout-item>
+                                                    <lightning-layout-item size="12" padding="around-small">
+                                                        <lightning-input type="number" label={labels.roiPercentage.label} formatter="percent" disabled value={incrementalROI}></lightning-input>
+                                                    </lightning-layout-item>        
+                                                    <lightning-layout-item size="12" padding="horizontal-small">
+                                                        <lightning-input type="number" label={labels.forecastedReachCoverage.label} disabled value={forecastedReachCoverage} onchange={handleForecastedReachCoverage}></lightning-input>
+                                                    </lightning-layout-item>
+                                                    <lightning-layout-item size="12" padding="around-small">
+                                                        <lightning-input type="number" label={labels.costPerThousand.label} formatter="currency" disabled value={forecastedCostPerThousand}></lightning-input>
+                                                    </lightning-layout-item>        
+                                                    <lightning-layout-item size="12" class="slds-m-top_small" padding="around-small">
+                                                        <lightning-textarea label={labels.comments.label} value={bpaComments} onchange={handleBPACommentsChange}></lightning-textarea>
+                                                    </lightning-layout-item>
+                                                </lightning-layout>    
+                                            </div>
+                                        </lightning-card>
+                                    </lightning-layout-item>        
+                                </lightning-layout>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                    </lightning-layout-item>
+                </lightning-layout>
+            </template>
+        </lightning-card>
+    </template>        
+</template>
