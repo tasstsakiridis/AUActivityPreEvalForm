@@ -139,6 +139,9 @@ private class PreEvaluationForm_Controller_Test {
             msg = PreEvaluationForm_Controller.submitForApproval(pa1.Id);
             msg = PreEvaluationForm_Controller.recallApproval(pa1.Id);
            
+            pa1.Status__c = 'Rejected';
+            update pa1;
+            
             Test.stopTest();
         }
     }
