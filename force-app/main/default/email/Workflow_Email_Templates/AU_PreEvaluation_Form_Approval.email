@@ -1,0 +1,450 @@
+<messaging:emailTemplate subject="Brown Forman - Activity Pre-Evaluation Form" recipientType="User" relatedToType="Promotion_Activity__c" replyTo="{!relatedTo.Owner.Email}">
+<messaging:attachment renderAs="PDF" filename="{!relatedTo.Name}">
+<html>
+    <head>
+        <style>
+            body { font-family: 'Arial Unicode MS'; }
+            table { 
+                border-collapse: collapse;
+            }
+            table, th, td {
+                border: none;
+            }
+            td h4 {
+                font-size: 9pt;
+                text-transform: uppercase;
+                max-width: 200px;
+            }
+            .label {
+                color: #080707;
+                font-size: 9pt;
+                line-height: 0.8em;
+                text-transform: uppercase;
+            }
+            .smallFont {
+                font-size: smaller;
+            }
+            .shaded {
+                background-color: #bfbdbd; 
+                width: 25%;   
+                font-size: smaller;         
+            }
+            .detailCell {
+                padding-left: 5px;
+                height: 24px;
+                vertical-align: middle;
+                font-size: small;
+            }
+            .tableCenter {
+                width: 80%;
+                margin-left: 10%;
+                margin-right: 10%;
+            }
+            .column {
+                float: left;
+                width: 33.33%;
+            }
+            .column-2 {
+                float: left;
+                width: 50%;
+            }
+            .header {
+                padding: 0 5px;
+            }
+        </style>    
+    </head>
+    <body>
+        <table class="tableCenter" style="border:0px;margin-bottom:5px;">
+           <tr>
+                <td style="border:0px;text-align:center;vertical-align:middle;">
+                    <img src = "{!$Resource.bflogo}" />                        
+                </td>
+            </tr>            
+        </table>
+        <h1 style="font-size:16pt; text-align:center;">ACTIVITY PRE-EVALUATION FORM</h1>
+        <h2 style="font-size:large; text-align:center;">{!relatedTo.Name} - {!relatedTo.Promotion_Activity_Number__c}</h2>
+        <br />
+        
+        <div style="width:95%">
+            <h3 class="label">Project Leads</h3>  
+            <div>
+                <div class="column">
+                    <div style="float:left;width:30%;"><img src="{!relatedTo.Project_Manager__r.SmallPhotoUrl}" style="height: 60px;" /></div>
+                    <div style="float:left;width:70%;">
+                       <div><span style="font-size:12pt;font-weight:bold;">{!relatedTo.Project_Manager__r.Name}</span></div>
+                       <div><span class="font-size:9pt;text-transform:uppercase;">Project Manager</span></div>                        
+                    </div>
+                </div>
+                <div class="column">
+                    <div style="float:left;width:30%;"><img src="{!relatedTo.Marketing_Manager__r.SmallPhotoUrl}" style="height: 60px;" /></div>
+                    <div style="float:left;width:70%;">
+                        <div><span style="font-size:12pt;font-weight:bold;">{!relatedTo.Marketing_Manager_Name__c}</span></div>
+                        <div><span style="font-size:9pt;text-transform:uppercase;">Marketing Contact</span></div>                        
+                    </div>
+                </div>
+                <div class="column">
+                    <div style="float:left;width:30%;"><img src="{!relatedTo.Sales_Manager__r.SmallPhotoUrl}" style="height: 60px;" /></div>
+                    <div style="float:left;width:70%;">
+                        <div><span style="font-size:12pt;font-weight:bold;">{!relatedTo.Sales_Manager_Name__c}</span></div>
+                        <div><span style="font-size:9pt;text-transform:uppercase;">Sales Contact</span></div>                        
+                    </div>                           
+                </div>
+            </div>
+        </div>
+        <br />
+        <br />
+        <br />
+        <br />
+        <div style="margin-top: 10px;">
+            <h3 class="label" style="line-height: 0.8em;">Customer Contact</h3>
+            <span>{!relatedTo.Customer_Contact__c}</span>
+        </div>
+        <br />        
+        <div>
+            <h3 class="label">Agency Contact</h3>
+            <span>{!relatedTo.Agency_Contact__c}</span>
+        </div>
+        <br /><br />
+        <div>
+            <h3>Activity Details</h3>
+            <div>
+                <h3 class="label">Status</h3>
+                <span>{!relatedTo.Status__c}</span>
+            </div>
+            <br />
+            <div>
+                <h3 class="label">Lead Channel</h3>
+                <span>{!relatedTo.Channel__c}</span>
+            </div>
+            <br />
+            <div>
+                <h3 class="label">Customer Type</h3>
+                <span>{!relatedTo.Customer_Type__c}</span>
+            </div>
+            <br />
+            <div>
+                <h3 class="label">Customer Banner</h3>
+                <span>{!relatedTo.Promo_Banner_Groups__c}</span>
+            </div>
+            <br />
+            <div>
+                <h3 class="label">Number of Stores in Customer Banner</h3>
+                <apex:outputText value="{0, number, ###,#00}">
+                    <apex:param value="{!relatedTo.Number_of_Stores_in_Banner_Group__c}" />
+                </apex:outputText>                                    
+            </div>
+            <br />
+            <div>
+                <h3 class="label">Number of Stores in Customer Banner Running Activity</h3>
+                <apex:outputText value="{0, number, ###,#00}">
+                    <apex:param value="{!relatedTo.No_of_Stores_in_Banner_Running_Activity__c}" />
+                </apex:outputText>                                    
+            </div>
+            <br />
+            <div>
+                <h3 class="label">Comments</h3>
+                <span>{!relatedTo.Channel_Comments__c}</span>
+            </div>
+            <br />
+            <div>
+                <h3 class="label">Was there an activity running in the same period last year?</h3>
+                <span>{!relatedTo.Was_Activity_Running_Last_Year__c}</span>
+            </div>
+            <br />
+            <div>
+                <h3 class="label">Brand(s) and timing of last years activity</h3>
+                <span>{!relatedTo.Last_Year_Activity_Details__c}</span>
+            </div>
+            <br />
+            <div>
+                <h3 class="label">State(s)</h3>
+                <span>{!relatedTo.State_MP__c}</span>
+            </div>
+            <br />
+            <div>
+                <h3 class="label">Smartsheet Link</h3>
+                <span>{!relatedTo.Smartsheet_Link__c}</span>
+            </div>
+            <br />            
+        </div>
+        <br />
+        <div style="page-break-before:always;">
+            <h3>Activity Details</h3>
+            <br />
+            <div>
+                <h3 class="label">Description of Activity Mechanic</h3>
+                <span>{!relatedTo.Proposal_Mechanics__c}</span>
+            </div>
+            <br />
+            <div>
+                <h3 class="label">Focus Brands</h3>
+                <span>{!relatedTo.Promo_Brands__c}</span>
+            </div>
+            <br />
+            <div>
+                <h3 class="label">Focus Products</h3>
+                <span>{!relatedTo.Promo_Products__c}</span>
+            </div>
+            <br />
+            <div>
+                <h3 class="label">Activity Mechanic</h3>
+                <span>{!relatedTo.Activity_Mechanic__c}</span>
+            </div>
+            <br />
+            <div>
+                <h3 class="label">Comments</h3>
+                <span>{!relatedTo.Activity_Mechanic_Comments__c}</span>
+            </div>
+            <br />
+            <div>
+                <h3>Key Dates &amp; Timings</h3>
+            </div>
+            <br />
+            <div>
+                <h3 class="label">Proposed In-Market Start Date</h3>
+                <apex:outputText value="{0,date,EEEE',' MMMM d',' yyyy}">
+                    <apex:param value="{!relatedTo.Begin_Date__c}" />
+                </apex:outputText>
+            </div>
+            <br />
+            <div>
+                <h3 class="label">Proposed In-Market End Date</h3>
+                <apex:outputText value="{0,date,EEEE',' MMMM d',' yyyy}">
+                    <apex:param value="{!relatedTo.End_Date__c}" />
+                </apex:outputText>
+            </div>
+            <br />
+            <div>
+                <h3 class="label">Pre-Alignment Deadline</h3>
+                <apex:outputText value="{0,date,EEEE',' MMMM d',' yyyy}">
+                    <apex:param value="{!relatedTo.PreAlignment_Deadline__c}" />
+                </apex:outputText>
+            </div>
+            <br />
+            <div>
+                <h3 class="label">Pre-Evaluation Deadline</h3>
+                <apex:outputText value="{0,date,EEEE',' MMMM d',' yyyy}">
+                    <apex:param value="{!relatedTo.PreEvaluation_Deadline__c}" />
+                </apex:outputText>
+            </div>
+            <br />
+            <div>
+                <h3 class="label">Activity Approval Date</h3>
+                <apex:outputText value="{0,date,EEEE',' MMMM d',' yyyy}">
+                    <apex:param value="{!relatedTo.Date_Approved__c}" />
+                </apex:outputText>
+            </div>
+        </div>
+        <br /><br />
+        <div style="page-break-before:always;">
+            <h3>Activity Objectives / Qualitative Considerations</h3>
+            <br />
+            <div>
+                <h3 class="label">Business Opportunity or Challenge</h3>
+                <apex:outputText value="{!relatedTo.Business_Opportunity__c}" />
+            </div>
+            <br />
+            <div>
+                <h3 class="label">Activity Objectives</h3>
+                <apex:outputText value="{!relatedTo.Proposal_Objectives__c}" />
+            </div>
+            <br />
+            <div>
+                <h3 class="label">How does the proposed Activity meet the below objectives?</h3>
+            </div>
+            <br />
+            <div>
+                <h3 class="label">Brand Strategy - <span style="font-size:8pt;font-style:italic;">aligned to strategy and delivers brand equality</span></h3>
+                <apex:outputField value="{!relatedTo.Brand_Strategy_Index__c}" />
+            </div>
+            <br />
+            <div>
+                <h3 class="label">Commercial - <span style="font-size:8pt;font-style:italic;">intended to deliver strong commercial return</span></h3>
+                <apex:outputField value="{!relatedTo.Commercial_Return_Index__c}" />
+            </div>
+            <br />
+            <div>
+                <h3 class="label">Relationship - <span style="font-size:8pt;font-style:italic;">builds long term customer relationships</span></h3>
+                <apex:outputField value="{!relatedTo.Customer_Relationship_Index__c}" />
+            </div>
+            <br />
+            <div>
+                <h3 class="label">Trial New - <span style="font-size:8pt;font-style:italic;">test new experiential</span></h3>
+                <apex:outputField value="{!relatedTo.New_Experiential_Index__c}" />
+            </div>
+            <br /><br />
+            <div style="page-break-before:always;">
+                <apex:outputPanel id="items" title="Items" layout="block">
+                    <h3>How is the Activity communicated to the consumer?</h3>
+                    <apex:dataTable cellpadding="5" var="i" value="{!relatedTo.Promotion_Activity_Related_Data__r}" >
+                        <apex:column value="{!i.Primary__c}" headerValue="" width="100px"/>
+                        <apex:column value="{!i.Name}" headerValue="Catalogue" width="300px" style="color:blue;"/>
+                        <apex:column value="{!i.Reach__c}" headerValue="{!$ObjectType.Promotion_Activity_Related_Data__c.Fields.Reach__c.Label}" width="150px"/>
+                    </apex:dataTable>
+                </apex:outputPanel>                
+            </div>
+        </div>
+        <br /><br />
+        <div style="page-break-before:always;">
+            <h3>Cost Details</h3>
+            <div>
+                <h3 class="label">Total Budgeted Cost (A&amp;P)</h3>
+                <apex:outputText value="{0, number, currency}">
+                    <apex:param value="{!relatedTo.Total_Budgeted_Cost_AP__c}" />
+                </apex:outputText>                    
+            </div>
+            <br />
+            <div>
+                <h3 class="label">Total Budgeted Cost (COGS)</h3>
+                <apex:outputText value="{0, number, currency}">
+                    <apex:param value="{!relatedTo.Total_Budgeted_Cost_COGS__c}" />
+                </apex:outputText>                    
+            </div>
+            <br />            
+            <div>
+                <h3 class="label">Total Budgeted Cost (PA)</h3>
+                <apex:outputText value="{0, number, currency}">
+                    <apex:param value="{!relatedTo.Total_Budgeted_Cost_PA__c}" />
+                </apex:outputText>                    
+            </div>
+            <br />
+            <div>
+                <h3 class="label">Total Budgeted Cost (LumpSum)</h3>
+                <apex:outputText value="{0, number, currency}">
+                    <apex:param value="{!relatedTo.Total_Budgeted_Cost_LumpSum__c}" />
+                </apex:outputText>                    
+            </div>
+            <br />
+            <div>
+                <h3 class="label">Total Budgeted Cost</h3>
+                <apex:outputText value="{0, number, currency}">
+                    <apex:param value="{!relatedTo.Activity_Budget__c}" />
+                </apex:outputText>                    
+            </div>
+            <br />
+            <div>
+                <h3 class="label">Details of Nature of Cost</h3>
+                <apex:outputText value="{!relatedTo.Nature_of_Cost_Details__c}" />
+            </div>
+            <br />
+            <div>
+                <h3 class="label">Total Customer A&amp;P Budget for the financial year</h3>
+                <apex:outputText value="{0, number, currency}">
+                    <apex:param value="{!relatedTo.Total_Customer_AP_Budget__c}" />
+                </apex:outputText>                    
+            </div>
+            <br />
+            <div>
+                <h3 class="label">Total Customer SNS for the financial year</h3>
+                <apex:outputText value="{0, number, currency}">
+                    <apex:param value="{!relatedTo.Total_Customer_SNS__c}" />
+                </apex:outputText>                    
+            </div>
+            <br />
+            <div>
+                <h3 class="label">Activity Spend as a % of total Customer Budget</h3>
+                <apex:outputText value="{0, number, ##0.00%}">
+                    <apex:param value="{!relatedTo.Activity_Spend_of_Customer_Budget__c}" />
+                </apex:outputText>                    
+            </div>
+            <br />
+            <div>
+                <h3 class="label">Total Customer A&amp;P as % of SNS</h3>
+                <apex:outputText value="{0, number, ##0.00%}">
+                    <apex:param value="{!relatedTo.Total_Customer_Spend_of_SNS__c}" />
+                </apex:outputText>                    
+            </div>
+            <br />
+            <div>
+                <h3 class="label">Additional Comments</h3>
+                <apex:outputText value="{!relatedTo.Evaluation_Comments__c}" />
+            </div>
+            <br />
+            <div>
+                <h3 class="label">Incremental Discounts (PA &#8725; Lump Sum) Provided?</h3>
+                <apex:outputField value="{!relatedTo.Incremental_Discounts_Provided__c}" />
+            </div>
+            <br />            
+        </div>        
+        <br /><br />
+        <div style="page-break-before:always;">
+            <h3>Forecasted Commerical Return</h3>
+            <br />
+            <div>
+                <h3 class="label">Incremental 9L Volume Uplift by Brand &#8725; SKU</h3>
+                <apex:outputText value="{!relatedTo.Incremental_9L_Uplift__c}" />
+            </div>
+            <br />            
+            <h3>Sales</h3>
+            <br />
+            <div>
+                <h3 class="label">Incremental Gross Profit</h3>
+                <apex:outputText value="{0, number, currency}">
+                    <apex:param value="{!relatedTo.Incremental_Gross_Profit_Sales__c}" />
+                </apex:outputText>                    
+            </div>
+            <br />            
+            <div>
+                <h3 class="label">Incremental Profit &#8725; (Loss)</h3>
+                <apex:outputText value="{0, number, currency}">
+                    <apex:param value="{!relatedTo.Incremental_Profit_Loss_Sales__c}" />
+                </apex:outputText>                    
+            </div>
+            <br />            
+            <div>
+                <h3 class="label">ROI %</h3>
+                <apex:outputText value="{0, number, ##0.00%}">
+                    <apex:param value="{!relatedTo.Incremental_ROI_Sales__c/100}" />
+                </apex:outputText>                    
+            </div>
+            <br /><br />
+            <h3>BP&amp;A Team</h3>
+            <br />
+            <div>
+                <h3 class="label">Incremental Gross Profit</h3>
+                <apex:outputText value="{0, number, currency}">
+                    <apex:param value="{!relatedTo.Incremental_Gross_Profit__c}" />
+                </apex:outputText>                    
+            </div>
+            <br />            
+            <div>
+                <h3 class="label">Incremental Profit &#8725; (Loss)</h3>
+                <apex:outputText value="{0, number, currency}">
+                    <apex:param value="{!relatedTo.Incremental_Profit_Loss__c}" />
+                </apex:outputText>                    
+            </div>
+            <br />            
+            <div>
+                <h3 class="label">ROI %</h3>
+                <apex:outputText value="{0, number, ##0.00%}">
+                    <apex:param value="{!relatedTo.Incremental_ROI__c/100}" />
+                </apex:outputText>                    
+            </div>
+            <div>
+                <h3 class="label">Forecasted Reach Coverage</h3>
+                <apex:outputText value="{0, number, ##0}">
+                    <apex:param value="{!relatedTo.Forecasted_Reach_Coverage__c}" />
+                </apex:outputText>                    
+            </div>
+            <br />
+            <div>
+                <h3 class="label">Forecasted Cost per Thousand</h3>
+                <apex:outputText value="{0, number, currency}">
+                    <apex:param value="{!relatedTo.Forecasted_Cost_per_Thousand__c}" />
+                </apex:outputText>                    
+            </div>
+            <br />
+            
+        </div>
+    </body>
+</html>
+</messaging:attachment>
+<messaging:htmlEmailBody >
+    <a href="https://bf.my.salesforce.com/{!relatedTo.Id}"><b>{!relatedTo.Name}</b></a> created by {!relatedTo.createdBy.Name} on {!relatedTo.createdDate} requires approval.
+    <br />
+    <p>
+    The details of this evaluation are attached below for your review, or you can click on the link above to view the order in Salesforce.
+    You can accept or reject this or formder by replying to this email with the word <b>"approve"</b> or <b>"reject"</b> in the first line of your response.  Make sure that any comments that you want to add start from line two (2) of your response.    
+    </p>
+</messaging:htmlEmailBody>
+</messaging:emailTemplate>

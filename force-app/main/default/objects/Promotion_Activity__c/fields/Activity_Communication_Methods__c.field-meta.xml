@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Activity_Communication_Methods__c</fullName>
+    <externalId>false</externalId>
+    <label>Activity Communication Methods</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>MultiselectPicklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Catalogue</fullName>
+                <default>false</default>
+                <label>Catalogue</label>
+            </value>
+            <value>
+                <fullName>Social Media - Brand</fullName>
+                <default>false</default>
+                <label>Social Media - Brand</label>
+            </value>
+            <value>
+                <fullName>In Store Theatre</fullName>
+                <default>false</default>
+                <label>In Store Theatre</label>
+            </value>
+            <value>
+                <fullName>Gondola End Shelf</fullName>
+                <default>false</default>
+                <label>Gondola End Shelf</label>
+            </value>
+            <value>
+                <fullName>Customer EDM</fullName>
+                <default>false</default>
+                <label>Customer EDM</label>
+            </value>
+            <value>
+                <fullName>Digital</fullName>
+                <default>false</default>
+                <label>Digital</label>
+            </value>
+            <value>
+                <fullName>Broad Reach Media</fullName>
+                <default>false</default>
+                <label>Broad Reach Media</label>
+            </value>
+            <value>
+                <fullName>Other</fullName>
+                <default>false</default>
+                <label>Other</label>
+            </value>
+            <value>
+                <fullName>Social Media - Customer</fullName>
+                <default>false</default>
+                <label>Social Media - Customer</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+    <visibleLines>4</visibleLines>
+</CustomField>

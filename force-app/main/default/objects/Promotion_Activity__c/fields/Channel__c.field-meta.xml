@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Channel__c</fullName>
+    <externalId>false</externalId>
+    <label>Channel</label>
+    <required>false</required>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <controllingField>Premise__c</controllingField>
+        <valueSetDefinition>
+            <sorted>true</sorted>
+            <value>
+                <fullName>Bank Stores</fullName>
+                <default>false</default>
+                <label>Bank Stores</label>
+            </value>
+            <value>
+                <fullName>Bar/Nightclub</fullName>
+                <default>false</default>
+                <label>Bar/Nightclub</label>
+            </value>
+            <value>
+                <fullName>Both</fullName>
+                <default>false</default>
+                <label>Both</label>
+            </value>
+            <value>
+                <fullName>Casino</fullName>
+                <default>false</default>
+                <label>Casino</label>
+            </value>
+            <value>
+                <fullName>Club Store</fullName>
+                <default>false</default>
+                <label>Club Store</label>
+            </value>
+            <value>
+                <fullName>Convenience</fullName>
+                <default>false</default>
+                <label>Convenience</label>
+            </value>
+            <value>
+                <fullName>Conventional Liquor</fullName>
+                <default>false</default>
+                <label>Conventional Liquor</label>
+            </value>
+            <value>
+                <fullName>Dining</fullName>
+                <default>false</default>
+                <label>Dining</label>
+            </value>
+            <value>
+                <fullName>Drug</fullName>
+                <default>false</default>
+                <label>Drug</label>
+            </value>
+            <value>
+                <fullName>Drug/Convenience</fullName>
+                <default>false</default>
+                <label>Drug/Convenience</label>
+            </value>
+            <value>
+                <fullName>eCommerce</fullName>
+                <default>false</default>
+                <label>eCommerce</label>
+            </value>
+            <value>
+                <fullName>ERC</fullName>
+                <default>false</default>
+                <label>ERC</label>
+            </value>
+            <value>
+                <fullName>Grocery</fullName>
+                <default>false</default>
+                <label>Grocery</label>
+            </value>
+            <value>
+                <fullName>Hotel</fullName>
+                <default>false</default>
+                <label>Hotel</label>
+            </value>
+            <value>
+                <fullName>Integrated</fullName>
+                <default>false</default>
+                <label>Integrated</label>
+            </value>
+            <value>
+                <fullName>Large Liquor</fullName>
+                <default>false</default>
+                <label>Large Liquor</label>
+            </value>
+            <value>
+                <fullName>Large Superstore</fullName>
+                <default>false</default>
+                <label>Large Superstore</label>
+            </value>
+            <value>
+                <fullName>Liquor Superstore</fullName>
+                <default>false</default>
+                <label>Liquor Superstore</label>
+            </value>
+            <value>
+                <fullName>Lodging</fullName>
+                <default>false</default>
+                <label>Lodging</label>
+            </value>
+            <value>
+                <fullName>Lodging &amp; Entertainment</fullName>
+                <default>false</default>
+                <label>Lodging &amp; Entertainment</label>
+            </value>
+            <value>
+                <fullName>Mass</fullName>
+                <default>false</default>
+                <label>Mass</label>
+            </value>
+            <value>
+                <fullName>Off</fullName>
+                <default>false</default>
+                <label>Off</label>
+            </value>
+            <value>
+                <fullName>Off DH</fullName>
+                <default>false</default>
+                <label>Off DH</label>
+            </value>
+            <value>
+                <fullName>Off Modern</fullName>
+                <default>false</default>
+                <label>Off Modern</label>
+            </value>
+            <value>
+                <fullName>Off Traditional</fullName>
+                <default>false</default>
+                <label>Off Traditional</label>
+            </value>
+            <value>
+                <fullName>On</fullName>
+                <default>false</default>
+                <label>On</label>
+            </value>
+            <value>
+                <fullName>Other</fullName>
+                <default>false</default>
+                <label>Other</label>
+            </value>
+            <value>
+                <fullName>Other On-Premise</fullName>
+                <default>false</default>
+                <label>Other On-Premise</label>
+            </value>
+            <value>
+                <fullName>Pub/Tavern</fullName>
+                <default>false</default>
+                <label>Pub/Tavern</label>
+            </value>
+            <value>
+                <fullName>Restaurant (Any)</fullName>
+                <default>false</default>
+                <label>Restaurant (Any)</label>
+            </value>
+            <value>
+                <fullName>Restaurant Mainstream</fullName>
+                <default>false</default>
+                <label>Restaurant Mainstream</label>
+            </value>
+            <value>
+                <fullName>Restaurant Premium</fullName>
+                <default>false</default>
+                <label>Restaurant Premium</label>
+            </value>
+            <value>
+                <fullName>Small Premium</fullName>
+                <default>false</default>
+                <label>Small Premium</label>
+            </value>
+            <value>
+                <fullName>Small Value</fullName>
+                <default>false</default>
+                <label>Small Value</label>
+            </value>
+            <value>
+                <fullName>Trade Advocacy</fullName>
+                <default>false</default>
+                <label>Trade Advocacy</label>
+            </value>
+            <value>
+                <fullName>Value</fullName>
+                <default>false</default>
+                <label>Value</label>
+            </value>
+        </valueSetDefinition>
+        <valueSettings>
+            <controllingFieldValue>On</controllingFieldValue>
+            <valueName>Bar/Nightclub</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>On</controllingFieldValue>
+            <valueName>Casino</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>On</controllingFieldValue>
+            <valueName>Dining</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>On</controllingFieldValue>
+            <valueName>ERC</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>On</controllingFieldValue>
+            <valueName>Hotel</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>On</controllingFieldValue>
+            <valueName>Lodging</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>On</controllingFieldValue>
+            <valueName>Lodging &amp; Entertainment</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>On</controllingFieldValue>
+            <controllingFieldValue>Not Applicable</controllingFieldValue>
+            <valueName>On</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>On</controllingFieldValue>
+            <valueName>Other On-Premise</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>On</controllingFieldValue>
+            <valueName>Pub/Tavern</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>On</controllingFieldValue>
+            <valueName>Restaurant Mainstream</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>On</controllingFieldValue>
+            <valueName>Restaurant Premium</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Off</controllingFieldValue>
+            <valueName>Bank Stores</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Off</controllingFieldValue>
+            <valueName>Club Store</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Off</controllingFieldValue>
+            <valueName>Convenience</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Off</controllingFieldValue>
+            <valueName>Conventional Liquor</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Off</controllingFieldValue>
+            <valueName>Drug</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Off</controllingFieldValue>
+            <valueName>Drug/Convenience</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Off</controllingFieldValue>
+            <valueName>Grocery</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Off</controllingFieldValue>
+            <valueName>Large Liquor</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Off</controllingFieldValue>
+            <valueName>Large Superstore</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Off</controllingFieldValue>
+            <valueName>Liquor Superstore</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Off</controllingFieldValue>
+            <valueName>Mass</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Off</controllingFieldValue>
+            <controllingFieldValue>Not Applicable</controllingFieldValue>
+            <valueName>Off</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Off</controllingFieldValue>
+            <valueName>Small Premium</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Off</controllingFieldValue>
+            <valueName>Small Value</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Not Applicable</controllingFieldValue>
+            <valueName>eCommerce</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Not Applicable</controllingFieldValue>
+            <valueName>Integrated</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Not Applicable</controllingFieldValue>
+            <valueName>Other</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Not Applicable</controllingFieldValue>
+            <valueName>Trade Advocacy</valueName>
+        </valueSettings>
+    </valueSet>
+</CustomField>

@@ -1,0 +1,20 @@
+.content {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.card-body {
+    background-color: #fff;
+}
+.background-white {
+    background-color: #fff;
+}
+
+c-bf-lookup-item-l-w-c {
+    border: 1px solid #e6e6e6;
+    border-radius: 5px;
+    min-height: 100px;
+    min-width: 200px;  
+    margin: 0.25rem;  
+    flex: 1;
+}

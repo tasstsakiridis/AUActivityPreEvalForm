@@ -1,0 +1,5 @@
+The pre-alignment deadline for {!Promotion_Activity__c.Name} is fast approaching. Please review the Pre-Evaluation form and complete any necessary actions.
+
+Click the link below to view the Pre-Evaluation form.
+
+{!Promotion_Activity__c.Link}

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <description>Reminder sent to the project manager 14 days before the PreAlignment Deadline for the Pre-Evaluation Form</description>
+    <encodingKey>UTF-8</encodingKey>
+    <name>AU Activity PreAlignment  Deadline Reminder</name>
+    <style>none</style>
+    <subject>Activity Pre-Alignment Reminder</subject>
+    <type>text</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

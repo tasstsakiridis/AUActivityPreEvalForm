@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <description>Notify owner of activity the status of the approval</description>
+    <encodingKey>UTF-8</encodingKey>
+    <name>AU Activity Status Update</name>
+    <style>none</style>
+    <subject>Pre-Evaluation Activity Status Update</subject>
+    <type>text</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

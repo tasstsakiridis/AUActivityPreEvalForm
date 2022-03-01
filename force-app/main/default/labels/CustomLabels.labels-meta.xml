@@ -1,0 +1,553 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomLabels xmlns="http://soap.sforce.com/2006/04/metadata">
+    <labels>
+        <fullName>Activity_Approval_Date</fullName>
+        <categories>labels</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Activity Approval Date</shortDescription>
+        <value>Activity Approval Date</value>
+    </labels>
+    <labels>
+        <fullName>Activity_Brand_Strategy_Objective</fullName>
+        <categories>labels</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Activity Brand Strategy Objective</shortDescription>
+        <value>Brand Strategy - aligned to strategy and delivers brand equity</value>
+    </labels>
+    <labels>
+        <fullName>Activity_Commercial_Objective</fullName>
+        <categories>labels</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Activity Commercial Objective</shortDescription>
+        <value>Commerical - intended to deliver strong commercial return</value>
+    </labels>
+    <labels>
+        <fullName>Activity_Details</fullName>
+        <categories>labels</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Activity Details</shortDescription>
+        <value>Activity Details</value>
+    </labels>
+    <labels>
+        <fullName>Activity_Mechanic</fullName>
+        <categories>labels</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Activity Mechanic</shortDescription>
+        <value>Activity Mechanic</value>
+    </labels>
+    <labels>
+        <fullName>Activity_Mechanics</fullName>
+        <categories>labels</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Activity Mechanics</shortDescription>
+        <value>Activity Mechanics</value>
+    </labels>
+    <labels>
+        <fullName>Activity_New_Trial_Objective</fullName>
+        <categories>labels</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Activity New Trial Objective</shortDescription>
+        <value>Trial New - test new experiential</value>
+    </labels>
+    <labels>
+        <fullName>Activity_Objectives_Description</fullName>
+        <categories>labels</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Activity Objectives Description</shortDescription>
+        <value>Description of Activity Objectives:</value>
+    </labels>
+    <labels>
+        <fullName>Activity_Relationship_Objective</fullName>
+        <categories>labels</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Activity Relationship Objective</shortDescription>
+        <value>Relationship - builds long term customer relationships</value>
+    </labels>
+    <labels>
+        <fullName>Activity_Spend_as_a_perc_of_total_Customer_Budget</fullName>
+        <categories>labels</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Activity Spend as a % of total Customer Budget</shortDescription>
+        <value>Activity Spend as a % of total Customer Budget</value>
+    </labels>
+    <labels>
+        <fullName>Additional_COGS</fullName>
+        <categories>labels</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Additional COGS</shortDescription>
+        <value>Additional COGS</value>
+    </labels>
+    <labels>
+        <fullName>Agency_Supplier_Contact</fullName>
+        <categories>labels</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Agency Supplier Contact</shortDescription>
+        <value>Agency / Supplier Contact</value>
+    </labels>
+    <labels>
+        <fullName>Approved</fullName>
+        <categories>labels</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Approved</shortDescription>
+        <value>Approved</value>
+    </labels>
+    <labels>
+        <fullName>Available</fullName>
+        <categories>labels</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Available</shortDescription>
+        <value>Available</value>
+    </labels>
+    <labels>
+        <fullName>BPA_Review</fullName>
+        <categories>labels</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>BP&amp;A Review</shortDescription>
+        <value>BP&amp;A Review</value>
+    </labels>
+    <labels>
+        <fullName>BPA_Team_to_complete</fullName>
+        <categories>labels</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>BP&amp;A Team to complete</shortDescription>
+        <value>BP&amp;A Team to complete</value>
+    </labels>
+    <labels>
+        <fullName>Banner_Groups</fullName>
+        <categories>labels</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Banner Groups</shortDescription>
+        <value>Banner Groups</value>
+    </labels>
+    <labels>
+        <fullName>Brands_and_Timings</fullName>
+        <categories>labels</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Brands and Timings</shortDescription>
+        <value>What was the brand(s) and timing</value>
+    </labels>
+    <labels>
+        <fullName>Changes_Saved_Successfully</fullName>
+        <categories>messages</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Changes Saved Successfully</shortDescription>
+        <value>All changes saved successfully</value>
+    </labels>
+    <labels>
+        <fullName>Commercial_Lead_Review</fullName>
+        <categories>labels</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Commercial Lead Review</shortDescription>
+        <value>Commercial Lead Review</value>
+    </labels>
+    <labels>
+        <fullName>Cost_Details</fullName>
+        <categories>labels</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Cost Details</shortDescription>
+        <value>Cost Details (ex GST)</value>
+    </labels>
+    <labels>
+        <fullName>Cost_per_Thousand</fullName>
+        <categories>labels</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Cost per Thousand</shortDescription>
+        <value>Cost per Thousand (CPT)</value>
+    </labels>
+    <labels>
+        <fullName>Customer_Banner</fullName>
+        <categories>labels</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Customer Banner</shortDescription>
+        <value>Customer Banner</value>
+    </labels>
+    <labels>
+        <fullName>Customer_Contact</fullName>
+        <categories>labels</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Customer Contact</shortDescription>
+        <value>Customer Contact</value>
+    </labels>
+    <labels>
+        <fullName>Customer_Type</fullName>
+        <categories>labels</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Customer Type</shortDescription>
+        <value>Customer Type</value>
+    </labels>
+    <labels>
+        <fullName>Details_on_Nature_of_Cost</fullName>
+        <categories>labels</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Details on Nature of Cost</shortDescription>
+        <value>Details on Nature of Cost</value>
+    </labels>
+    <labels>
+        <fullName>Draft</fullName>
+        <categories>labels</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Draft</shortDescription>
+        <value>Draft</value>
+    </labels>
+    <labels>
+        <fullName>Focus_Brands</fullName>
+        <categories>labels</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Focus Brands</shortDescription>
+        <value>Focus Brands</value>
+    </labels>
+    <labels>
+        <fullName>Focus_Products</fullName>
+        <categories>labels</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Focus Products</shortDescription>
+        <value>Focus Products</value>
+    </labels>
+    <labels>
+        <fullName>Forecasted_Commercial_Return</fullName>
+        <categories>labels</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Forecasted Commercial Return</shortDescription>
+        <value>Forecasted Commercial Return</value>
+    </labels>
+    <labels>
+        <fullName>Forecasted_Reach_Coverage</fullName>
+        <categories>labels</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Forecasted Reach Coverage</shortDescription>
+        <value>Forecasted Reach / Coverage</value>
+    </labels>
+    <labels>
+        <fullName>Incremental_Gross_Profit</fullName>
+        <categories>labels</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Incremental Gross Profit</shortDescription>
+        <value>Incremental Gross Profit</value>
+    </labels>
+    <labels>
+        <fullName>Incremental_PA</fullName>
+        <categories>labels</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Incremental PA</shortDescription>
+        <value>Incremental PA</value>
+    </labels>
+    <labels>
+        <fullName>Incremental_Profit_Loss</fullName>
+        <categories>labels</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Incremental Profit / (Loss)</shortDescription>
+        <value>Incremental Profit / (Loss)</value>
+    </labels>
+    <labels>
+        <fullName>Instructions</fullName>
+        <categories>labels</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Instructions</shortDescription>
+        <value>Instructions</value>
+    </labels>
+    <labels>
+        <fullName>Key_Dates_Timings</fullName>
+        <categories>labels</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Key Dates &amp; Timings</shortDescription>
+        <value>Key Dates &amp; Timings</value>
+    </labels>
+    <labels>
+        <fullName>Lead_Channel</fullName>
+        <categories>labels</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Lead Channel</shortDescription>
+        <value>Lead Channel</value>
+    </labels>
+    <labels>
+        <fullName>Lump_Sum_Discount</fullName>
+        <categories>labels</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Lump Sum Discount</shortDescription>
+        <value>Lump Sum Discount</value>
+    </labels>
+    <labels>
+        <fullName>Marketing_Contact</fullName>
+        <categories>labels</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Marketing Contact</shortDescription>
+        <value>Marketing Contact</value>
+    </labels>
+    <labels>
+        <fullName>Number_of_Stores_in_Banner_Group</fullName>
+        <categories>labels</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Number of Stores in Banner Group</shortDescription>
+        <value>Total No. of Stores in Customer Banner</value>
+    </labels>
+    <labels>
+        <fullName>Number_of_Stores_in_Banner_Group_Running_Activity</fullName>
+        <categories>labels</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Number of Stores in Banner Group Running Activity</shortDescription>
+        <value>Total No. of Stores in Customer Banner Running Activity</value>
+    </labels>
+    <labels>
+        <fullName>Pending_Approval</fullName>
+        <categories>labels</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Pending Approval</shortDescription>
+        <value>Pending Approval</value>
+    </labels>
+    <labels>
+        <fullName>PreEvaluationFormInstructions</fullName>
+        <categories>messages</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>PreEvaluationFormInstructions</shortDescription>
+        <value>&lt;div&gt;
+&lt;p&gt;This form must be completed by the project manager for all activities. &lt;/p&gt;
+&lt;p&gt;A new form is required for each activity.&lt;/p&gt;
+&lt;p style=&quot;margin-bottom: 10px;&quot;&gt;Once approved, attach the completed form to CCConnect when raising a purchase order.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div&gt;
+&lt;h4&gt;Review Process&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;Activity with spend below $100,000 will need approval from the Project Manager&apos;s manager&lt;/li&gt;
+&lt;li&gt;Activity with spend above $100,000 will need approval from the Project Manager&apos;s manager, Matthew Bazeley, Andy Kim, and Marisa Murray&lt;/li&gt;
+&lt;li&gt;Activity with spend above $250,000 will need approval from the Project Manager&apos;s manager, Matthew Bazeley, Andy Kim, Marisa Murray, and Eveline Albarracin&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p style=&quot;margin-top: 10px;font-weight:bold;font-style:italic;&quot;&gt;Note: A commercial evaluation by the BP&amp;A team is only required for activity with spend over $100,000&lt;/p&gt;
+&lt;/div&gt;</value>
+    </labels>
+    <labels>
+        <fullName>Pre_Alignment_Deadline</fullName>
+        <categories>labels</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Pre-Alignment Deadline</shortDescription>
+        <value>Pre-Alignment Deadline</value>
+    </labels>
+    <labels>
+        <fullName>Pre_Evaluation_Deadline</fullName>
+        <categories>labels</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Pre-Evaluation Deadline</shortDescription>
+        <value>Pre-Evaluation Deadline</value>
+    </labels>
+    <labels>
+        <fullName>Project_Leads</fullName>
+        <categories>labels</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Project Leads</shortDescription>
+        <value>Project Leads</value>
+    </labels>
+    <labels>
+        <fullName>Project_Manager</fullName>
+        <categories>labels</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Project Manager</shortDescription>
+        <value>Project Manager</value>
+    </labels>
+    <labels>
+        <fullName>Project_or_Sales_Manager_to_Complete</fullName>
+        <categories>labels</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Project or Sales Manager to Complete</shortDescription>
+        <value>Project or Sales Manager to Complete</value>
+    </labels>
+    <labels>
+        <fullName>Proposed_In_Market_End_Date</fullName>
+        <categories>labels</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Proposed In-Market End Date</shortDescription>
+        <value>Proposed In-Market End Date</value>
+    </labels>
+    <labels>
+        <fullName>Proposed_In_Market_Start_Date</fullName>
+        <categories>labels</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Proposed In-Market Start Date</shortDescription>
+        <value>Proposed In-Market Start Date</value>
+    </labels>
+    <labels>
+        <fullName>ROI_Percentage</fullName>
+        <categories>labels</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>ROI %</shortDescription>
+        <value>ROI %</value>
+    </labels>
+    <labels>
+        <fullName>Reviewed</fullName>
+        <categories>labels</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Reviewed</shortDescription>
+        <value>Reviewed</value>
+    </labels>
+    <labels>
+        <fullName>Sales_Contact</fullName>
+        <categories>labels</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Sales Contact</shortDescription>
+        <value>Sales Contact</value>
+    </labels>
+    <labels>
+        <fullName>Select_Activity_Focus_Items</fullName>
+        <categories>messages</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Select Activity Focus Items</shortDescription>
+        <value>Select the %0 that will be the focus of this activity and then click/tap the OK button.</value>
+    </labels>
+    <labels>
+        <fullName>Selected</fullName>
+        <categories>labels</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Selected</shortDescription>
+        <value>Selected</value>
+    </labels>
+    <labels>
+        <fullName>Smartsheet</fullName>
+        <categories>labels</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Smartsheet</shortDescription>
+        <value>Smartsheet</value>
+    </labels>
+    <labels>
+        <fullName>Submit_for_Review</fullName>
+        <categories>labels</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Submit for Review</shortDescription>
+        <value>Submit for Review</value>
+    </labels>
+    <labels>
+        <fullName>Submit_for_Review_Success</fullName>
+        <categories>messages</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Submit for Review Success</shortDescription>
+        <value>%0 has been successfully submitted for Review</value>
+    </labels>
+    <labels>
+        <fullName>Total_Budgeted_Cost</fullName>
+        <categories>labels</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Total Budgeted Cost</shortDescription>
+        <value>Total Budgeted Cost</value>
+    </labels>
+    <labels>
+        <fullName>Total_Cost_A_P_Help</fullName>
+        <categories>help text</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Total Cost A&amp;P Help</shortDescription>
+        <value>This line is representative of any expense that is coded to the A&amp;P Brand Budget (eg: Creative Development, GWP items, Samples, Media)</value>
+    </labels>
+    <labels>
+        <fullName>Total_Cost_Additional_COGS_Help</fullName>
+        <categories>help text</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Total Cost Additional COGS Help</shortDescription>
+        <value>To reflect additional COGS costs (packaging, pick and pack) in addition to the product.  Must exclude the product (wet goods).</value>
+    </labels>
+    <labels>
+        <fullName>Total_Cost_Incremental_PA_Help</fullName>
+        <categories>help text</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Total Cost Incremental PA Help</shortDescription>
+        <value>Scan deals, Off Invoice Discount, Customer Rebate</value>
+    </labels>
+    <labels>
+        <fullName>Total_Cost_Lump_Sum_Help</fullName>
+        <categories>help text</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Total Cost Lump Sum Help</shortDescription>
+        <value>Co-op</value>
+    </labels>
+    <labels>
+        <fullName>Total_Customer_A_P_Budget_for_the_financial_year</fullName>
+        <categories>labels</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Total Customer A&amp;P Budget for the financial year</shortDescription>
+        <value>Total Customer A&amp;P Budget for the financial year</value>
+    </labels>
+    <labels>
+        <fullName>Total_Customer_A_P_Spend_as_perc_of_SNS</fullName>
+        <categories>labels</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Total Customer A&amp;P Spend as % of SNS</shortDescription>
+        <value>Total Customer A&amp;P Spend as a % of SNS</value>
+    </labels>
+    <labels>
+        <fullName>Total_Customer_SNS_for_the_financial_year</fullName>
+        <categories>labels</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Total Customer SNS for the financial year</shortDescription>
+        <value>Total Customer SNS for the financial year</value>
+    </labels>
+    <labels>
+        <fullName>Was_Activity_Running_Last_Year</fullName>
+        <categories>messages</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Was Activity Running Last Year</shortDescription>
+        <value>Was there an activity running in the same period last year?</value>
+    </labels>
+</CustomLabels>

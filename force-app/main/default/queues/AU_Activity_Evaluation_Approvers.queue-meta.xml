@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Queue xmlns="http://soap.sforce.com/2006/04/metadata">
+    <doesSendEmailToMembers>true</doesSendEmailToMembers>
+    <name>AU - Activity Evaluation Approvers</name>
+    <queueMembers>
+        <users>
+            <user>andy_kim@b-f.com</user>
+            <user>marisa_murray@b-f.com</user>
+            <user>matthew_bazeley@b-f.com</user>
+        </users>
+    </queueMembers>
+    <queueSobject>
+        <sobjectType>Promotion_Activity__c</sobjectType>
+    </queueSobject>
+</Queue>

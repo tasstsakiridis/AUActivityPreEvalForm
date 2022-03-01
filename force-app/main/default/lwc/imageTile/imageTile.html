@@ -1,0 +1,18 @@
+<template>
+    <div class="tile">
+        <a onclick={handleClick}>
+            <template if:false={isreadonly}>
+                <span class="text-info_small slds-float_right slds-m-right_x-small">tap to change</span>
+            </template>
+            <lightning-layout>
+                <lightning-layout-item size="4" class='slds-align_absolute-center'>
+                    <img src={item.imageUrl} class="lookup-item slds-m-around_x-small" alt="Product picture" />
+                </lightning-layout-item>
+                <lightning-layout-item size="8" padding="around-small" class="slds-m-left_small">
+                    <p class="slds-text-title_caps">{label}</p><br />
+                    <p class="title">{item.name}</p>
+                </lightning-layout-item>
+            </lightning-layout>
+        </a>
+    </div>    
+</template>
