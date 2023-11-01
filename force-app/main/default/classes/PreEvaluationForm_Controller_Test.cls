@@ -128,7 +128,7 @@ private class PreEvaluationForm_Controller_Test {
 
             List<Banner_Groups__c> bannerGroups = PreEvaluationForm_Controller.getBannerGroups(mAU.Id);
 
-            List<Product__c> l_products = PreEvaluationForm_Controller.getProducts(null);
+            Map<String, Object> l_products = PreEvaluationForm_Controller.getProducts(null);
             
             String msg = PreEvaluationForm_Controller.save(pa1, l_PAP, l_PARD_Comms, l_PARD_Banners, null);
 

@@ -1,0 +1,50 @@
+<aura:component implements="flexipage:availableForAllPageTypes,force:hasRecordId,force:lightningQuickActionWithoutHeader" access="global" controller="Factsheet_Controller">
+    <aura:attribute name="objectName" type="String" access="global" />
+    <aura:attribute name="objectLabel" type="String" default="{!$Label.c.Factsheet}" />
+    <aura:attribute name="icon" type="String" default="/resource/SLDS232/assets/icons/standard-sprite/svg/symbols.svg#account" />
+    <aura:attribute name="recordId" type="String" default="" description="The id of the record we are building a factsheet for" />
+    <aura:attribute name="recordName" type="String" default="" />
+    
+    <!-- Number Attributes -->
+    <aura:attribute name="fldIndex" type="Integer" default="0" />
+    
+    <!-- List & Object Attributes -->
+    <aura:attribute name="theRecord" type="SObject" default="{}" />
+    
+    <!-- Handle local component events -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+        
+    <!-- Register events that this component will trigger -->
+    <aura:registerEvent name="bfLightningEvent" type="c:bfLightningEvent" />
+    
+    <div class="slds-page-header">
+        <div class="slds-grid">
+        	<div class="slds-col slds-has-flexi-truncate">
+                <div class="slds-media slds-no-space slds-grow">
+                    <div class="slds-media__figure">
+                        <span class="slds-icon_container" title="Object media icon">
+                            <c:svg class="slds-icon slds-page-header__icon" ariaHidden="true" xlinkHref="{!v.icon}" />
+                        </span>
+                    </div>
+                    <div class="slds-media__body">
+                        <nav>
+                            <ol class="slds-breadcrumb slds-line-height_reset">
+                                <li class="slds-breadcrumb__item">
+                                    <span>{!v.objectLabel}</span>
+                                </li>
+                            </ol>
+                        </nav>
+                        <h1 class="slds-page-header__title slds-m-right_small slds-align-middel slds-truncate" title="{!v.recordName}">{!v.theRecord.Name}</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-col slds-no-flex slds-grid slds-align-top">
+                <div class="slds-button-group" role="group">
+                    <button class="slds-button slds-button_neutral slds-hide">
+                    	<c:svg class="slds-button__icon_stateful slds-button__icon-left" ariaHidden="true" xlinkHref="/assets/icons/utility-sprite/svg/symbols.svg#pdf" />PDF
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</aura:component>

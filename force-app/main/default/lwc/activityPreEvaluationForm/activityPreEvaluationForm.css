@@ -8,6 +8,9 @@
 .background-info {
     background-color: #ffe8cc;
 }
+.text-align_center {
+    text-align: center;
+}
 .text-info {
     color: red;
     font-size: 8pt;
@@ -35,6 +38,12 @@
 .required-field::before {
     color: red;
     content: '*';
+}
+.totals-grid {
+    font-weight: bold;
+    margin-left: 20px;
+    margin-right: 20px;
+    padding-top: 20px;
 }
 
 c-brand-tile {

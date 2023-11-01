@@ -34,6 +34,9 @@ export default class BfLookup extends LightningElement {
     useMarketId;
 
     @api 
+    isActiveFieldName;
+
+    @api 
     showRequiredIndicator;
     
     @track 
@@ -111,7 +114,9 @@ export default class BfLookup extends LightningElement {
     }
 
     doTheSearch() {
-        doSearch({queryTerm: this.queryTerm, objectName: this.objectName, showImages: this.showImages, limitToMarket: this.limitToMarket, marketId: this.marketId, marketName: this.marketName, marketFieldName: this.marketFieldName, useMarketId: this.useMarketId})
+        doSearch({queryTerm: this.queryTerm, objectName: this.objectName, showImages: this.showImages, limitToMarket: this.limitToMarket, 
+                    marketId: this.marketId, marketName: this.marketName, marketFieldName: this.marketFieldName, useMarketId: this.useMarketId,
+                    isActiveFieldName: this.isActiveFieldName })
         .then(result => {
             console.log('result', result);            
             this.lookupItems = result;

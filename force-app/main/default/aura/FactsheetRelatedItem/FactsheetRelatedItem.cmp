@@ -1,0 +1,59 @@
+<aura:component implements="flexipage:availableForAllPageTypes" access="global" controller="Factsheet_Controller">
+    <!-- String Attributes -->
+    <aura:attribute name="objectName" type="String" access="global" />
+    <aura:attribute name="objectLabel" type="String" default="{!$Label.c.FactsheetItem}" />
+    <aura:attribute name="icon" type="String" default="/resource/SLDS232/assets/icons/standard-sprite/svg/symbols.svg#account" />
+    <aura:attribute name="parentFieldName" type="String" default="" description="The name of the field linking this related data to the parent object" />
+    <aura:attribute name="parentId" type="String" default="" description="The id of the field linking this related data to the parent object" />
+    <aura:attribute name="recordName" type="String" default="" />
+    <aura:attribute name="fieldsetName" type="String" default="Default" />
+    <aura:attribute name="customFilter" type="String" default="" />
+    <aura:attribute name="label" type="String" default="" />
+    <aura:attribute name="title" type="String" default="{!$Label.c.FactsheetItem}" />
+    
+    <!-- Boolean Attributes -->
+    <aura:attribute name="getRelateddata" type="Boolean" default="false" />
+    <aura:attribute name="buildForm" type="Boolean" default="false" />
+    <aura:attribute name="isRelatedToParent" type="Boolean" default="true" />
+        
+    <!-- List & Object Attributes -->
+    <aura:attribute name="fieldset" type="bfColumn[]" default="[]" />
+    <aura:attribute name="theRelatedData" type="SObject[]" default="[]" />
+    <aura:attribute name="columns" type="String[]" default="[]" />
+    
+    <!-- Handle local component events -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+    <!-- Handle attribute value change events -->
+    <aura:handler name="change" value="{!v.getRelatedData}" action="{!c.handleGetRelatedDataChange}" />
+    <aura:handler name="change" value="{!v.buildForm}" action="{!c.handleBuildFormChange}" />
+
+    <div id="{!v.objectName+'_section_panel'}" aura:id="section_panel" class="slds-section slds-is-open slds-m-around_small" style="background-color: #fff; border: 1px solid #999; border-radius: 5px;page-break-after:auto;">
+    	<h3 class="slds-section__title">
+        	<button aria-controls="section_content" aria-expanded="true" class="slds-button slds-section__title-action" onclick="{!c.toggleSection}">
+                <c:svg class="slds-section__title-action-icon slds-button__icon slds-button__icon_left" ariaHidden="true" xlinkHref="/resource/SLDS232/assets/icons/utility-sprite/svg/symbols.svg#switch" />
+	            <span class="slds-truncate" title="{!v.objectLabel}">{!v.title}</span>
+            </button>
+        </h3>
+        <div aria-hidden="false" class="slds-section__content" aura:id="section_content" id="{!v.objectName+'_section_content'}" style="overflow-x: scroll;">        
+            <table aura:id="datatable_container" id="datatable_container" class="slds-table slds-table_bordered slds-max-medium-table_stacked-horizontal slds-table_striped" style="width: 100%;">
+                <thead>
+                    <tr class="slds-text-title_caps">
+                        <aura:iteration items="{!v.columns}" var="th">
+                            <th class="slds-cell-shrink" scope="col">
+                                <div class="slds-truncate" title="{!th}">{!th}
+                                    <span class="slds-assistive-text">{!th}</span>
+                                </div>
+                            </th>
+                        </aura:iteration>
+                    </tr>
+                </thead>
+                <tbody>                    
+                    <aura:iteration items="{!v.theRelatedData}" var="r">
+                        <c:FactsheetRelatedItemRow datarow="{!r}" fieldset="{!v.fieldset}" />
+                    </aura:iteration>
+                </tbody>                
+            </table>
+        </div>
+    </div>
+</aura:component>

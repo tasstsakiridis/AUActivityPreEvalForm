@@ -1,0 +1,226 @@
+<template>
+    <hr style="margin-left: 20px; margin-right: 20px;"/>
+    <lightning-card class="bf-card">
+        <h2 slot="title">{title}</h2>
+
+        <lightning-button-group slot="actions">
+            <lightning-button label={labels.removeBrand.label} name="removeBrand" onclick={handleRemoveBrandButtonClick}></lightning-button>
+        </lightning-button-group>
+        <div class="slds-m-around_small" style="width: 90%;">
+            <lightning-layout>
+                <lightning-layout-item size="2">
+                    <template if:true={brandImage}>
+                        <img src={brandImage} />
+                    </template>
+                </lightning-layout-item>
+                <lightning-layout-item size="10">
+                    <lightning-combobox name="i_Brand" label={labels.brand.label} value={brandId} options={availableBrands}
+                        disabled={isLocked} required onchange={handleBrandChange}></lightning-combobox>
+                    <div style="font-size: 9pt;">
+                        <lightning-layout>
+                            <lightning-layout-item size="2" padding="horizontal-small">
+                                <p style="margin-top: 3px; margin-bottom: 5px;">{labels.gpRate.label}</p>
+                                <lightning-formatted-number value={brandGPRate} format-style="currency" maximum-fraction-digits="2"></lightning-formatted-number>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="2" padding="horizontal-small">
+                                <p style="margin-top: 3px; margin-bottom: 5px;">{labels.snsRate.label}</p>
+                                <lightning-formatted-number value={brandSNSRate} format-style="currency" maximum-fraction-digits="2"></lightning-formatted-number>                            
+                            </lightning-layout-item>
+                            <lightning-layout-item size="4" padding="horizontal-small">
+                                <lightning-input type="number" label={labels.percentSplit.label} value={percentSplit} max="100" min="0"
+                                    formatter="percent-fixed" onchange={handlePercentSplitChange} oncommit={handlePercentSplitCommit}></lightning-input>                            
+                            </lightning-layout-item>
+                            <lightning-layout-item size="4" padding="horizontal-small">
+                                <lightning-input type="number" label={labels.amountSplit.label} value={amountSplit} max={projectedSpend} min="0"
+                                    formatter="currency" onchange={handleAmountSplitChange} oncommit={handleAmountSplitCommit}></lightning-input>                            
+                            </lightning-layout-item>
+                        </lightning-layout>
+
+                    </div>
+                </lightning-layout-item>                
+            </lightning-layout>
+        </div>
+
+        <template if:true={isBTL}>
+            <div>
+                <lightning-layout>
+                    <lightning-layout-item size="3" padding="around-small">
+                        <lightning-layout multiple-rows="true">
+                            <lightning-layout-item size="12">
+                                <lightning-input type="number" label={labels.numberOfOutlets.label}
+                                    field-level-help={labels.numberOfOutlets.help} value={item.Number_of_Outlets__c}
+                                    step="0.01" disabled={isLocked} onchange={handleNumberOfOutletsChange} oncommit={handleNumberOfOutletsCommit}></lightning-input>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="12">
+                                <lightning-input type="number" label={labels.percentageOfCustomerUniverse.label}
+                                    field-level-help={labels.percentageOfCustomerUniverse.help}
+                                    step="0.01" value={percentageOfCustomerUniverse} formatter="percent-fixed" disabled={isLocked}
+                                    onchange={handlePercentageOfCustomerUniverseChange}></lightning-input>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="12">
+                                <lightning-input type="number" label={labels.incrementalDistributionPoints.label}
+                                    field-level-help={labels.incrementalDistributionPoints.help}
+                                    step="0.01" value={incrementalDistributionPoints} disabled={isLocked}
+                                    onchange={handleIncrementalDistributionPointsChange}></lightning-input>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="12">
+                                <lightning-input type="text" label={labels.picosDelivery.label} value={picosDelivery}
+                                    field-level-help={labels.picosDelivery.help} read-only></lightning-input>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="12">
+                                <lightning-input type="number" label={labels.rateOfSale.label} value={rateOfSale}
+                                    field-level-help={labels.rateOfSale.help} read-only></lightning-input>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="3" padding="around-small">
+                        <lightning-layout multiple-rows="true">
+                            <lightning-layout-item size="12">
+                                <lightning-input type="number" label={labels.baselineSalesVolume.label}
+                                    field-level-help={labels.baselineSalesVolume.help} value={item.Baseline_Sales_Volume_9L__c}
+                                    step="0.01" disabled={isLocked} onchange={handleBaselineSalesVolumeChange}></lightning-input>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="12">
+                                <lightning-input type="number" label={labels.baselineSNS.label} value={baselineSNS}
+                                    formatter="currency" field-level-help={labels.baselineSNS.help} read-only></lightning-input>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="12">
+                                <lightning-input type="number" label={labels.baselineGP.label} value={baselineGP}
+                                    formatter="currency" field-level-help={labels.baselineGP.help} read-only></lightning-input>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="12">
+                                <lightning-input type="number" label={labels.baselineBrandProfit.label}
+                                    value={baselineBrandProfit} formatter="currency" field-level-help={labels.baselineBrandProfit.help} read-only></lightning-input>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="3" padding="around-small">
+                        <lightning-layout multiple-rows="true">
+                            <lightning-layout-item size="12">
+                                <lightning-input type="number" label={labels.projectedSalesVolume.label}
+                                    field-level-help={labels.projectedSalesVolume.help} value={item.Projected_Sales_Volume__c}
+                                    step="0.01" disabled={isLocked} onchange={handleProjectedSalesVolumeChange} oncommit={handleProjectedSalesVolumeCommit}></lightning-input>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="12">
+                                <lightning-input type="number" label={labels.projectedSNS.label} value={projectedSNS}
+                                    formatter="currency" field-level-help={labels.projectedSNS.help} read-only></lightning-input>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="12">
+                                <lightning-input type="number" label={labels.projectedGP.label} value={projectedGP}
+                                    formatter="currency" field-level-help={labels.projectedGP.help} read-only></lightning-input>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="12">
+                                <lightning-input type="number" label={labels.projectedBrandProfit.label}
+                                    value={projectedBrandProfit} formatter="currency" field-level-help={labels.projectedBrandProfit.help} read-only></lightning-input>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="12">
+                                <lightning-input type="number" label={labels.incrementalBrandProfit.label}
+                                    value={incrementalBrandProfit} formatter="currency" field-level-help={labels.incrementalBrandProfit.help} read-only
+                                    class="slds-m-top_small"></lightning-input>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="12">
+                                <lightning-input type="number" label={labels.roiPercentage.label} value={roiPercent}
+                                    formatter="percent-fixed" field-level-help={labels.roiPercentage.help} read-only></lightning-input>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="3" padding="around-small">
+                        <lightning-layout multiple-rows="true">
+                            <lightning-layout-item size="12">
+                                <lightning-input type="number" label={labels.actualSalesVolume.label}
+                                    field-level-help={labels.actualSalesVolume.help} value={item.Actual_Sales_Volume__c} step="0.01"
+                                    disabled={isLocked} onchange={handleActualSalesVolumeChange}></lightning-input>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="12">
+                                <lightning-input type="number" label={labels.actualSNS.label} value={actualSNS} formatter="currency"
+                                    field-level-help={labels.actualSNS.help} read-only></lightning-input>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="12">
+                                <lightning-input type="number" label={labels.actualGP.label} value={actualGP} formatter="currency"
+                                    field-level-help={labels.actualGP.help} read-only></lightning-input>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="12">
+                                <lightning-input type="number" label={labels.actualBrandProfit.label} value={actualBrandProfit}
+                                    formatter="currency" field-level-help={labels.actualBrandProfit.help} read-only></lightning-input>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="12">
+                                <lightning-input type="number" label={labels.actualIncrementalBrandProfit.label} value={actualIncrementalBrandProfit}
+                                    formatter="currency" field-level-help={labels.actualIncrementalBrandProfit.help} read-only
+                                    class="slds-m-top_small"></lightning-input>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="12">
+                                <lightning-input type="number" label={labels.actualROIPercentage.label} value={actualROIPercent} formatter="percent-fixed"
+                                    field-level-help={labels.actualROIPercentage.help} read-only></lightning-input>
+                            </lightning-layout-item>
+
+                        </lightning-layout>
+                    </lightning-layout-item>
+                </lightning-layout>
+            </div>
+        </template>
+        
+        <template if:true={isBroadreach}>
+            <lightning-layout>
+                <lightning-layout-item size="4" padding="around-small">
+                    <lightning-layout multiple-rows="true">
+                        <lightning-layout-item size="12">
+                            <lightning-input type="number" label={labels.reach.label} field-level-help={labels.reach.help}
+                                value={reach} step="0.01" disabled={isLocked} onchange={handleReachChange}></lightning-input>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="12">
+                            <lightning-input type="number" label={labels.esov.label} field-level-help={labels.esov.help}
+                                value={esov} formatter="percent-fixed" step="0.01" disabled={isLocked}
+                                onchange={handleESOVChange}></lightning-input>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="12">
+                            <lightning-input type="number" label={labels.engagementRates.label}
+                                field-level-help={labels.engagementRates.help} value={engagementRates}
+                                formatter="percent-fixed" step="0.01" disabled={isLocked}
+                                onchange={handleEngagementRatesChange}></lightning-input>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                </lightning-layout-item>
+                <lightning-layout-item size="4" padding="around-small">
+                    <lightning-layout multiple-rows="true">
+                        <lightning-layout-item size="12">
+                            <lightning-input type="number" label={labels.penetration.label}
+                                field-level-help={labels.penetration.help} value={penetration} formatter="percent-fixed"
+                                step="0.01" disabled={isLocked} onchange={handlePenetrationChange}></lightning-input>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="12">
+                            <lightning-input type="number" label={labels.awarenessIncrease.label}
+                                field-level-help={labels.awarenessIncrease.help} value={awarenessIncreases}
+                                formatter="percent-fixed" step="0.01" disabled={isLocked}
+                                onchange={handleAwarenessIncreasesChange}></lightning-input>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="12">
+                            <lightning-input type="number" label={labels.purchaseIntent.label}
+                                field-level-help={labels.purchaseIntent.help} value={purchaseIntent}
+                                formatter="percent-fixed" step="0.01" disabled={isLocked} onchange={handlePurchaseIntentChange}></lightning-input>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                </lightning-layout-item>
+                <lightning-layout-item size="4" padding="around-small">
+                    <lightning-layout multiple-rows="true">
+                        <lightning-layout-item size="12">
+                            <lightning-input type="number" label={labels.meaningfulDifference.label}
+                                field-level-help={labels.meaningfulDifference.help} value={meaningfulDifference}
+                                step="0.01" disabled={isLocked} onchange={handleMeaningfulDifferenceChange}></lightning-input>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="12">
+                            <lightning-input type="number" label={labels.costPerEngagement.label}
+                                field-level-help={labels.costPerEngagement.help} value={costPerEngagement}
+                                formatter="currency" step="0.01" disabled={isLocked}
+                                onchange={handleCostPerEngagementChange}></lightning-input>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="12">
+                            <lightning-input type="number" label={labels.reachPremium.label}
+                                field-level-help={labels.reachPremium.help} value={reachPremium} formatter="percent-fixed"
+                                step="0.01" disabled={isLocked} onchange={handleReachPremiumChange}></lightning-input>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                </lightning-layout-item>
+            </lightning-layout>
+        </template>
+    </lightning-card>
+</template>

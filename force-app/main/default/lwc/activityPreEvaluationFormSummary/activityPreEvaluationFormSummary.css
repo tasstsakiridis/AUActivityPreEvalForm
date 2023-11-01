@@ -1,0 +1,8 @@
+.bordered-card {
+    border: 1px solid lightgray;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+.card-body {
+    border-top: 1px solid lightgray;
+}

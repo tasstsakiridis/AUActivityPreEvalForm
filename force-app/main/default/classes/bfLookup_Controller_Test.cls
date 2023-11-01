@@ -11,7 +11,7 @@ public class bfLookup_Controller_Test {
         
         String searchString = 'Test';
         String sObjectAPIName = 'User';
-        List<Object> l = bfLookup_Controller.doSearch(searchString, sObjectAPIName, false, true, mAU.Id, 'Australia', 'Market__c', true);
+        List<Object> l = bfLookup_Controller.doSearch(searchString, sObjectAPIName, false, true, mAU.Id, 'Australia', 'Market__c', true, 'IsActive');
         System.assertNotEquals(null, l, 'Some list was returned from lookup method and not null');
         
         

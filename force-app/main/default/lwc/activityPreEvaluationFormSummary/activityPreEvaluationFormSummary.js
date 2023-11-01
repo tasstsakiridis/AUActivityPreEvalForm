@@ -2,56 +2,147 @@ import { LightningElement, api, wire } from 'lwc';
 import { CurrentPageReference, NavigationMixin } from 'lightning/navigation';
 
 import getActivity from '@salesforce/apex/PreEvaluationForm_Controller.getActivity';
-import getProducts from '@salesforce/apex/PreEvaluationForm_Controller.getProducts';
 import getUserDetails from '@salesforce/apex/PreEvaluationForm_Controller.getUserDetails';
+import sendPDF from '@salesforce/apex/PreEvaluationForm_Controller.sendPDF';
 
+import LABEL_AMOUNT_SPLIT from '@salesforce/label/c.PreEval_Amount_Split';
+import LABEL_AWARENESS_INCREASE from '@salesforce/label/c.AwarenessIncrease';
+import LABEL_AWARENESS_INCREASE_HELP from '@salesforce/label/c.AwarenessIncreaseHelp';
+import LABEL_BANNER_GROUP from '@salesforce/label/c.Banner_Groups';
+import LABEL_BANNER_GROUP_HELP from '@salesforce/label/c.PreEval_BannerGroup_Help';
+import LABEL_BASELINE_BRAND_PROFIT from '@salesforce/label/c.BaselineBrandProfit';
+import LABEL_BASELINE_BRAND_PROFIT_HELP from '@salesforce/label/c.PreEval_BaselineBrandProfit_Help';
+import LABEL_BASELINE_GP from '@salesforce/label/c.BaselineGP';
+import LABEL_BASELINE_GP_HELP from '@salesforce/label/c.PreEval_BaselineGP_Help';
+import LABEL_BASELINE_SALES_VOLUME from '@salesforce/label/c.BaselineSalesVolume';
+import LABEL_BASELINE_SALES_VOLUME_HELP from '@salesforce/label/c.PreEval_BaselineSalesVolume_Help';
+import LABEL_BASELINE_SNS from '@salesforce/label/c.BaselineSNS';
+import LABEL_BASELINE_SNS_HELP from '@salesforce/label/c.PreEval_BaselineSNS_Help';
+import LABEL_BRAND from '@salesforce/label/c.Brand';
+import LABEL_BROADREACH_TITLE from '@salesforce/label/c.Broadreach_Title';
+import LABEL_BTL_ACTIVATION from '@salesforce/label/c.BTL_Activation_Title';
 import LABEL_CANCEL from '@salesforce/label/c.Cancel';
-import LABEL_DETACH_FILE from '@salesforce/label/c.Detach_File';
-import LABEL_DETACH_FILE_CONFIRMATION from '@salesforce/label/c.Detach_File_Confirmation';
-import LABEL_DETACH_FILE_SUCCESS from '@salesforce/label/c.Detach_File_Success';
-import LABEL_FORMINSTRUCTIONS from '@salesforce/label/c.PreEvaluationFormInstructions';
+import LABEL_CHANNEL from '@salesforce/label/c.Channel';
+import LABEL_CHANNEL_HELP from '@salesforce/label/c.PreEval_Channel_Help';
+import LABEL_CONSUMER_DRIVER from '@salesforce/label/c.ConsumerDriver';
+import LABEL_CONSUMER_DRIVER_HELP from '@salesforce/label/c.PreEval_ConsumerDriver_Help';
+import LABEL_COST_PER_ENGAGEMENT from '@salesforce/label/c.CostPerEngagement';
+import LABEL_COST_PER_ENGAGEMENT_HELP from '@salesforce/label/c.PreEval_CostPerEngagement_Help';
+import LABEL_DESCRIPTION from '@salesforce/label/c.Description';
+import LABEL_DESCRIPTION_HELP from '@salesforce/label/c.PreEval_Description_Help';
+import LABEL_END_DATE from '@salesforce/label/c.End_Date';
+import LABEL_END_DATE_HELP from '@salesforce/label/c.PreEval_EndDate_Help';
+import LABEL_ENGAGEMENT_RATES from '@salesforce/label/c.EngagementRates';
+import LABEL_ENGAGEMENT_RATES_HELP from '@salesforce/label/c.PreEval_EngagementRates_Help';
+import LABEL_ESOV from '@salesforce/label/c.ESOV';
+import LABEL_ESOV_HELP from '@salesforce/label/c.PreEval_ESOV_Help';
+import LABEL_GP_RATE from '@salesforce/label/c.GP_Rate';
 import LABEL_HELP from '@salesforce/label/c.Help';
+import LABEL_INCREMENTAL_BRAND_PROFIT from '@salesforce/label/c.IncrementalBrandProfit';
+import LABEL_INCREMENTAL_BRAND_PROFIT_HELP from '@salesforce/label/c.PreEval_IncrementalBrandProfit_Help';
+import LABEL_INCREMENTAL_DISTRIBUTION_POINTS from '@salesforce/label/c.IncrementalDistributionPoints';
+import LABEL_INCREMENTAL_DISTRIBUTION_POINTS_HELP from '@salesforce/label/c.PreEval_IncrementalDistributionPoints_Help';
 import LABEL_INFO from '@salesforce/label/c.Info';
-import LABEL_SAVE from '@salesforce/label/c.Save';
+import LABEL_MEANINGFUL_DIFFERENCE from '@salesforce/label/c.MeaningfulDifference';
+import LABEL_MEANINGFUL_DIFFERENCE_HELP from '@salesforce/label/c.PreEval_MeaningfulDifference_Help';
+import LABEL_MECHANIC from '@salesforce/label/c.Activity_Mechanic';
+import LABEL_MECHANIC_HELP from '@salesforce/label/c.PreEval_Mechanic_Help';
+import LABEL_NUMBER_OF_OUTLETS from '@salesforce/label/c.NumberOfOutlets'
+import LABEL_NUMBER_OF_OUTLETS_HELP from '@salesforce/label/c.PreEval_NumberOfOutlets_Help'
+import LABEL_PENETRATION from '@salesforce/label/c.Penetration';
+import LABEL_PENETRATION_HELP from '@salesforce/label/c.PreEval_Penetration_Help';
+import LABEL_PERCENT_SPLIT from '@salesforce/label/c.PreEval_Percent_Split';
+import LABEL_PERCENTAGE_CUSTOMER_UNIVERSE from '@salesforce/label/c.PercentageOfCustomerUniverse';
+import LABEL_PERCENTAGE_CUSTOMER_UNIVERSE_HELP from '@salesforce/label/c.PreEval_PercentageOfCustomerUniverse_Help';
+import LABEL_PICOS_DELIVERY from '@salesforce/label/c.PicosDelivery';
+import LABEL_PICOS_DELIVERY_HELP from '@salesforce/label/c.PreEval_PICOSDelivery_Help';
+import LABEL_PROJECTED_BRAND_PROFIT from '@salesforce/label/c.ProjectedBrandProfit';
+import LABEL_PROJECTED_BRAND_PROFIT_HELP from '@salesforce/label/c.PreEval_ProjectedBrandProfit_Help';
+import LABEL_PROJECTED_GP from '@salesforce/label/c.ProjectedGP';
+import LABEL_PROJECTED_GP_HELP from '@salesforce/label/c.PreEval_ProjectedGP_Help';
+import LABEL_PROJECTED_SALES_VOLUME from '@salesforce/label/c.ProjectedSalesVolume';
+import LABEL_PROJECTED_SALES_VOLUME_HELP from '@salesforce/label/c.PreEval_ProjectedSalesVolume_Help';
+import LABEL_PROJECTED_SPEND from '@salesforce/label/c.ProjectedSpend';
+import LABEL_PROJECTED_SPEND_HELP from '@salesforce/label/c.PreEval_ProjectedSpend_Help';
+import LABEL_PROJECTED_SNS from '@salesforce/label/c.ProjectedSNS';
+import LABEL_PROJECTED_SNS_HELP from '@salesforce/label/c.PreEval_ProjectedSNS_Help';
+import LABEL_PURCHASE_INTENT from '@salesforce/label/c.PurchaseIntent';
+import LABEL_PURCHASE_INTENT_HELP from '@salesforce/label/c.PreEval_PurchaseIntent_Help';
+import LABEL_RATE_OF_SALE from '@salesforce/label/c.RateOfSale';
+import LABEL_RATE_OF_SALE_HELP from '@salesforce/label/c.PreEval_RateOfSale_Help';
+import LABEL_REACH from '@salesforce/label/c.Reach';
+import LABEL_REACH_HELP from '@salesforce/label/c.PreEval_Reach_Help';
+import LABEL_REACH_PREMIUM from '@salesforce/label/c.ReachPremium';
+import LABEL_REACH_PREMIUM_HELP from '@salesforce/label/c.PreEval_ReachPremium_Help';
+import LABEL_REMOVE from '@salesforce/label/c.Remove';
+import LABEL_ROI_PERCENTAGE from '@salesforce/label/c.ROI_Percentage';
+import LABEL_ROI_PERCENTAGE_HELP from '@salesforce/label/c.PreEval_ROI_Help';
+import LABEL_SEGMENT_TYPE from '@salesforce/label/c.SegmentType';
+import LABEL_SEGMENT_TYPE_HELP from '@salesforce/label/c.PreEval_SegmentType_Help';
+import LABEL_SEND_PDF from '@salesforce/label/c.Send_PDF';
+import LABEL_SEND_PDF_SUCCESS_MESSAGE from '@salesforce/label/c.Send_PDF_Success';
+import LABEL_SNS_RATE from '@salesforce/label/c.SNS_Rate';
+import LABEL_SPLIT_ERROR from '@salesforce/label/c.PreEval_Split_Error';
+import LABEL_START_DATE from '@salesforce/label/c.Start_Date';
+import LABEL_START_DATE_HELP from '@salesforce/label/c.PreEval_StartDate_Help';
+import LABEL_STRATEGIC_PILLAR from '@salesforce/label/c.StrategicPillar';
+import LABEL_STRATEGIC_PILLAR_HELP from '@salesforce/label/c.PreEval_StrategicPillar_Help';
 import LABEL_SUMMARY from '@salesforce/label/c.Summary';
+import LABEL_TYPE_OF_SPEND from '@salesforce/label/c.TypeOfSpend';
+import LABEL_TYPE_OF_SPEND_HELP from '@salesforce/label/c.PreEval_TypeOfSpend_Help';
 
 export default class ActivityPreEvaluationFormSummary extends NavigationMixin(LightningElement) {
     labels = {
-        agencyContact   : { label: 'Agency Contact' },
-        cancel          : { label: LABEL_CANCEL },
-        customerContact : { label: 'Customer Contact' },
-        detachFile              : { label: LABEL_DETACH_FILE, successMessage: LABEL_DETACH_FILE_SUCCESS, confirmation: LABEL_DETACH_FILE_CONFIRMATION},
-        help            : { label: LABEL_HELP },
-        keyDates        : { label: 'Key Dates & Timings' },
-        marketingContact : { label: 'Marketing Contact' },
-        projectLeads    : { label: 'Project Leads' },
-        projectManager  : { label: 'Project Manager' },
-        salesContact    : { label: 'Sales Contact' },        
-        save            : { label: LABEL_SAVE },
-        info            : { label: LABEL_INFO },
-        instructions    : { label: 'Instructions', message: LABEL_FORMINSTRUCTIONS },
-        inMarketStartDate : { label: 'Proposed In-Market Start Date' },
-        inMarketEndDate   : { label: 'Proposed In-Market End Date' },
-        preAlignmentDeadline : { label: 'Pre-Alignment Deadline' },
-        preEvaluationDeadline : { label: 'Pre-Evaluation Deadline' },
-        activityApprovalDate  : { label: 'Activity Approval Date' },
-        channel               : { label: 'Channel' },
-        comments              : { label: 'Comments' },
-        customerBanner        : { label: 'Customer Banner' },
-        customerType          : { label: 'Customer Type' },
-        activityDetails       : { label: 'Activity Details' },
-        objectives            : { label: 'Activity Objectives / Qualitative Considerations' },
-        businessOpportunity   : { label: 'What is the Business Opportunity or Challenge?' },
-        activityObjectives    : { label: 'Description of Activity Objectives:' },
-        next                  : { label: 'Next' },
-        prev                  : { label: 'Prev' },
-        provideDetailsBelow   : { label: 'Provide details below' },
-        yes                   : { label: 'Yes' },
-        no                    : { label: 'No' },
-        uploadFile            : { label: 'Upload & Attach Files', message: 'Select files to upload and attach', successMessage: 'Files uploaded successfully!' },
-        saveSuccess             : { message: 'All changes saved successfully'},
-        summary               : { label: LABEL_SUMMARY },
-        print                 : { label: 'Print' }
+        amountSplit                     : { label: LABEL_AMOUNT_SPLIT },
+        awarenessIncrease               : { label: LABEL_AWARENESS_INCREASE, help: LABEL_AWARENESS_INCREASE_HELP },
+        bannerGroup                     : { label: LABEL_BANNER_GROUP, help: LABEL_BANNER_GROUP_HELP },
+        baselineSalesVolume             : { label: LABEL_BASELINE_SALES_VOLUME, help: LABEL_BASELINE_SALES_VOLUME_HELP },
+        baselineSNS                     : { label: LABEL_BASELINE_SNS, help: LABEL_BASELINE_SNS_HELP },
+        baselineGP                      : { label: LABEL_BASELINE_GP, help: LABEL_BASELINE_GP_HELP },
+        baselineBrandProfit             : { label: LABEL_BASELINE_BRAND_PROFIT, help: LABEL_BASELINE_BRAND_PROFIT_HELP },
+        brand                           : { label: LABEL_BRAND },
+        broadreach                      : { title: LABEL_BROADREACH_TITLE },
+        btlActivation                   : { title: LABEL_BTL_ACTIVATION },
+        cancel                          : { label: LABEL_CANCEL },
+        channel                         : { label: LABEL_CHANNEL, help: LABEL_CHANNEL_HELP },
+        consumerDriver                  : { label: LABEL_CONSUMER_DRIVER, help: LABEL_CONSUMER_DRIVER_HELP },
+        costPerEngagement               : { label: LABEL_COST_PER_ENGAGEMENT, help: LABEL_COST_PER_ENGAGEMENT_HELP },
+        description                     : { label: LABEL_DESCRIPTION, help: LABEL_DESCRIPTION_HELP },
+        endDate                         : { label: LABEL_END_DATE, help: LABEL_END_DATE_HELP },
+        engagementRates                 : { label: LABEL_ENGAGEMENT_RATES, helpe: LABEL_ENGAGEMENT_RATES_HELP },
+        esov                            : { label: LABEL_ESOV, help: LABEL_ESOV_HELP },
+        gpRate                          : { label: LABEL_GP_RATE },
+        help                            : { label: LABEL_HELP },
+        incrementalBrandProfit          : { label: LABEL_INCREMENTAL_BRAND_PROFIT, help: LABEL_INCREMENTAL_BRAND_PROFIT_HELP },
+        incrementalDistributionPoints   : { label: LABEL_INCREMENTAL_DISTRIBUTION_POINTS, help: LABEL_INCREMENTAL_DISTRIBUTION_POINTS_HELP },
+        info                            : { label: LABEL_INFO },
+        meaningfulDifference            : { label: LABEL_MEANINGFUL_DIFFERENCE, help: LABEL_MEANINGFUL_DIFFERENCE_HELP },
+        mechanic                        : { label: LABEL_MECHANIC, help: LABEL_MECHANIC_HELP },
+        numberOfOutlets                 : { label: LABEL_NUMBER_OF_OUTLETS, help: LABEL_NUMBER_OF_OUTLETS_HELP },
+        penetration                     : { label: LABEL_PENETRATION, help: LABEL_PENETRATION_HELP },
+        percentageOfCustomerUniverse    : { label: LABEL_PERCENTAGE_CUSTOMER_UNIVERSE, help: LABEL_PERCENTAGE_CUSTOMER_UNIVERSE_HELP },
+        picosDelivery                   : { label: LABEL_PICOS_DELIVERY, help: LABEL_PICOS_DELIVERY_HELP },
+        percentSplit                    : { label: LABEL_PERCENT_SPLIT },
+        print                           : { label: 'Print' },
+        projectedAPSpend                : { label: LABEL_PROJECTED_SPEND, help: LABEL_PROJECTED_SPEND_HELP },
+        projectedBrandProfit            : { label: LABEL_PROJECTED_BRAND_PROFIT, help: LABEL_PROJECTED_BRAND_PROFIT_HELP },
+        projectedGP                     : { label: LABEL_PROJECTED_GP, help: LABEL_PROJECTED_GP_HELP },
+        projectedSalesVolume            : { label: LABEL_PROJECTED_SALES_VOLUME, help: LABEL_PROJECTED_SALES_VOLUME_HELP },
+        projectedSNS                    : { label: LABEL_PROJECTED_SNS, help: LABEL_PROJECTED_SNS_HELP },        
+        purchaseIntent                  : { label: LABEL_PURCHASE_INTENT, help: LABEL_PURCHASE_INTENT_HELP },
+        rateOfSale                      : { label: LABEL_RATE_OF_SALE, help: LABEL_RATE_OF_SALE_HELP },
+        reach                           : { label: LABEL_REACH, help: LABEL_REACH_HELP },
+        reachPremium                    : { label: LABEL_REACH_PREMIUM, help: LABEL_REACH_PREMIUM_HELP },
+        removeBrand                     : { label: `${LABEL_REMOVE} ${LABEL_BRAND}`},
+        roiPercentage                   : { label: LABEL_ROI_PERCENTAGE, help: LABEL_ROI_PERCENTAGE_HELP },
+        segmentType                     : { label: LABEL_SEGMENT_TYPE, help: LABEL_SEGMENT_TYPE_HELP },
+        sendPDF                         : { label: LABEL_SEND_PDF, successMessage: LABEL_SEND_PDF_SUCCESS_MESSAGE },
+        snsRate                         : { label: LABEL_SNS_RATE },
+        split                           : { error: LABEL_SPLIT_ERROR },
+        startDate                       : { label: LABEL_START_DATE, help: LABEL_START_DATE_HELP },
+        strategicPillar                 : { label: LABEL_STRATEGIC_PILLAR, help: LABEL_STRATEGIC_PILLAR_HELP },
+        summary                         : { label: LABEL_SUMMARY },
+        typeOfSpend                     : { label: LABEL_TYPE_OF_SPEND, help: LABEL_TYPE_OF_SPEND_HELP },
     };
 
     @wire(CurrentPageReference) pageRef;
@@ -79,263 +170,70 @@ export default class ActivityPreEvaluationFormSummary extends NavigationMixin(Li
         }
     }
 
-    brands;
-    products;
-    allProducts;
-    wiredProducts;
-    @wire(getProducts, { market: '$market' })
-    wiredGetProducts(value) {
-        this.wiredProducts = value;
+
+    wiredActivity;
+    activity;
+    @wire(getActivity, {activityId: '$activityId'})
+    wiredGetActivity(value) {
+        console.log('[getFormData] activityId', this.activityId);
+        this.wiredActivity = value;
         if (value.error) {
             this.error = value.error;
-            this.products = undefined;
-            this.brands = undefined;
-        } else if (value.data) {
-            this.error = undefined;
-            //this.products = value.data;
-            this.allProducts = [];
-            this.brands = [];
-            const brandIds = [];
-            console.log('[getproducts] data', value.data);
-            value.data.forEach(p => {                
-                if (brandIds.indexOf(p.Brand__c) < 0) {
-                    brandIds.push(p.Brand__c);
-                    this.brands.push({
-                        id: p.Brand__c, 
-                        name: p.Brand_Name__c, 
-                        imageUrl: p.Brand__r.Primary_Logo__c != undefined ? 'https://salesforce-static.b-fonline.com/images/brand_logos/'+ p.Brand__r.Primary_Logo__c : '',
-                        isSelected: false
-                    });
-                }
-                this.allProducts.push({
-                    id: p.Id,
-                    name: p.Name,
-                    imageUrl: p.Image_Name__c != undefined ? 'https://salesforce-static.b-fonline.com/images/'+p.Image_Name__c : '',
-                    brand: p.Brand__c,
-                    brandName: p.Brand_Name__c
-                });
-            });
-            console.log('[getproducts] brands', this.brands);
-            console.log('[getproducts] products', this.products);
-
-            this.getFormData();
-        }
-    }
-
-    activity;
-    getFormData() {
-        getActivity({activityId: this.activityId})
-        .then(result => {
-            this.error = undefined;
-            this.activity = result;
-            this.loadData();
-        })
-        .catch(error => {
-            this.error = error;
             this.activity = undefined;
-        });
+        } else {
+            console.log('[getFormData] result', value.data);
+            this.error = undefined;
+            this.activity = value.data;
+            this.loadData();
+        }
     }
 
     activityName;
     panNumber;
     status;
-    projectManager = {};
-    marketingContact = {};
-    salesContact = {};
-    agencyContact;
-    customerContact;
-    numberOfStoresInBanner;
-    numberOfStoresRunningActivity;
-    wasActivityRunningLastYear;
-    lastYearActivityDetails;
-    states;
-    smartsheetLink;
-    channel;
-    isOtherChannel;
-    isOffChannel;
-    customerType;
-    customerBanner;
-    channelComments;
-    activityMechanicDescription;
-    activityMechanics;
-    activityAdditionalComments;
-    businessOpportunity;
-    activityObjectives;
-    brandStrategyIndex;
-    commercialReturnIndex;
-    customerRelationshipIndex;
-    newExperientialIndex;
-    natureOfCostDescription;
-    activityAdditionalComments;
-    incrementalDiscountsProvided;
-    formattedActivityApprovalDate;
-    formattedPreAlignmentDeadline;
-    formattedPreEvaluationDeadline;
-    formattedProposedInMarketEndDate;
-    formattedProposedInMarketStartDate;
-    totalBudgetedCost;
-    totalBudgetedCostAP;
-    totalBudgetedCostPA;
-    totalBudgetedCostLumpSum;
-    incrementalGrossProfit;
-    incrementalProfitLoss;
-    incrementalProfitLossSales;
-    incrementalROI;
-    incrementalROISales;
-    forecastedCostPerThousand;
-    activitySpendPercentage;
-    totalCustomerAPSpendVSSNS;
-    activityCommunicationMethods;
-    activityCommunicationIncludesOther;
-    focusProducts;
-    focusBrands;
-    attachedFiles;
-
+    formattedStartDate;
+    formattedEndDate;
+    bannerGroups;
+    segmentTypes;
+    brandData;
 
     loadData() {
         console.log('[loadData] activity', this.activity);
+        if (this.activity == undefined) { return; }
+
         try {
-        this.activityName = this.activity.Name;
-        this.status = this.activity.Status__c;
-        this.panNumber = this.activity.Promotion_Activity_Number__c;
-        this.projectManager = { id: this.activity.Project_Manager__c, name: this.activity.Project_Manager__r.Name, imageUrl: this.activity.Project_Manager__r.SmallPhotoUrl };
-        this.marketingContact = { id: this.activity.Marketing_Manager__c, name: this.activity.Marketing_Manager__r.Name, imageUrl: this.activity.Marketing_Manager__r.SmallPhotoUrl };
-        this.salesContact = { id: this.activity.Sales_Manager__c, name: this.activity.Sales_Manager__r.Name, imageUrl: this.activity.Sales_Manager__r.SmallPhotoUrl };
-        this.customerContact = this.activity.Customer_Contact__c;
-        this.agencyContact = this.activity.Agency_Contact__c;
-        this.numberOfStoresInBanner = this.activity.Number_of_Stores_in_Banner_Group__c;
-        this.numberOfStoresRunningActivity = this.activity.No_of_Stores_in_Banner_Running_Activity__c;
-        this.wasActivityRunningLastYear = this.activity.Was_Activity_Running_Last_Year__c;
-        this.lastYearActivityDetails = this.activity.Last_Year_Activity_Details__c;
-        this.states = this.activity.State_MP__c;
-        this.smartsheetLink = this.activity.Smartsheet_Link__c;
-        this.channel = this.activity.Channel__c;
-        this.isOffChannel = this.activity.Channel__c == 'Off';
-        this.isOtherChannel = this.activity.Channel__c == 'Other';
-        this.customerType = this.activity.Customer_Type__c;  
-        this.customerBanner = this.activity.Promo_Banner_Groups__c;
-        //this.customerBanner = this.activity.National_Banner__r != undefined ? this.activity.National_Banner__r.Name : '';
-        this.channelComments = this.activity.Channel_Comments__c;
-        this.activityMechanicDescription = this.activity.Proposal_Mechanics__c;
-        this.activityMechanics = this.activity.Activity_Mechanic__c;
-        this.activityAdditionalComments = this.activity.Activity_Mechanic_Comments__c;
-        this.businessOpportunity = this.activity.Business_Opportunity__c;
-        this.activityObjectives = this.activity.Proposal_Objectives__c;
-        this.brandStrategyIndex = this.activity.Brand_Strategy_Index__c;
-        this.commercialReturnIndex = this.activity.Commercial_Return_Index__c;
-        this.customerRelationshipIndex = this.activity.Customer_Relationship_Index__c;
-        this.newExperientialIndex = this.activity.New_Experiential_Index__c;
-        this.natureOfCostDescription = this.activity.Nature_of_Cost_Details__c;
-        this.activityAdditionalComments = this.activity.Evaluation_Comments__c;
-        this.incrementalDiscountsProvided = this.activity.Incremental_Discounts_Provided__c;
+            this.activityName = this.activity.Name;
+            this.status = this.activity.Status__c;
+            this.panNumber = this.activity.Promotion_Activity_Number__c;
+            this.isBroadreach = this.activity.Type_of_Spend__c == 'Broadreach';
+            this.isActivation = this.activity.Type_of_Spend__c == 'Activation';
 
-        let dt;
-        if (this.activity.Begin_Date__c) {
-            dt = new Date(this.activity.Begin_Date__c);
-            this.formattedProposedInMarketStartDate = dt.toISOString();    
-        }
-
-        if (this.activity.End_Date__c) {
-            dt = new Date(this.activity.End_Date__c);
-            this.formattedProposedInMarketEndDate = dt.toISOString();    
-        }
-
-        if (this.activity.PreAlignment_Deadline__c) {
-            dt = new Date(this.activity.PreAlignment_Deadline__c);
-            this.formattedPreAlignmentDeadline = dt.toISOString();    
-        }
-
-        if (this.activity.PreEvaluation_Deadline__c) {
-            dt = new Date(this.activity.PreEvaluation_Deadline__c);
-            this.formattedPreEvaluationDeadline = dt.toISOString();    
-        }
-
-        if (this.activity.Date_Approved__c) {
-            dt = new Date(this.activity.Date_Approved__c);
-            this.formattedActivityApprovalDate = dt.toISOString();    
-        }
-
-        this.totalBudgetedCost = parseFloat(this.activity.Activity_Budget__c) || 0;
-        this.totalBudgetedCostAP = parseFloat(this.activity.Total_Budgeted_Cost_AP__c) || 0;
-        this.totalBudgetedCostPA = parseFloat(this.activity.Total_Budgeted_Cost_PA__c) || 0;
-        this.totalBudgetedCostLumpSum = parseFloat(this.activity.Total_Budgeted_Cost_LumpSum__c) || 0;
-        this.totalBudgetedCostCOGS = parseFloat(this.activity.Total_Budgeted_Cost_COGS__c) || 0;
-        this.incrementalGrossProfit = parseFloat(this.activity.Incremental_Gross_Profit__c);
-        this.incrementalGrossProfitSales = parseFloat(this.activity.Incremental_Gross_Profit_Sales__c);
-        this.incrementalProfitLoss = this.incrementalGrossProfit - this.totalBudgetedCost;
-        this.incrementalProfitLossSales = this.incrementalGrossProfitSales - this.totalBudgetedCost;
-        this.incrementalROI = this.totalBudgetedCost == 0 ? 0 : this.incrementalProfitLoss / this.totalBudgetedCost;
-        this.incrementalROISales = this.incrementalProfitLossSales / this.totalBudgetedCost;
-
-        
-        this.forecastedReachCoverage = parseFloat(this.activity.Forecasted_Reach_Coverage__c) || 0;
-        this.forecastedCostPerThousand = this.forecastedReachCoverage == 0 ? 0 : this.totalBudgetedCost / this.forecastedReachCoverage;
-
-        this.totalCustomerAPBudget = this.activity.Total_Customer_AP_Budget__c == undefined ? 0 : parseFloat(this.activity.Total_Customer_AP_Budget__c);
-        this.totalCustomerSNS = this.activity.Total_Customer_SNS__c == undefined ? 0 : parseFloat(this.activity.Total_Customer_SNS__c);
-        this.activitySpendPercentage = this.totalCustomerAPBudget == 0 ? 0 : this.totalBudgetedCost / this.totalCustomerAPBudget;
-        this.totalCustomerAPSpendVSSNS = this.totalCustomerSNS == 0 ? 0 : this.totalCustomerAPBudget / this.totalCustomerSNS;
-
-        this.activityCommunicationMethods = [];
-        if (this.activity.Promotion_Activity_Related_Data__r != undefined) {
-            this.activityCommunicationMethods = [];
-            this.customerBanner = '';
-            this.activity.Promotion_Activity_Related_Data__r.forEach(pard => {
-                if (pard.RecordType.Name == 'Banner Group') {
-                    this.customerBanner += pard.Name + ', ';
-                } else if (pard.RecordType.Name == 'Communication Method') {
-                    this.activityCommunicationMethods.push({
-                        Id: pard.Id,
-                        RecordTypeId: pard.RecordTypeId,
-                        Activity__c: pard.Activity__c,
-                        Name: pard.Name,
-                        Primary__c: pard.Primary__c,
-                        Secondary__c: pard.Secondary__c,
-                        Reach__c: pard.Reach__c
-                    });
-                }
-            });
-            this.customerBanner = this.customerBanner.substr(0, this.customerBanner.length - 2);
-            const pard = this.activity.Promotion_Activity_Related_Data__r.find(p => p.Name == 'Other');
-            if (pard != null) {
-                this.activityCommunicationIncludesOther = true;
+            let dt;
+            if (this.activity.Begin_Date__c) {
+                dt = new Date(this.activity.Begin_Date__c);
+                this.formattedStartDate = dt.toISOString();    
             }
-        }
 
-        this.focusBrands = [];
-        if (this.activity.Promo_Brands__c) {
-            const l = this.activity.Promo_Brands__c.split(';');
-            l.forEach(pb => {
-                const brand = this.brands.find(b => b.name == pb);
-                this.focusBrands.push({
-                    type: 'avatar',
-                    label: brand.name,
-                    src: brand.imageUrl,
-                    fallbackIconName: 'standard:user',
-                    variant: 'circle',
-                    alternativeText: brand.name,
-                    isLink: false,
+            if (this.activity.End_Date__c) {
+                dt = new Date(this.activity.End_Date__c);
+                this.formattedEndDate = dt.toISOString();    
+            }
 
+            this.bannerGroups = '';
+            this.brandData = [];
+
+            if (this.activity.Promotion_Activity_Related_Data__r != undefined) {
+                this.activity.Promotion_Activity_Related_Data__r.forEach(pard => {
+                    if (pard.RecordType.Name == 'Banner Group') {
+                        this.bannerGroups += pard.Banner_Group__r.Name + ', ';
+                    } else if (pard.RecordType.Name == 'Activation') {
+                        this.brandData.push(pard);
+                    } else if (pard.RecordType.Name == 'Broadreach') {
+                        this.brandData.push(pard);
+                    }
                 });
-            });
-        }
-        this.focusProducts = [];
-        if (this.activity.Activity_Products__r && this.activity.Activity_Products__r.length > 0) {
-            this.activity.Activity_Products__r.forEach(ap => {
-                this.focusProducts.push({
-                        type: 'avatar',
-                        label: ap.Product_NoFilter__r.Name,
-                        src: 'https://salesforce-static.b-fonline.com/images/'+ap.Product_NoFilter__r.Image_Name__c,
-                        fallbackIconName: 'standard:user',
-                        variant: 'circle',
-                        alternativeText: ap.Product_NoFilter__r.Name,
-                        isLink: false,
-                        productId: ap.Product__c,
-                        recordId: ap.Id
-                }); 
-            });
-            
-        }
+                this.bannerGroups = this.bannerGroups.substr(0, this.bannerGroups.length - 2);
+            }
 
             if (this.activity.ContentDocumentLinks) {
                 this.attachedFiles = this.activity.ContentDocumentLinks.map(cdl => {
@@ -386,4 +284,24 @@ export default class ActivityPreEvaluationFormSummary extends NavigationMixin(Li
     handlePrintButtonClick(event) {
         window.print();
     }
+
+    handleSendPDFButtonClick() {
+        this.isWorking = true;
+        sendPDF({activityId: this.recordId})
+            .then(result => {
+                this.isWorking = false;
+                if (result == 'OK') {
+                    this.showToast('success', 'Success', this.labels.sendPDF.successMessage);
+                } else {
+                    this.showToast('error', 'Warning', result.message);
+                }
+            })
+            .catch(error => {
+                this.isWorking = false;
+                this.error = error;
+                this.showToast('error', 'Warning', error);                
+            });
+    }
+
+
 }

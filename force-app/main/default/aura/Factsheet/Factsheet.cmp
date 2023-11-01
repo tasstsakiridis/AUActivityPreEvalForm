@@ -1,0 +1,38 @@
+<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction,lightning:isUrlAddressable" access="global" controller="Factsheet_Controller">
+    <!-- String Attributes -->
+    <aura:attribute name="factsheetName" type="String" required="true" default="DEFAULT" />
+    <aura:attribute name="recordId" type="String" default="" />
+    <aura:attribute name="objectName" type="String" default="" />
+    <aura:attribute name="marketId" type="String" default="" />
+    <aura:attribute name="market" type="String" default="" />
+    <aura:attribute name="recordTypeName" type="String" default="" />
+    <aura:attribute name="channel" type="String" default="" />
+    <aura:attribute name="noFactsheetMessage" type="String" default="{!$Label.c.NoFactsheetFoundMessage}" />
+    
+    <!-- Boolean Attributes -->
+    <aura:attribute name="buildFactsheet" type="Boolean" default="false" />
+    
+    <!-- List & Object Attributes -->
+    <aura:attribute name="theFactsheet" type="Factsheet__c" />
+    
+    <!-- Handle local component events -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+    <!-- Handle attribute value change events -->
+    <aura:handler name="change" value="{!v.buildFactsheet}" action="{!c.handleBuildFactsheetChange}" />
+    
+	<div aura:id="userMessageContainer" id="userMessageContainer" class="slds-notify_container slds-is-relative slds-hide" aria-hidden="false">
+        <div class="slds-notify slds-notify_toast slds-theme_warning" role="alert">
+            <span class="slds-assistive-text">warning</span>
+            <span class="slds-icon_container slds-icon-utility-warning slds-m-right_small slds-no-flex slds-align-top" title="warning icon">
+                <c:svg class="slds-icon slds-icon_small" ariaHidden="true" xlinkHref="/resource/SLDS232/assets/icons/utility-sprite/svg/symbols.svg#warning" />
+            </span>
+            <div class="slds-notiy__content">
+	            <div class="slds-text-heading_small">{!v.noFactsheetMessage}</div>
+            </div>
+        </div>
+	</div>
+    <div style="background-color: #fff; height: 100%;">
+    	{!v.body}
+    </div>	
+</aura:component>

@@ -47,9 +47,29 @@
                 .column-2 {
                     float: left;
                     width: 50%;
+                    flex: 50%;
+                }
+                .column-3 {
+                    float: left;
+                    width: 33.33%;
+                    flex: 33.33%;
+                }
+                .column-4 {
+                    float: left;
+                    width: 25%;
+                    flex: 25%;
                 }
                 .header {
                     padding: 0 5px;
+                }
+                .row {
+                    display: flex;
+                }
+                .column-3 dd {
+                    margin-bottom: 5px;
+                }
+                dt {
+                    padding: 10px;
                 }
             </style>    
         </head>
@@ -63,380 +83,338 @@
             </table>
             <h1 style="font-size:16pt; text-align:center;">ACTIVITY PRE-EVALUATION FORM</h1>
             <h2 style="font-size:large; text-align:center;">{!theEvalForm.Name} - {!theEvalForm.Promotion_Activity_Number__c}</h2>
+            <h2 style="font-size:large; text-align:center;">{!theEvalForm.Status__c}</h2>
             <br />
             
-            <div style="width:95%">
-                <h3 class="label">Project Leads</h3>  
-                <div>
-                    <div class="column">
-                        <div style="float:left;width:30%;"><img src="{!theEvalForm.Project_Manager__r.SmallPhotoUrl}" style="height: 60px;" /></div>
-                        <div style="float:left;width:70%;">
-                            <div><span style="font-size:12pt;font-weight:bold;">{!theEvalForm.Project_Manager__r.Name}</span></div>
-                            <div><span class="font-size:9pt;text-transform:uppercase;">Project Manager</span></div>                        
-                        </div>
-                    </div>
-                    <div class="column">
-                        <div style="float:left;width:30%;"><img src="{!theEvalForm.Marketing_Manager__r.SmallPhotoUrl}" style="height: 60px;" /></div>
-                        <div style="float:left;width:70%;">
-                            <div><span style="font-size:12pt;font-weight:bold;">{!theEvalForm.Marketing_Manager_Name__c}</span></div>
-                            <div><span style="font-size:9pt;text-transform:uppercase;">Marketing Contact</span></div>                        
-                        </div>
-                    </div>
-                    <div class="column">
-                        <div style="float:left;width:30%;"><img src="{!theEvalForm.Sales_Manager__r.SmallPhotoUrl}" style="height: 60px;" /></div>
-                        <div style="float:left;width:70%;">
-                            <div><span style="font-size:12pt;font-weight:bold;">{!theEvalForm.Sales_Manager_Name__c}</span></div>
-                            <div><span style="font-size:9pt;text-transform:uppercase;">Sales Contact</span></div>                        
-                        </div>                           
-                    </div>
-                </div>
-            </div>
-            <br />
-            <br />
-            <br />
-            <br />
-            <div style="margin-top: 10px;">
-                <h3 class="label" style="line-height: 0.8em;">Customer Contact</h3>
-                <span>{!theEvalForm.Customer_Contact__c}</span>
-            </div>
-            <br />        
-            <div>
-                <h3 class="label">Agency Contact</h3>
-                <span>{!theEvalForm.Agency_Contact__c}</span>
-            </div>
-            <br /><br />
             <div>
                 <h3>Activity Details</h3>
-                <div>
-                    <h3 class="label">Status</h3>
-                    <span>{!theEvalForm.Status__c}</span>
-                </div>
-                <br />
-                <div>
-                    <h3 class="label">Lead Channel</h3>
-                    <span>{!theEvalForm.Channel__c}</span>
-                </div>
-                <br />
-                <div>
-                    <h3 class="label">Customer Type</h3>
-                    <span>{!theEvalForm.Customer_Type__c}</span>
-                </div>
-                <br />
-                <div>
-                    <h3 class="label">Customer Banner</h3>
-                    <span>{!theEvalForm.Promo_Banner_Groups__c}</span>
-                </div>
-                <br />
-                <div>
-                    <h3 class="label">Number of Stores in Customer Banner</h3>
-                    <apex:outputText value="{0, number, ###,#00}">
-                        <apex:param value="{!theEvalForm.Number_of_Stores_in_Banner_Group__c}" />
-                    </apex:outputText>                                    
-                </div>
-                <br />
-                <div>
-                    <h3 class="label">Number of Stores in Customer Banner Running Activity</h3>
-                    <apex:outputText value="{0, number, ###,#00}">
-                        <apex:param value="{!theEvalForm.No_of_Stores_in_Banner_Running_Activity__c}" />
-                    </apex:outputText>                                    
-                </div>
-                <br />
-                <div>
-                    <h3 class="label">Comments</h3>
-                    <span>{!theEvalForm.Channel_Comments__c}</span>
-                </div>
-                <br />
-                <div>
-                    <h3 class="label">Was there an activity running in the same period last year?</h3>
-                    <span>{!theEvalForm.Was_Activity_Running_Last_Year__c}</span>
-                </div>
-                <br />
-                <div>
-                    <h3 class="label">Brand(s) and timing of last years activity</h3>
-                    <span>{!theEvalForm.Last_Year_Activity_Details__c}</span>
-                </div>
-                <br />
-                <div>
-                    <h3 class="label">State(s)</h3>
-                    <span>{!theEvalForm.State_MP__c}</span>
-                </div>
-                <br />
-                <div>
-                    <h3 class="label">Smartsheet Link</h3>
-                    <span>{!theEvalForm.Smartsheet_Link__c}</span>
-                </div>
-                <br />            
+
+                <table class="tableCenter" style="border: 0px; margin: 5px 5px; width: 95%;">
+                    <tr>
+                        <td style="width: 50%;">
+                            <h3 class="label">Type of Spend</h3>
+                            <span>{!theEvalForm.Type_of_Spend__c}</span>
+                        </td>
+                        <td style="width: 50%;">
+                            <h3 class="label">Consumer Driver</h3>
+                            <span>{!theEvalForm.Consumer_Driver__c}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h3 class="label">Channel</h3>
+                            <span>{!theEvalForm.Channel__c}</span>
+                        </td>
+                        <td>
+                            <h3 class="label">Strategic Pillar</h3>
+                            <span>{!theEvalForm.Strategic_Pillar__c}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h3 class="label">Projected A&amp;P Spend</h3>
+                            <apex:outputText value="{0, number, currency}">
+                                <apex:param value="{!theEvalForm.Projected_AP_Spend__c}" />
+                            </apex:outputText>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h3 class="label">Banner Groups</h3>
+                            <span>{!bannerGroups}</span>
+                        </td>
+                        <td>
+                            <h3 class="label">Segment Types</h3>
+                            <span>{!theEvalForm.Segment_Type__c}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h3 class="label">Start Date</h3>
+                            <apex:outputText value="{0,date,EEEE',' MMMM d',' yyyy}">
+                                <apex:param value="{!theEvalForm.Begin_Date__c}" />
+                            </apex:outputText>
+                        </td>
+                        <td>
+                            <h3 class="label">End Date</h3>
+                            <apex:outputText value="{0,date,EEEE',' MMMM d',' yyyy}">
+                                <apex:param value="{!theEvalForm.End_Date__c}" />
+                            </apex:outputText>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h3 class="label">Activity Mechanic</h3>
+                            <span>{!theEvalForm.Activity_Mechanic_Comments__c}</span>
+                        </td>
+                        <td>
+                            <h3 class="label">Description</h3>
+                            <span>{!theEvalForm.Description__c}</span>
+                        </td>
+                    </tr>
+                </table>
             </div>
-            <br />
-            <div style="page-break-before:always;">
-                <h3>Activity Details</h3>
-                <br />
-                <div>
-                    <h3 class="label">Description of Activity Mechanic</h3>
-                    <span>{!theEvalForm.Proposal_Mechanics__c}</span>
-                </div>
-                <br />
-                <div>
-                    <h3 class="label">Focus Brands</h3>
-                    <span>{!theEvalForm.Promo_Brands__c}</span>
-                </div>
-                <br />
-                <div>
-                    <h3 class="label">Focus Products</h3>
-                    <span>{!theEvalForm.Promo_Products__c}</span>
-                </div>
-                <br />
-                <div>
-                    <h3 class="label">Activity Mechanic</h3>
-                    <span>{!theEvalForm.Activity_Mechanic__c}</span>
-                </div>
-                <br />
-                <div>
-                    <h3 class="label">Comments</h3>
-                    <span>{!theEvalForm.Activity_Mechanic_Comments__c}</span>
-                </div>
-                <br />
-                <div>
-                    <h3>Key Dates &amp; Timings</h3>
-                </div>
-                <br />
-                <div>
-                    <h3 class="label">Proposed In-Market Start Date</h3>
-                    <apex:outputText value="{0,date,EEEE',' MMMM d',' yyyy}">
-                        <apex:param value="{!theEvalForm.Begin_Date__c}" />
-                    </apex:outputText>
-                </div>
-                <br />
-                <div>
-                    <h3 class="label">Proposed In-Market End Date</h3>
-                    <apex:outputText value="{0,date,EEEE',' MMMM d',' yyyy}">
-                        <apex:param value="{!theEvalForm.End_Date__c}" />
-                    </apex:outputText>
-                </div>
-                <br />
-                <div>
-                    <h3 class="label">Pre-Alignment Deadline</h3>
-                    <apex:outputText value="{0,date,EEEE',' MMMM d',' yyyy}">
-                        <apex:param value="{!theEvalForm.PreAlignment_Deadline__c}" />
-                    </apex:outputText>
-                </div>
-                <br />
-                <div>
-                    <h3 class="label">Pre-Evaluation Deadline</h3>
-                    <apex:outputText value="{0,date,EEEE',' MMMM d',' yyyy}">
-                        <apex:param value="{!theEvalForm.PreEvaluation_Deadline__c}" />
-                    </apex:outputText>
-                </div>
-                <br />
-                <div>
-                    <h3 class="label">Activity Approval Date</h3>
-                    <apex:outputText value="{0,date,EEEE',' MMMM d',' yyyy}">
-                        <apex:param value="{!theEvalForm.Date_Approved__c}" />
-                    </apex:outputText>
-                </div>
-            </div>
+
             <br /><br />
             <div style="page-break-before:always;">
-                <h3>Activity Objectives / Qualitative Considerations</h3>
-                <br />
-                <div>
-                    <h3 class="label">Business Opportunity or Challenge</h3>
-                    <apex:outputText value="{!theEvalForm.Business_Opportunity__c}" />
-                </div>
-                <br />
-                <div>
-                    <h3 class="label">Activity Objectives</h3>
-                    <apex:outputText value="{!theEvalForm.Proposal_Objectives__c}" />
-                </div>
-                <br />
-                <div>
-                    <h3 class="label">How does the proposed Activity meet the below objectives?</h3>
-                </div>
-                <br />
-                <div>
-                    <h3 class="label">Brand Strategy - <span style="font-size:8pt;font-style:italic;">aligned to strategy and delivers brand equality</span></h3>
-                    <apex:outputField value="{!theEvalForm.Brand_Strategy_Index__c}" />
-                </div>
-                <br />
-                <div>
-                    <h3 class="label">Commercial - <span style="font-size:8pt;font-style:italic;">intended to deliver strong commercial return</span></h3>
-                    <apex:outputField value="{!theEvalForm.Commercial_Return_Index__c}" />
-                </div>
-                <br />
-                <div>
-                    <h3 class="label">Relationship - <span style="font-size:8pt;font-style:italic;">builds long term customer relationships</span></h3>
-                    <apex:outputField value="{!theEvalForm.Customer_Relationship_Index__c}" />
-                </div>
-                <br />
-                <div>
-                    <h3 class="label">Trial New - <span style="font-size:8pt;font-style:italic;">test new experiential</span></h3>
-                    <apex:outputField value="{!theEvalForm.New_Experiential_Index__c}" />
-                </div>
-                <br /><br />
-                <div style="page-break-before:always;">
-                    <apex:outputPanel id="items" title="Items" layout="block">
-                        <h3>How is the Activity communicated to the consumer?</h3>
-                        <apex:dataTable cellpadding="5" var="i" value="{!communicationMethods}">
-                            <apex:column value="{!i.Primary__c}" headerValue="" width="100px" />
-                            <apex:column value="{!i.Name}" headerValue="Catalogue" width="300px" style="color:blue;"/>
-                            <apex:column value="{!i.Reach__c}" headerValue="{!$ObjectType.Promotion_Activity_Related_Data__c.Fields.Reach__c.Label}" width="150px"/>
-                        </apex:dataTable>
-                    </apex:outputPanel>                
-                </div>            
+                <apex:outputPanel id="broadreachItems" title="Items" layout="block" rendered="{!isBroadreach}">
+                    <h3>Broadreach (BTL)</h3>
+                    <apex:repeat value="{!brandData}" var="item" id="broadreachData">
+                        <table class="table-centered" style="border: 1px solid lightgray; margin: 10px 10px;">
+                            <thead>
+                                <tr>
+                                    <th scope="col" colspan="4">
+                                        <h2>{!item.Brand__r.Name}</h2>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tr>
+                                <td style="width: 25%; margin-right: 10px;">
+                                    <h3 class="label">GP Rate</h3>
+                                    <apex:outputText value="{0, number, currency}">
+                                        <apex:param value="{!item.Brand_GP_Rate__c}" />
+                                    </apex:outputText>
+                                </td>
+                                <td style="width: 25%; margin-right: 10px;">
+                                    <h3 class="label">SNS Rate</h3>
+                                    <apex:outputText value="{0, number, currency}">
+                                        <apex:param value="{!item.Brand_GP_Rate__c}" />
+                                    </apex:outputText>                                
+                                </td>
+                                <td style="width: 25%; margin-right: 10px;">
+                                    <h3 class="label">% Split</h3>
+                                    <apex:outputText value="{0, number, percent}">
+                                        <apex:param value="{!item.Percent_Split__c}" />
+                                    </apex:outputText>                                
+                                </td>
+                                <td style="width: 25%;">
+                                    <h3 class="label">$ Split</h3>
+                                    <apex:outputText value="{0, number, currency}">
+                                        <apex:param value="{!item.Amount_Split__c}" />
+                                    </apex:outputText>                                
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 33%; margin-right: 10px;">
+                                    <dl>
+                                        <dt>Reach</dt>
+                                        <dd>
+                                            <apex:outputText value="{0, number, ##,##0.00}">
+                                                <apex:param value="{!item.Reach__c}" />
+                                            </apex:outputText>
+                                        </dd>
+                                        <dt>ESOV</dt>
+                                        <dd>
+                                            <apex:outputText value="{0, number, #,##0}%">
+                                                <apex:param value="{!item.ESOV__c}" />
+                                            </apex:outputText>
+                                        </dd>
+                                        <dt>Engagement Rates</dt>
+                                        <dd>
+                                            <apex:outputText value="{0, number, #,##0}%">
+                                                <apex:param value="{!item.Engagement_Rates__c}" />
+                                            </apex:outputText>
+                                        </dd>
+                                    </dl>
+                                </td>
+                                <td style="width: 33%;">
+                                    <dl>
+                                        <dt>Penetration</dt>
+                                        <dd>
+                                            <apex:outputText value="{0, number, #,##0}%">
+                                                <apex:param value="{!item.Penetration__c}" />
+                                            </apex:outputText>
+                                        </dd>
+                                        <dt>Awareness Increases</dt>
+                                        <dd>
+                                            <apex:outputText value="{0, number, #,##0}%">
+                                                <apex:param value="{!item.Awareness_Increases__c}" />
+                                            </apex:outputText>
+                                        </dd>
+                                        <dt>Purchase Intent</dt>
+                                        <dd>
+                                            <apex:outputText value="{0, number, #,##0}%">
+                                                <apex:param value="{!item.Purchase_Intent__c}" />
+                                            </apex:outputText>
+                                        </dd>
+                                    </dl>
+                                </td>
+                                <td style="width: 33%; margin-left: 10px;">
+                                    <dl>
+                                        <dt>Meaningful Difference</dt>
+                                        <dd>
+                                            <apex:outputText value="{0, number, ##,##0.00}">
+                                                <apex:param value="{!item.Meaningful_Difference__c}" />
+                                            </apex:outputText>
+                                        </dd>
+                                        <dt>Cost per Engagement</dt>
+                                        <dd>
+                                            <apex:outputText value="{0, number, currency}">
+                                                <apex:param value="{!item.Cost_per_Engagement__c}" />
+                                            </apex:outputText>
+                                        </dd>
+                                        <dt>Reach Premium</dt>
+                                        <dd>
+                                            <apex:outputText value="{0, number, #,##0}%">
+                                                <apex:param value="{!item.Reach_Premium__c}" />
+                                            </apex:outputText>
+                                        </dd>
+                                    </dl>
+                                </td>
+                            </tr>
+                        </table>
+                    </apex:repeat>
+                </apex:outputPanel>                
+                <apex:outputPanel id="activationItems" title="Items" layout="block" rendered="{!isActivation}">
+                    <h3>Activation (ATL)</h3>
+                    <apex:repeat value="{!brandData}" var="item" id="activationData">
+                        <table class="table-centered" style="border: 1px solid lightgray; margin: 10px 10px; width: 100%;">
+                            <thead>
+                                <tr>
+                                    <th scope="col" colspan="4">
+                                        <h2>{!item.Brand__r.Name}</h2>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tr>
+                                <td style="width: 25%; margin-right: 10px;">
+                                    <h3 class="label">GP Rate</h3>
+                                    <apex:outputText value="{0, number, currency}">
+                                        <apex:param value="{!item.Brand_GP_Rate__c}" />
+                                    </apex:outputText>
+                                </td>
+                                <td style="width: 25%; margin-right: 10px;">
+                                    <h3 class="label">SNS Rate</h3>
+                                    <apex:outputText value="{0, number, currency}">
+                                        <apex:param value="{!item.Brand_GP_Rate__c}" />
+                                    </apex:outputText>
+                                </td>
+                                <td style="width: 25%; margin-right: 10px;">
+                                    <h3 class="label">% Split</h3>
+                                    <apex:outputText value="{0, number, percent}">
+                                        <apex:param value="{!item.Percent_Split__c}" />
+                                    </apex:outputText>
+                                </td>
+                                <td style="width: 25%;">
+                                    <h3 class="label">$ Split</h3>
+                                    <apex:outputText value="{0, number, currency}">
+                                        <apex:param value="{!item.Amount_Split__c}" />
+                                    </apex:outputText>
+                                </td>
+                            </tr>
+                        </table>
+                        <table class="table-centered" style="border: 1px solid lightgray; margin: 10px 10px; width: 100%;">
+                            <tr>
+                                <td style="width: 33%; margin-right: 10px; padding: 10px;">
+                                    <dl>
+                                        <dt class="label">Number of Outlets</dt>
+                                        <dd>
+                                            <apex:outputText value="{0, number, ##,##0.00}">
+                                                <apex:param value="{!item.Number_of_Outlets__c}" />
+                                            </apex:outputText>
+                                        </dd>
+                                        <dt class="label">% of Customer Universe</dt>
+                                        <dd>
+                                            <apex:outputText value="{0, number, #,##0}%">
+                                                <apex:param value="{!item.Percentage_of_Customer_Universe__c}" />
+                                            </apex:outputText>
+                                        </dd>
+                                        <dt class="label">Incremental Distribution Points</dt>
+                                        <dd>
+                                            <apex:outputText value="{0, number, ##,##0.00}">
+                                                <apex:param value="{!item.Incremental_Distribution_Points__c}" />
+                                            </apex:outputText>
+                                        </dd>
+                                        <dt class="label">Rate of Sale</dt>
+                                        <dd>
+                                            <apex:outputText value="{0, number, ##,##0.00}">
+                                                <apex:param value="{!item.Rate_of_Sale__c}" />
+                                            </apex:outputText>"
+                                        </dd>
+                                        <dt>&nbsp;</dt>
+                                        <dd>&nbsp;</dd>
+                                        <dt>&nbsp;</dt>
+                                        <dd>&nbsp;</dd>
+                                    </dl>
+                                </td>
+                                <td style="width: 33%; padding: 10px;">
+                                    <dl>
+                                        <dt class="label">Baseline Sales Volume (9L)</dt>
+                                        <dd>
+                                            <apex:outputText value="{0, number, ##,##0.00}">
+                                                <apex:param value="{!item.Baseline_Sales_Volume_9L__c}" />
+                                            </apex:outputText>
+                                        </dd>
+                                        <dt class="label">Baseline SNS</dt>
+                                        <dd>
+                                            <apex:outputText value="{0, number, currency}">
+                                                <apex:param value="{!item.Baseline_SNS__c}" />
+                                            </apex:outputText>
+                                        </dd>
+                                        <dt class="label">Baseline GP</dt>
+                                        <dd>
+                                            <apex:outputText value="{0, number, currency}">
+                                                <apex:param value="{!item.Baseline_GP__c}" />
+                                            </apex:outputText>
+                                        </dd>
+                                        <dt class="label">Baseline Brand Profit</dt>
+                                        <dd>
+                                            <apex:outputText value="{0, number, currency}">
+                                                <apex:param value="{!item.Baseline_Brand_Profit__c}" />
+                                            </apex:outputText>
+                                        </dd>
+                                        <dt>&nbsp;</dt><dd>&nbsp;</dd>
+                                        <dt>&nbsp;</dt>
+                                        <dd>&nbsp;</dd>
+                                    </dl>
+                                </td>
+                                <td style="width: 33%; margin-left: 10px; padding: 10px;">
+                                    <dl>
+                                        <dt class="label">Projected Sales Volume</dt>
+                                        <dd>
+                                            <apex:outputText value="{0, number, ##,##0.00}">
+                                                <apex:param value="{!item.Projected_Sales_Volume__c}" />
+                                            </apex:outputText>
+                                        </dd>
+                                        <dt class="label">Projected SNS</dt>
+                                        <dd>
+                                            <apex:outputText value="{0, number, currency}">
+                                                <apex:param value="{!item.Projected_SNS__c}" />
+                                            </apex:outputText>
+                                        </dd>
+                                        <dt class="label">Projected GP</dt>
+                                        <dd>
+                                            <apex:outputText value="{0, number, currency}">
+                                                <apex:param value="{!item.Projected_GP__c}" />
+                                            </apex:outputText>
+                                        </dd>
+                                        <dt class="label">Projected Brand Profit</dt>
+                                        <dd>
+                                            <apex:outputText value="{0, number, currency}">
+                                                <apex:param value="{!item.Projected_Brand_Profit__c}" />
+                                            </apex:outputText>
+                                        </dd>
+                                        <dt class="label">Incremental Brand Profit</dt>
+                                        <dd>
+                                            <apex:outputText value="{0, number, currency}">
+                                                <apex:param value="{!item.Incremental_Brand_Profit__c}" />
+                                            </apex:outputText>
+                                        </dd>
+                                        <dt class="label">ROI %</dt>
+                                        <dd>
+                                            <apex:outputText value="{0, number, #,##0}%">
+                                                <apex:param value="{!item.ROI_Percent__c}" />
+                                            </apex:outputText>
+                                        </dd>
+                                    </dl>
+                                </td>
+                            </tr>
+                        </table>
+                        <hr style="margin: 5px 10px;" />
+                    </apex:repeat>
+                </apex:outputPanel>
+            </div>            
                 
-            </div>
-            <br /><br />
-            <div style="page-break-before:always;">
-                <h3>Cost Details</h3>
-                <div>
-                    <h3 class="label">Total Budgeted Cost (A&amp;P)</h3>
-                    <apex:outputText value="{0, number, currency}">
-                        <apex:param value="{!theEvalForm.Total_Budgeted_Cost_AP__c}" />
-                    </apex:outputText>                    
-                </div>
-                <br />
-                <div>
-                    <h3 class="label">Total Budgeted Cost (COGS)</h3>
-                    <apex:outputText value="{0, number, currency}">
-                        <apex:param value="{!theEvalForm.Total_Budgeted_Cost_COGS__c}" />
-                    </apex:outputText>                    
-                </div>
-                <br />            
-                <div>
-                    <h3 class="label">Total Budgeted Cost (PA)</h3>
-                    <apex:outputText value="{0, number, currency}">
-                        <apex:param value="{!theEvalForm.Total_Budgeted_Cost_PA__c}" />
-                    </apex:outputText>                    
-                </div>
-                <br />
-                <div>
-                    <h3 class="label">Total Budgeted Cost (LumpSum)</h3>
-                    <apex:outputText value="{0, number, currency}">
-                        <apex:param value="{!theEvalForm.Total_Budgeted_Cost_LumpSum__c}" />
-                    </apex:outputText>                    
-                </div>
-                <br />
-                <div>
-                    <h3 class="label">Total Budgeted Cost</h3>
-                    <apex:outputText value="{0, number, currency}">
-                        <apex:param value="{!theEvalForm.Activity_Budget__c}" />
-                    </apex:outputText>                    
-                </div>
-                <br />
-                <div>
-                    <h3 class="label">Details of Nature of Cost</h3>
-                    <apex:outputText value="{!theEvalForm.Nature_of_Cost_Details__c}" />
-                </div>
-                <br />
-                <div>
-                    <h3 class="label">Total Customer A&amp;P Budget for the financial year</h3>
-                    <apex:outputText value="{0, number, currency}">
-                        <apex:param value="{!theEvalForm.Total_Customer_AP_Budget__c}" />
-                    </apex:outputText>                    
-                </div>
-                <br />
-                <div>
-                    <h3 class="label">Total Customer SNS for the financial year</h3>
-                    <apex:outputText value="{0, number, currency}">
-                        <apex:param value="{!theEvalForm.Total_Customer_SNS__c}" />
-                    </apex:outputText>                    
-                </div>
-                <br />
-                <div>
-                    <h3 class="label">Activity Spend as a % of total Customer Budget</h3>
-                    <apex:outputText value="{0, number, ##0.00%}">
-                        <apex:param value="{!theEvalForm.Activity_Spend_of_Customer_Budget__c}" />
-                    </apex:outputText>                    
-                </div>
-                <br />
-                <div>
-                    <h3 class="label">Total Customer A&amp;P as % of SNS</h3>
-                    <apex:outputText value="{0, number, ##0.00%}">
-                        <apex:param value="{!theEvalForm.Total_Customer_Spend_of_SNS__c}" />
-                    </apex:outputText>                    
-                </div>
-                <br />
-                <div>
-                    <h3 class="label">Additional Comments</h3>
-                    <apex:outputText value="{!theEvalForm.Evaluation_Comments__c}" />
-                </div>
-                <br />
-                <div>
-                    <h3 class="label">Incremental Discounts (PA &#8725; Lump Sum) Provided?</h3>
-                    <apex:outputField value="{!theEvalForm.Incremental_Discounts_Provided__c}" />
-                </div>
-                <br />            
-            </div>        
-            <br /><br />
-            <div style="page-break-before:always;">
-                <h3>Forecasted Commerical Return</h3>
-                <br />
-                <div>
-                    <h3 class="label">Incremental 9L Volume Uplift by Brand &#8725; SKU</h3>
-                    <apex:outputText value="{!theEvalForm.Incremental_9L_Uplift__c}" />
-                </div>
-                <br />            
-                <h3>Sales</h3>
-                <br />
-                <div>
-                    <h3 class="label">Incremental Gross Profit</h3>
-                    <apex:outputText value="{0, number, currency}">
-                        <apex:param value="{!theEvalForm.Incremental_Gross_Profit_Sales__c}" />
-                    </apex:outputText>                    
-                </div>
-                <br />            
-                <div>
-                    <h3 class="label">Incremental Profit &#8725; (Loss)</h3>
-                    <apex:outputText value="{0, number, currency}">
-                        <apex:param value="{!theEvalForm.Incremental_Profit_Loss_Sales__c}" />
-                    </apex:outputText>                    
-                </div>
-                <br />            
-                <div>
-                    <h3 class="label">ROI %</h3>
-                    <apex:outputText value="{0, number, 0.00%}">
-                        <apex:param value="{!theEvalForm.Incremental_ROI_Sales__c/100}" />
-                    </apex:outputText>                    
-                </div>
-                <br /><br />
-                <h3>BP&amp;A Team</h3>
-                <br />
-                <div>
-                    <h3 class="label">Incremental Gross Profit</h3>
-                    <apex:outputText value="{0, number, currency}">
-                        <apex:param value="{!theEvalForm.Incremental_Gross_Profit__c}" />
-                    </apex:outputText>                    
-                </div>
-                <br />            
-                <div>
-                    <h3 class="label">Incremental Profit &#8725; (Loss)</h3>
-                    <apex:outputText value="{0, number, currency}">
-                        <apex:param value="{!theEvalForm.Incremental_Profit_Loss__c}" />
-                    </apex:outputText>                    
-                </div>
-                <br />            
-                <div>
-                    <h3 class="label">ROI %</h3>
-                    <apex:outputText value="{0, number, 0.00%}">
-                        <apex:param value="{!theEvalForm.Incremental_ROI__c/100}" />
-                    </apex:outputText>                    
-                </div>
-                <div>
-                    <h3 class="label">Forecasted Reach Coverage</h3>
-                    <apex:outputText value="{0, number, ##0}">
-                        <apex:param value="{!theEvalForm.Forecasted_Reach_Coverage__c}" />
-                    </apex:outputText>                    
-                </div>
-                <br />
-                <div>
-                    <h3 class="label">Forecasted Cost per Thousand</h3>
-                    <apex:outputText value="{0, number, currency}">
-                        <apex:param value="{!theEvalForm.Forecasted_Cost_per_Thousand__c}" />
-                    </apex:outputText>                    
-                </div>
-                <br />
-                
-            </div>
         </body>
     </html>
 </apex:component>

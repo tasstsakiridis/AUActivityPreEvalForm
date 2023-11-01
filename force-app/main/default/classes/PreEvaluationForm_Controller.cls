@@ -2,31 +2,15 @@ public with sharing class PreEvaluationForm_Controller {
     @AuraEnabled(cacheable=true) 
     public static Promotion_Activity__c getActivity(String activityId) {
         return [SELECT Id, Name, RecordTypeId, RecordType.Name, Status__c, Promotion_Activity_Number__c, Channel__c, Market__c, Market_Filter__c, 
-                       Customer_Type__c, National_Banner__c, National_Banner__r.Name, Project_Manager__c, Project_Manager__r.Name,
-                       Project_Manager__r.SmallPhotoUrl, Marketing_Manager__c, Marketing_Manager__r.Name, Marketing_Manager__r.SmallPhotoUrl,
-                       Sales_Manager__c, Sales_Manager__r.Name, Sales_Manager__r.SmallPhotoUrl, Customer_Contact__c, Agency_Contact__c, Number_of_Stores_in_Banner_Group__c,
-                       No_of_Stores_in_Banner_Running_Activity__c, Was_Activity_Running_Last_Year__c, Last_Year_Activity_Details__c,
-                       State_MP__c, Channel_Comments__c, Proposal_Mechanics__c, Activity_Mechanic__c, Activity_Mechanic_Comments__c,
-                       Begin_Date__c, End_Date__c, PreAlignment_Deadline__c, PreEvaluation_Deadline__c, Date_Approved__c,
-                       Business_Opportunity__c, Proposal_Objectives__c, Brand_Strategy_Index__c, Commercial_Return_Index__c,
-                       Customer_Relationship_Index__c, New_Experiential_Index__c, Activity_Communication_Methods__c,
-                       Evaluation_Comments__c, Activity_Budget__c, Nature_of_Cost_Details__c, Incremental_Discounts_Provided__c,
-                       Smartsheet_Link__c, Promo_Brands__c, Promo_Banner_Groups__c, Forecasted_Reach_Coverage__c, Total_Customer_AP_Budget__c, Total_Customer_SNS__c,
-                       Incremental_Gross_Profit__c, Incremental_Gross_Profit_Sales__c, Incremental_Profit_Loss__c, Incremental_Profit_Loss_Sales__c,
-                       Incremental_ROI__c, Incremental_ROI_Sales__c, Activity_Spend_of_Customer_Budget__c, Total_Customer_Spend_of_SNS__c,
-                       Forecasted_Cost_per_Thousand__c, Total_Budgeted_Cost_AP__c, Total_Budgeted_Cost_PA__c, Total_Budgeted_Cost_LumpSum__c,
-                       Total_Budgeted_Cost_COGS__c, Incremental_9L_Uplift__c, Evaluation_BPA_Comments__c, Activity_Comments__c,
-                       CreatedById, Publish_Activity__c, Is_Rejected__c, Commercial_Lead_Review_Entered_By__c, Commercial_Lead_Review_Entered_By_Name__c,
-                       Incremental_Gross_Profit_Previous__c, Incremental_Gross_Profit_Sales_Previous__c, 
-                       (SELECT Id, Activity__c, RecordTypeId, RecordType.Name, Name, Primary__c, Secondary__c, Reach__c, Banner_Group__c
-                          FROM Promotion_Activity_Related_Data__r),
-                       (SELECT Id, RecordTypeId, Activity__c, Product_NoFilter__c, Product_NoFilter__r.Name, Product_NoFilter__r.Image_Name__c,
-                               Product_NoFilter__r.Brand__c, Product_NoFilter__r.Brand__r.Name, Product_NoFilter__r.Brand__r.Primary_Logo__c 
-                          FROM Activity_Products__r),
-                       (SELECT Id, ContentDocumentId, ContentDocument.Title, ContentDocument.FileType, ContentDocument.FileExtension,
-                                ContentDocument.LatestPublishedVersionId 
-                          FROM ContentDocumentLinks) 
-
+                        CreatedById, CreatedBy.Name, Promo_Brands__c, Type_of_Spend__c, Segment_Type__c, Banner_Group__c, Projected_AP_Spend__c, Consumer_Driver__c,
+                        Strategic_Pillar__c, Begin_Date__c, End_Date__c, Activity_Mechanic_Comments__c, Description__c, Is_Approved__c, Publish_Activity__c,
+                        (SELECT Id, Brand__c, Brand__r.Name, Brand__r.Primary_Logo__c, Banner_Group__c, Banner_Group__r.Name, RecordTypeId, RecordType.Name, Number_of_Outlets__c, Percentage_of_Customer_Universe__c,
+                                Incremental_Distribution_Points__c, Baseline_Sales_Volume_9L__c, Baseline_SNS__c, Baseline_GP__c, Baseline_Brand_Profit__c,
+                                Projected_Sales_Volume__c, Projected_SNS__c, Projected_GP__c, Projected_Brand_Profit__c, Incremental_Brand_Profit__c,
+                                ROI_Percent__c, Reach__c, ESOV__c, Engagement_Rates__c, Penetration__c, Awareness_Increases__c, Purchase_Intent__c,
+                                Meaningful_Difference__c, Cost_per_Engagement__c, Reach_Premium__c, Brand_GP_Rate__c, Brand_SNS_Rate__c, Amount_Split__c,
+                                Percent_Split__c, Split_Manually_Set__c, Rate_of_Sale__c, Actual_Sales_Volume__c, Actual_Brand_Profit__c, Actual_GP__c, Actual_SNS__c
+                        FROM Promotion_Activity_Related_Data__r)
                   FROM Promotion_Activity__c 
                  WHERE Id =:activityId];
     }
@@ -64,11 +48,12 @@ public with sharing class PreEvaluationForm_Controller {
         return [SELECT Id, Name, Customer_Number__c, Image_Name__c 
                   FROM Banner_Groups__c 
                  WHERE Market__c =: market
-                   AND Management_Group_State_Level__c = 'BAN_NAT'];
+                   AND Management_Group_State_Level__c = 'BAN_NAT'
+                ORDER BY Sort_Order__c, Name];
     }
 
     @AuraEnabled(cacheable=true)
-    public static List<Product__c> getProducts(String marketId) {
+    public static Map<String, Object> getProducts(String marketId) {
         if (marketId == null) {
             String marketName = 'Australia';
             User u = [SELECT Id, Market__c FROM User WHERE Id =:UserInfo.getUserId()];
@@ -79,83 +64,141 @@ public with sharing class PreEvaluationForm_Controller {
             marketId = m.Id;
         }
 
-        return [SELECT Id, Name, Brand__c, Brand_Name__c, Brand__r.Primary_Logo__c, Image_Name__c 
-                  FROM Product__c 
-                 WHERE IsActive__c = true 
-                   AND RecordType.Name = 'Wet Goods'
-                   AND Is_Wombat_Product__c = true
-                   AND Market__c =:marketId
-              ORDER BY Name];
+        List<Product__c> products = [SELECT Id, Name, Brand__c, Brand_Name__c, Brand__r.Primary_Logo__c, Image_Name__c 
+                                       FROM Product__c 
+                                      WHERE IsActive__c = true 
+                                        AND RecordType.Name = 'Wet Goods'
+                                        AND Is_Wombat_Product__c = true
+                                        AND Market__c =:marketId
+                                    ORDER BY Name];
 
+        List<Pricebook2> prices = [SELECT Id, Brand__c, SNS_Rate__c, GP_Rate__c
+                                     FROM Pricebook2 
+                                     WHERE RecordType.Name = 'Australia' 
+                                       AND IsActive = true];
+
+        Map<String, Object> result = new Map<String, Object>();
+        result.put('products', products);
+        result.put('brandPrices', prices);
+        return result;
     }
 
     @AuraEnabled 
-    public static String save(Promotion_Activity__c activity, List<Activity_Product__c> products, List<Promotion_Activity_Related_Data__c> relatedData, List<Promotion_Activity_Related_Data__c> bannerGroups, List<Promotion_Activity_Related_Data__c> bannerGroupsToDelete) {
+    public static String save(Promotion_Activity__c activity, List<Promotion_Activity_Related_Data__c> relatedData, List<Promotion_Activity_Related_Data__c> brands, List<String> bannerGroups) {
         String msg = 'OK';
         try {
             System.debug('status: ' + activity.Status__c);
-            if (activity.Incremental_Gross_Profit_Sales__c > 0 && (activity.Status__c == 'Draft' || activity.Status__c == 'Commercial Lead Review' || activity.Status__c == 'Commercial Lead Reviewed')) {
-                activity.Commercial_Lead_Review_Entered_By__c = UserInfo.getUserId();
-                activity.Commercial_Lead_Review_Entered_By_Name__c = UserInfo.getName();
-            }
+            System.debug('brands: ' + brands);
+            System.debug('bannerGroups: ' + bannerGroups);
+            System.debug('relatedData: ' + relatedData);
             update activity;
-
-            String rtCRMAU = '';
-
-            Map<String, Schema.RecordTypeInfo> rtiList = Activity_Product__c.SObjectType.getDescribe().getRecordTypeInfosByName();
-            if (rtiList.containsKey('CRM - Australia')) {
-                rtCRMAU = rtiList.get('CRM - Australia').getRecordTypeId();
-            }
-    
-            for(Activity_Product__c product : products) {
-                if (product.RecordTypeId == null) {
-                    product.RecordTypeId = rtCRMAU;
-                }
-            }
-            if (products.size() > 0) {
-                upsert products;
+                        
+            List<Promotion_Activity_Related_Data__c> existingRelatedData = [SELECT Id FROM Promotion_Activity_Related_Data__c WHERE Activity__c =:activity.Id];
+            if (existingRelatedData != null && existingRelatedData.size() > 0) {
+                delete existingRelatedData;
             }
 
-            String rtCommMethod = '';
             Map<String, Schema.RecordTypeInfo> rtPARDList = Promotion_Activity_Related_Data__c.SObjectType.getDescribe().getRecordTypeInfosByName();
-            if (rtPARDList.containsKey('Communication Method')) {
-                rtCommMethod = rtPARDList.get('Communication Method').getRecordTypeId();
-            }
-            for(Promotion_Activity_Related_Data__c pard : relatedData) {
-                if (pard.Activity__c == null) {
-                    pard.Activity__c = activity.Id;
+            List<Promotion_Activity_Related_Data__c> items = new List<Promotion_Activity_Related_Data__c>();
+            System.debug('# of brands: ' + brands.size());
+            if (brands != null && brands.size() > 0) {
+                System.debug('processing brands');
+                String rtRelatedData;
+                if (activity.Type_of_Spend__c == 'Broadreach') {
+                    rtRelatedData = rtPARDList.get('Broadreach').getRecordTypeId();
+                } else if (activity.Type_of_Spend__c == 'Activation') {
+                    rtRelatedData = rtPARDList.get('Activation').getRecordTypeId();                    
                 }
-                if (pard.RecordTypeId == null) {
-                    pard.RecordTypeId = rtCommMethod;
+
+                for(Promotion_Activity_Related_Data__c pard : brands) {
+                    System.debug('pard.Id: ' + pard.Id);
+                    //if (pard.Id == 'new') { pard.Id = null; }
+                    pard.Id = null;
+                    if (String.isEmpty(pard.Activity__c)) {
+                        pard.Activity__c = activity.Id;
+                    }
+                    if (String.isEmpty(pard.RecordTypeId)) {
+                        pard.RecordTypeId = rtRelatedData;
+                    }
+                    
+                    System.debug('pard: ' + pard);
+
+                    //items.add(pard);
                 }
-                System.debug('pard: ' + pard);
+
+                System.debug('items: ' + brands);
+                upsert brands;
             }
-            String rtBannerGroup = '';
-            if (rtPARDList.containsKey('Banner Group')) {
-                rtBannerGroup = rtPARDList.get('Banner Group').getRecordTypeId();
-            }
-            if (relatedData == null) { relatedData = new List<Promotion_Activity_Related_Data__c>(); }
-            for(Promotion_Activity_Related_Data__c pard : bannerGroups) {
-                if (pard.Activity__c == null) {
-                    pard.Activity__c = activity.Id;
+
+            if (bannerGroups != null && bannerGroups.size() > 0) {
+                List<Promotion_Activity_Related_Data__c> relatedBannerGroups = new List<Promotion_Activity_Related_Data__c>();
+                String rtRelatedBanner = rtPARDList.get('Banner Group').getRecordTypeId();
+                for(String bg : bannerGroups) {
+                    Promotion_Activity_Related_Data__c pBanner = new Promotion_Activity_Related_Data__c();
+                    pBanner.Activity__c = activity.Id;
+                    pBanner.RecordTypeId = rtRelatedBanner;
+                    pBanner.Banner_Group__c = bg;
+
+                    relatedBannerGroups.add(pBanner);
                 }
-                if (pard.RecordTypeId == null) {
-                    pard.RecordTypeId = rtBannerGroup;
-                }
-                relatedData.add(pard);
+
+                upsert relatedBannerGroups;
             }
-            if (relatedData.size() > 0) {
-                upsert relatedData;
-            }
-            if (bannerGroupsToDelete != null && bannerGroupsToDelete.size() > 0) {
-                delete bannerGroupsToDelete;
-            }
-            
         } catch(Exception ex) {
             msg = ex.getMessage();
         }
 
         return msg;
+    }
+
+    @AuraEnabled 
+    public static Map<String, Object> publishActivity(String activityId) {
+        Map<String, Object> result = new Map<String, Object>();
+        try {
+            Promotion_Activity__c theActivity = [SELECT Id, Name, Promotion_Activity_Number__c, Status__c, Is_Approved__c, Market__r.Name, Owner.Name,
+                                                        (SELECT Id, Brand__c, Brand__r.Name FROM Promotion_Activity_Related_Data__r WHERE RecordType.Name = 'Activation' OR RecordType.Name = 'Broadreach')
+                                                   FROM Promotion_Activity__c 
+                                                   WHERE Id =:activityId];
+            if (theActivity != null) {
+                theActivity.Status__c = 'Approved';
+                theActivity.Is_Approved__c = true;
+                update theActivity;
+
+                sendPDFEmail(theActivity, true);
+
+                result.put('status', 'OK');
+            } else {
+                result.put('status', 'ERROR');
+                result.put('message', 'No activity found with record id : ' + activityId);
+            }
+        } catch(Exception ex) {
+            result.put('status', 'ERROR');
+            result.put('message', ex.getMessage());
+        }
+
+        return result;
+    }
+
+    @AuraEnabled 
+    public static Map<String, Object> sendPDF(String activityId) {
+        Map<String, Object> result = new Map<String, Object>();
+
+        try {
+            Promotion_Activity__c theActivity = [SELECT Id, Name, Promotion_Activity_Number__c, Status__c, Is_Approved__c, Market__r.Name, Owner.Name, Owner.Email
+                                                    FROM Promotion_Activity__c 
+                                                    WHERE Id =:activityId];
+            if (theActivity != null) {
+                EmailTemplate et = [SELECT Id FROM EmailTemplate WHERE DeveloperName = 'AU_PreEvaluation_Form'];
+                sendPDFEmail(theActivity, false);
+            }
+
+            result.put('status', 'OK');
+        } catch(Exception ex) {
+            result.put('status', 'ERROR');
+            result.put('message', ex.getMessage());
+        }
+
+        return result;
     }
 
     @AuraEnabled 
@@ -203,4 +246,50 @@ public with sharing class PreEvaluationForm_Controller {
         return msg;
     }
 
+    private static void sendPDFEmail(Promotion_Activity__c theActivity, Boolean notifyBrandManagers) {
+        EmailTemplate et = [SELECT Id FROM EmailTemplate WHERE DeveloperName = 'AU_PreEvaluation_Form'];
+
+        List<Messaging.SingleEmailMessage> msgs = new List<Messaging.SingleEmailMessage>();
+
+        /* Send to Owner */
+        Messaging.SingleEmailMessage msg = new Messaging.SingleEmailMessage();
+        msg.setTargetObjectId(theActivity.OwnerId);
+        msg.setSenderDisplayName(theActivity.Owner.Name);
+        msg.setSaveAsActivity(false);
+        msg.setTemplateId((et.Id));
+        msg.setUseSignature(false);
+        msg.setWhatId(theActivity.Id);
+        msgs.add(msg);
+
+        if (notifyBrandManagers && theActivity.Promotion_Activity_Related_Data__r != null && theActivity.Promotion_Activity_Related_Data__r.size() > 0) {
+            String brandString = '';
+            for(Promotion_Activity_Related_Data__c pard : theActivity.Promotion_Activity_Related_Data__r) {
+                brandString += '\'' + String.escapeSingleQuotes(pard.Brand__r.Name) + '\',';
+            }
+            brandString = brandString.removeEnd(',');
+            System.debug('brandString: ' + brandString);
+            String marketName = theActivity.Market__r.Name;
+            System.debug('marketName: ' + marketName);
+            String soql = 'SELECT Id, Name, Email, Manages_Brand__c FROM User WHERE Market__c = \'' + theActivity.Market__r.Name + '\'';
+            soql += ' AND Manages_Brand__c INCLUDES (' + brandString + ')';
+            List<User> brandManagers = Database.query(soql);
+            if (brandManagers != null && brandManagers.size() > 0) {
+                for(User mgr : brandManagers) {
+                    msg = new Messaging.SingleEmailMessage();
+
+                    msg.setTargetObjectId(mgr.Id);
+                    msg.setSenderDisplayName(theActivity.Owner.Name);
+                    msg.setUseSignature(false);
+                    msg.setTemplateId(et.Id);
+                    msg.setWhatId(theActivity.Id);
+                    msg.setSaveAsActivity(false);
+
+                    msgs.add(msg);
+                }
+
+            }
+        }
+
+        Messaging.sendEmail(msgs);
+    }
 }

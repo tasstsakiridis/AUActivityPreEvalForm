@@ -1,0 +1,42 @@
+<aura:component implements="flexipage:availableForAllPageTypes,force:hasRecordId" access="global" controller="Factsheet_Controller">
+    <!-- String Attributes -->
+    <aura:attribute name="objectName" type="String" access="global" />
+    <aura:attribute name="objectLabel" type="String" default="{!$Label.c.Factsheet}" />
+    <aura:attribute name="customLabel" type="String" default="" />
+    <aura:attribute name="icon" type="String" default="/resource/SLDS232/assets/icons/standard-sprite/svg/symbols.svg#account" />
+    <aura:attribute name="recordId" type="String" default="" description="The id of the record we are building a factsheet for" />
+    <aura:attribute name="recordName" type="String" default="" />
+    <aura:attribute name="fieldsetName" type="String" default="default" />
+    
+    <!-- Boolean Attributes -->
+    <aura:attribute name="getRecord" type="Boolean" default="false" />
+    <aura:attribute name="buildForm" type="Boolean" default="false" />
+    
+    <!-- List & Object Attributes -->
+    <aura:attribute name="fieldset" type="bfColumn[]" default="[]" />
+    <aura:attribute name="theRecord" type="SObject" default="{}" />
+    
+    <!-- Handle local component events -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <!-- Handle attribute value change events -->
+    <aura:handler name="change" value="{!v.getRecord}" action="{!c.handleGetRecordChange}" />
+    <aura:handler name="change" value="{!v.buildForm}" action="{!c.handleBuildFormChange}" />
+
+    <!-- Handle Application Events -->
+    <aura:handler event="c:bfLightningEvent" action="{!c.handleLightningEvent}" />
+
+    <div id="{!v.objectName+'_section_panel'}" aura:id="section_panel" class="slds-section slds-is-open slds-m-around_small" style="page-break-after:always;">
+    	<h3 class="slds-section__title">
+        	<button aria-controls="{!v.objectName+'_section_content'}" aria-expanded="true" class="slds-button slds-section__title-action" onclick="{!c.toggleSection}">
+                <c:svg class="slds-section__title-action-icon slds-button__icon slds-button__icon_left" ariaHidden="true" xlinkHref="/resource/SLDS232/assets/icons/utility-sprite/svg/symbols.svg#switch" />
+	            <span class="slds-truncate" title="{!v.objectLabel}">{!v.objectLabel}</span>
+            </button>
+        </h3>
+        <div aria-hidden="false" class="slds-section__content" id="{!v.objectName+'_section_content'}" aura:id="section_content">        
+            <div class="slds-form" role="list">
+                {!v.body}
+            </div>
+        </div>
+    </div>
+</aura:component>

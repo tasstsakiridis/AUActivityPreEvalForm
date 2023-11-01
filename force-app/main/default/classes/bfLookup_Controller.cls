@@ -1,6 +1,6 @@
 public with sharing class bfLookup_Controller {
     @AuraEnabled 
-    public static List<Object> doSearch(String queryTerm, String objectName, Boolean showImages, Boolean limitToMarket, String marketId, String marketName, String marketFieldName, Boolean useMarketId) {
+    public static List<Object> doSearch(String queryTerm, String objectName, Boolean showImages, Boolean limitToMarket, String marketId, String marketName, String marketFieldName, Boolean useMarketId, String isActiveFieldName) {
         if (queryTerm == null || objectName == null) { return null; }
         String soql = 'SELECT Id, Name';
         String sanitizedQueryTerm = '';
@@ -18,8 +18,11 @@ public with sharing class bfLookup_Controller {
 
 
         soql += ' FROM ' + objectName;
-        soql += ' WHERE Name LIKE \'%' + queryTerm + '%\' AND IsActive = TRUE';
+        soql += ' WHERE Name LIKE \'%' + queryTerm + '%\'';
 
+        if (String.isNotEmpty(isActiveFieldName)) {
+            soql += ' AND ' + isActiveFieldName + ' = TRUE';
+        }
         if (limitToMarket) {
             if (useMarketId) {
                 soql += ' AND ' + marketFieldName + ' = \'' + marketId + '\'';
