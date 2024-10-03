@@ -120,7 +120,6 @@ export default class ActivityPreEvaluationBrand extends LightningElement {
         return this._item;
     };
     set item(value) {
-        console.log('[brand.set] item', value == null ? '' : JSON.parse(JSON.stringify(value)));
         this._item = value;
         
         this.brandId = value.Brand__c;
@@ -147,9 +146,6 @@ export default class ActivityPreEvaluationBrand extends LightningElement {
         this.percentSplit = value.Percent_Split__c;
         this.amountSplit = value.Amount_Split__c;
         this.manuallySet = value.Split_Manually_Set__c;
-
-        console.log('[brand.set] percentSplit', this.percentSplit);
-        console.log('[brand.set] amount split', this.amountSplit);
     }
 
     @api 
@@ -183,8 +179,6 @@ export default class ActivityPreEvaluationBrand extends LightningElement {
         if (!this.manuallySet && value > 0) {
             this.amountSplit = value;
         }
-
-        console.log('[brand.defaultAmountSplit.set] amountSplit', this.amountSplit);
     }
 
     _defaultPercentSplit = 0;
@@ -197,7 +191,6 @@ export default class ActivityPreEvaluationBrand extends LightningElement {
         if (!this.manuallySet && value > 0) { 
             this.percentSplit = value;
         }
-        console.log('[brand.defaultPercentSplit.set] percentSplit', this.percentSplit);
     }
 
     @api 
@@ -215,37 +208,37 @@ export default class ActivityPreEvaluationBrand extends LightningElement {
             Brand__c: this.brandId,
             Brand_GP_Rate__c: this.brandGPRate,
             Brand_SNS_Rate__c: this.brandSNSRate,
-            Number_of_Outlets__c: this.numberOfOutlets,
-            Percentage_of_Customer_Universe__c: this.percentageOfCustomerUniverse,
-            Incremental_Distribution_Points__c: this.incrementalDistributionPoints,
+            Number_of_Outlets__c: this.numberOfOutlets || 0,
+            Percentage_of_Customer_Universe__c: this.percentageOfCustomerUniverse || 0,
+            Incremental_Distribution_Points__c: this.incrementalDistributionPoints || 0,
             PICOS_Delivery__c: this.picosDelivery,
-            Rate_of_Sales__c: this.rateOfSale,
-            Actual_Sales_Volume__c: this.actualSalesVolume,
+            Rate_of_Sales__c: this.rateOfSale || 0,
+            Actual_Sales_Volume__c: this.actualSalesVolume || 0,
             Actual_SNS__c: this.actualSNS,
             Actual_GP__c: this.actualGP,
             Actual_Brand_Profit__c: this.actualBrandProfit,
-            Baseline_Sales_Volume_9L__c: this.baselineSalesVolume,
+            Baseline_Sales_Volume_9L__c: this.baselineSalesVolume || 0,
             Baseline_SNS__c: this.baselineSNS,
             Baseline_GP__c: this.baselineGP,
             Baseline_Brand_Profit__c: this.baselineBrandProfit,
-            Projected_Sales_Volume__c: this.projectedSalesVolume,
+            Projected_Sales_Volume__c: this.projectedSalesVolume || 0,
             Projected_SNS__c: this.projectedSNS,
             Projected_GP__c: this.projectedGP,
             Projected_Brand_Profit__c: this.projectedBrandProfit,
             Incremental_Brand_Profit__c: this.incrementalBrandProfit,
-            ROI_Percent__c: this.roiPercent,
-            Reach__c: this.reach,
-            ESOV__c: this.esov,
-            Engagement_Rates__c: this.engagementRates,
-            Penetration__c: this.penetration,
-            Awareness_Increases__c: this.awarenessIncreases,
-            Purchase_Intent__c: this.purchaseIntent,
-            Meaningful_Difference__c: this.meaningfulDifference,
-            Cost_per_Engagement__c: this.costPerEngagement,
-            Reach_Premium__c: this.reachPremium,
-            Percent_Split__c: this.percentSplit,
-            Amount_Split__c: this.amountSplit,
-            Split_Manually_Set__c: this.manuallySet
+            ROI_Percent__c: this.roiPercent || 0,
+            Reach__c: this.reach || 0,
+            ESOV__c: this.esov || 0,
+            Engagement_Rates__c: this.engagementRates || 0,
+            Penetration__c: this.penetration || 0,
+            Awareness_Increases__c: this.awarenessIncreases || 0,
+            Purchase_Intent__c: this.purchaseIntent || 0,
+            Meaningful_Difference__c: this.meaningfulDifference || 0,
+            Cost_per_Engagement__c: this.costPerEngagement || 0,
+            Reach_Premium__c: this.reachPremium || 0,
+            Percent_Split__c: this.percentSplit || 0,
+            Amount_Split__c: this.amountSplit || 0,
+            Split_Manually_Set__c: this.manuallySet || 0
         };
     }
 
@@ -259,15 +252,12 @@ export default class ActivityPreEvaluationBrand extends LightningElement {
         this.isConnected = true;
 
         let l = [];
-        //console.log('[availableBrands] selectedbrands', JSON.parse(JSON.stringify(this.selectedBrands)));
-        //console.log('[availableBrands] brands', JSON.parse(JSON.stringify(this.brands)));
         try {
             if (this.selectedBrands != undefined && this.selectedBrands.length > 0) {
                 l = this.brands.filter(b => this.selectedBrands.find(sb => sb.id ==b.id) == undefined);
             } else {
                 l = [...this.brands];
             }
-            //console.log('[availableBrands] l', l);
         }catch(ex) {
             console.log('[activitybrand.availableBrands] exception', ex);
         }
@@ -318,7 +308,7 @@ export default class ActivityPreEvaluationBrand extends LightningElement {
         if (this.isBTL) {
             groupTitle = this.labels.btlActivation.title;
         } else if (this.isBroadreach) {
-            groupTitle = this.label.broadreach.title;
+            groupTitle = this.labels.broadreach.title;
         }
 
         let t = `${brandName} ${groupTitle}`;
@@ -332,16 +322,10 @@ export default class ActivityPreEvaluationBrand extends LightningElement {
         return 'Attachment';
     }
     get rateOfSale() {
-        //console.log('[rateOfSale] numberOfOutlets', this.numberOfOutlets);
-        //console.log('[rateOfSale] startDate', this.startDate);
-        //console.log('[rateOfSale] endDate', this.endDate);
-        //console.log('[rateOfSale] projectedSalesVolume', this.projectedSalesVolume);
         if (this.numberOfOutlets == 0 || this.startDate == undefined || this.endDate == undefined) { return; }
         const oneDay = 24 * 60 * 60 * 1000;  // hours * minutes * seconds * milliseconds
         let days = Math.round(Math.abs((this.endDate - this.startDate) / oneDay));
-        //console.log('[rateOfSale] days', days);
         let v = this.projectedSalesVolume / this.numberOfOutlets / (days / 7);
-        //console.log('[rateOfSale] value', v);
         return v.toFixed(2);
     }
 
@@ -359,20 +343,13 @@ export default class ActivityPreEvaluationBrand extends LightningElement {
     }
     get baselineSNS() {
         let v = this.baselineSalesVolume * this.brandSNSRate;
-        //console.log('[baselineSNS] baseline sales volume', this.baselineSalesVolume);
-        //console.log('[baselineSNS] snsRate', this.brandSNSRate);
-        //console.log('[baselineSNS] baselineSNS', v);
         return v.toFixed(2);        
     }
     get baselineGP() {        
         let v = this.baselineSalesVolume * this.brandGPRate;
-
-        //console.log('[baselineGP] baselineSalesVolume', this.baselineSalesVolume);
-        //console.log('[baselineGP] brandGPRate', this.brandGPRate);
         return v.toFixed(2);
     }
     get baselineBrandProfit() {
-        //console.log('[baselineBrandProfit] baselineGP', this.baselineGP);
         return this.baselineGP;
     }
 
@@ -395,8 +372,6 @@ export default class ActivityPreEvaluationBrand extends LightningElement {
         return v.toFixed(2);
     }
     get incrementalBrandProfit() {
-        //console.log('[incrementalBrandProfit] projectedBrandProfit', this.projectedBrandProfit);
-        //console.log('[incrementalBrandProfit] projectedAPSpend', this.baselineBrandProfit);
         let v = this.projectedBrandProfit - this.baselineBrandProfit;
         return v.toFixed(2);
     }
@@ -407,10 +382,7 @@ export default class ActivityPreEvaluationBrand extends LightningElement {
     get roiPercent() {
         let v = 0;
         try {
-            console.log('[roiPercentage] projectedAPSpend', this.projectedSpend);
-            console.log('[roiPercentage] incrementalBrandProfit', this.incrementalBrandProfit);
             v = (this.incrementalBrandProfit / this.amountSplit) * 100;
-            console.log('[roiPercentage] roiPercent', v);
         }catch(ex) {
             console.log('[roiPercentage] exception', ex);
         }
@@ -452,7 +424,6 @@ export default class ActivityPreEvaluationBrand extends LightningElement {
         }
     }
     handlePercentageOfCustomerUniverseChange(event) {
-        console.log('[handlePercentagOfCustomerUniverse] value', event.detail.value);
         this.percentageOfCustomerUniverse = event.detail.value;
     }
     handleIncrementalDistributionPointsChange(event) {

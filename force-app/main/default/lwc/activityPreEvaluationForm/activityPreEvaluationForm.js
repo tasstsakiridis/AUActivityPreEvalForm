@@ -245,7 +245,6 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
     wiredActivity;
     @wire(getActivity, { activityId: '$recordId'})
     getWiredActivity(value) {
-        console.log('[getWiredActivity] value', value);
         this.wiredActivity = value;
         if (value.error) {
 
@@ -264,15 +263,11 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
     @wire(getObjectInfo, { objectApiName: 'Promotion_Activity__c'})
     wiredGetObjectInfo(value) {
         this.objectInfo = value;
-        console.log('[getObjectInfo] value', value);
     }
 
     picklistValuesMap;
     @wire(getPicklistValuesByRecordType, { objectApiName: { objectApiName: 'Promotion_Activity__c' }, recordTypeId: '$recordTypeId' })
     wiredPicklistValues({ error, data }) {
-        console.log('[getPicklistValues] recordtypeid', this.recordTypeId);
-        console.log('[getPicklistValues] data', data);
-        console.log('[getPicklistValues] error', error);
         if (data) {
             this.error = undefined;
             this.picklistValuesMap = data.picklistFieldValues;
@@ -313,7 +308,6 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
             this.nationalBannerGroups = undefined;
         } else if (value.data) {
             this.error = undefined;
-            console.log('bannerGroups', value.data);
             const groups = value.data.map(bg => ({ 
                 label: bg.Name, 
                 value: bg.Id,
@@ -337,7 +331,6 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
 
             this.nationalBannerGroups = groups;
             this.availableBannerGroups = [...groups];
-            console.log('[getBannerGroups] availableBannerGroups', this.availableBannerGroups);            
             this.finishedLoadingBannerGroups = true;
             if (this.finishedLoadingForm && this.finishedLoadingObjectInfo && this.finishedLoadingBrandsAndProducts) {
                 this.loadPreEvaluationForm();
@@ -362,13 +355,11 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
             this.products = [];
             this.brands = [];
             const brandIds = [];
-            console.log('products', value.data);
             
             value.data.products.forEach(p => {                
                 if (brandIds.indexOf(p.Brand__c) < 0) {
                     brandIds.push(p.Brand__c);
                     let price = value.data.brandPrices.find(bp => bp.Brand__c == p.Brand__c);
-                    console.log('price', price);
                     if (price == undefined) {
                         price = {
                             SNS_Rate__c: 0,
@@ -403,9 +394,6 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
                 return 0; 
             });
             this.brandOptions = [...this.brands];
-            console.log('[getproducts] brands', this.brands);
-            console.log('[getproducts] brandOptions', this.brandOptions);
-            console.log('[getproducts] products', this.products);
             
             this.finishedLoadingBrandsAndProducts = true;
             if (this.finishedLoadingForm && this.finishedLoadingBannerGroups && this.finishedLoadingObjectInfo) {
@@ -444,16 +432,21 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
         console.log('[savebuttonclick]');
         this.isWorking = true;
         if (this.validateForm()) {
-            this.save();
+            this.save(false);
         } else {
             this.isWorking = false;
         }
     }
     handlePublishButtonClick() {
         this.isWorking = true;
+        if (this.validateForm()) {
+            this.save(true);
+        } else {
+            this.isWorking = false;
+        }
+        /*
         publishActivity({ activityId: this.recordId })
             .then(result => {
-                console.log('[publishActivity] result', result);
                 if (result.status == 'OK') {
                     this.status = 'Approved';
                     this.showToast('success', 'Success', this.labels.publish.successMessage);
@@ -465,17 +458,16 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
                 this.isWorking = false;
             })
             .catch(error => {
-                console.log('[publish] error', error);
                 this.isWorking = false;
                 this.error = error;
                 this.showToast('error', 'Warning', error);
             });
+        */
     }
     handleSubmitForApprovalButtonClick() {
         this.isWorking = true;
         submitForApproval({ activityId: this.recordId })
             .then(result => {
-                console.log('[submitforapproval] result', result);
                 this.isWorking = false;
                 if (result == 'OK') {
                     this.status = 'Pending Approval';
@@ -485,7 +477,6 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
                 }
             })
             .catch(error => {
-                console.log('[submitforapprova] error', error);
                 this.isWorking = false;
                 this.error = error;
                 this.showToast('error', 'Warning', error);
@@ -498,7 +489,6 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
         sendPDF({activityId: this.recordId})
             .then(result => {
                 this.isWorking = false;
-                console.log('[sendPDF] result', JSON.parse(JSON.stringify(result)));
                 if (result.status == 'OK') {
                     this.showToast('success', 'Success', this.labels.sendPDF.successMessage);
                 } else {
@@ -560,6 +550,10 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
                 Projected_GP__c: 0,
                 Projected_Brand_Profit__c: 0,
                 Incremental_Brand_Profit__c: 0,
+                Actual_Sales_Volume__c: 0,
+                Actual_GP__c: 0,
+                Actual_SNS__c: 0,
+                Actual_Brand_Profit__c: 0,
                 ROI_Percentage__c: 0,
                 Reach__c: 0,
                 ESOV__c: 0,
@@ -572,20 +566,19 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
                 Reach_Premium__c: 0,
                 Percent_Split__c: this.defaultPercentSplit,
                 Amount_Split__c: this.defaultAmountSplit,
-                Split_Manually_Set__c: false
+                Split_Manually_Set__c: false,
+                Type_of_Spend__c: this.typeOfSpend
             };
 
             l.push(newBrand);
 
             this.brandInputList = [...l];
 
-            console.log('[handleAddBrand] brandInputList', this.brandInputList);
         }catch(ex) {
             console.log('[handleAddBrand] exception', ex);
         }
     }
     handleRemoveBrand(event) {
-        console.log('[handleRemoveBrand] details', JSON.parse(JSON.stringify(event.detail)));
         try {
             let index = this.selectedBrands.findIndex(sb => sb.index == event.detail.index);
             if (index >= 0) {
@@ -593,7 +586,6 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
             }
             
             index = this.brandInputList.findIndex(b => b.index == event.detail.index);
-            console.log('[handleRemoveBrand] index', index);
             if (index >= 0) {
                 let newList = [...this.brandInputList];
                 newList.splice(index, 1);
@@ -602,10 +594,7 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
                 } else {
                     this.brandInputList = [...newList];
                 }
-                console.log('[hadnelRemoveBrand] newList', newList);
             }
-            console.log('[handleRemoveBrand] brandInputList', this.brandInputList);
-            console.log('[handleRemoveBrand] # of brands', this.brandInputList.length);
 
             this.calculateSplits(false);
             this.updateTotals();
@@ -615,8 +604,6 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
     }
     handleBrandSelected(event) {
         try {
-            console.log('[form.handleBrandSelected] selected brand', JSON.parse(JSON.stringify(event.detail)));
-            console.log('[form.handleBrandSelected] selectedBrands', JSON.parse(JSON.stringify(this.selectedBrands)));
             let b = this.selectedBrands.find(sb => sb.index == event.detail.index);
             if (b == undefined) {
                 this.selectedBrands.push(event.detail);
@@ -624,7 +611,6 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
                 b.brandId = event.detail.brandId;
                 b.name = event.detail.name;
             }
-            console.log('[handleBrandSelected] selectedBrands', JSON.parse(JSON.stringify(this.selectedBrands)));
         }catch(ex) {
             console.log('[form.handleBrandSelected] exception', ex);
         }
@@ -632,7 +618,6 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
     handleBrandUpdated(event) {
         try {
             let brand = this.brandInputList.find(b => b.Brand__c == event.detail.brandId);
-            console.log('activityForm.handleBrandUpdated] brand', brand);
             let temp = {...brand};
             if (event.detail.numberOfOutlets) {
                 temp.Number_of_Outlets__c = event.detail.numberOfOutlets;
@@ -655,7 +640,6 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
 
     handleSplitUpdated(event) {
         try {
-            console.log('[form.handleSplitUpdated] split details', JSON.parse(JSON.stringify(event.detail)));
             this.calculateSplits();
         }catch(ex) {
             console.log('[form.handleSplitUpdated] exception', ex);
@@ -685,7 +669,6 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
     }
     handleSegmentTypeChange(event) {
         this.selectedSegmentTypes = event.detail.value;
-        console.log('[handleSegmentTypeChange] selectedSegmentTypes', this.selectedSegmentTypes);
     }
     handleBannerGroupChange(event) {
         this.selectedBannerGroups = event.detail.value;
@@ -710,7 +693,6 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
      * Helper functions
      */
     setFieldOptions(picklistValues) {
-        console.log('[setFieldOptions] picklistValues', picklistValues);
         Object.keys(picklistValues).forEach(picklist => {            
             if (picklist === 'Channel__c') {
                 this.channelOptions = this.setFieldOptionsForField(picklistValues, picklist);                
@@ -720,7 +702,6 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
             }
             if (picklist === 'Segment_Type__c') {
                 this.availableSegmentTypes = this.setFieldOptionsForField(picklistValues, picklist);
-                console.log('[setFieldOptions] available segment types', this.availableSegmentTypes);
             }
             if (picklist === 'Consumer_Driver__c') {
                 this.consumerDriverOptions = this.setFieldOptionsForField(picklistValues, picklist);
@@ -738,7 +719,6 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
     }
     
     setFieldOptionsForField(picklistValues, picklist) {        
-        console.log('[setFieldOptionsForField] picklist field', picklist);
         return picklistValues[picklist].values.map(item => ({
             label: item.label, value: item.value
         }));
@@ -762,7 +742,6 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
     }    
 
     loadPreEvaluationForm() {
-        console.log('[loadPreEvaluationForm] theActivity', this.theActivity);
         this.activityName = this.theActivity.Name;
         this.startDate = this.theActivity.Begin_Date__c == undefined ? new Date() : new Date(this.theActivity.Begin_Date__c);
         this.endDate = this.theActivity.End_Date__c == undefined ? new Date() : new Date(this.theActivity.End_Date__c);
@@ -777,7 +756,6 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
         this.status = this.theActivity.Status__c;
 
         this.selectedSegmentTypes = this.theActivity.Segment_Type__c == undefined ? [] : this.theActivity.Segment_Type__c.split(';');
-        console.log('[loadPreEvaluationForm] selectedSegmentTypes', this.selectedSegmentTypes);
 
         let bannerGroups = [];
         this.selectedBrands = [];
@@ -807,15 +785,10 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
 
             this.totalROI = (this.totalIncrementalBrandProfit / this.projectedAPSpend) * 100;
 
-            console.log('[load] totalIncrementalBrandProfit', this.totalIncrementalBrandProfit);
-            console.log('[load] projectedAPSpend', this.projectedAPSpend);
-            console.log('[load] totalROI', this.totalROI);
-
             this.selectedBannerGroups = [...bannerGroups];
             this.brandInputList = [...brandList];
 
         }        
-        console.log('[loadPreEvaluationForm] selectedBannerGroups', this.selectedBannerGroups);
     }
 
     validateForm() {
@@ -862,7 +835,6 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
             if (isValid && this.brandInputList.length > 0) {
                 let percentSplit = 0;
                 let amountSplit = 0;                
-                console.log('[validate] brandInputList', JSON.parse(JSON.stringify(this.brandInputList)));
 
                 const brandComponents = this.template.querySelectorAll('c-activity-pre-evaluation-brand');
                 let brandItems = [];
@@ -874,8 +846,6 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
                     });
                 }
 
-                console.log('[validateForm] percentSplit, amountSplit', percentSplit, amountSplit);
-                console.log('[validateForm] percentSplit, amountSplit', percentSplit.toFixed(2), amountSplit.toFixed(2));
                 if (percentSplit.toFixed(2) != 100.00 || amountSplit.toFixed(2) != this.projectedAPSpend.toFixed(2)) {
                     isValid = false;
                 }
@@ -892,8 +862,7 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
         return isValid;
     }
 
-    save() {
-        console.log('[save]');
+    save(publish) {
         try {
             const evalForm = Object.assign({}, this.theActivity);
             evalForm.Name = this.activityName;
@@ -903,6 +872,11 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
             evalForm.Market_Filter__c = this.marketName;
             evalForm.Active__c = true;
             evalForm.Promotion_Type__c = 'Sales Promo';
+            if (publish) { 
+                this.status = 'Approved'; 
+                evalForm.Status__c = 'Approved';
+                evalForm.Is_Approved__c = true;
+            }
             if (this.status == 'Approved') {
                 evalForm.Wombat_Active__c = this.publishActivity;
             }
@@ -916,7 +890,6 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
             evalForm.Activity_Mechanic_Comments__c = this.mechanic;
             evalForm.Description__c = this.activityDescription;
             evalForm.Publish_Activity__c = this.publishActivity;  
-            console.log('[save] selectedSegmentTypes', this.selectedSegmentTypes); 
             evalForm.Segment_Type__c = this.selectedSegmentTypes.join(';');         
             
             evalForm.Promo_Brands__c = '';
@@ -947,25 +920,20 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
                 });
             }
             */
-            console.log('[save] activity', evalForm);
-            console.log('[save] relatedData', JSON.parse(JSON.stringify(relatedData)));
-            console.log('[save] items', JSON.parse(JSON.stringify(brandItems)));
-            console.log('[save] bannerGroups', JSON.parse(JSON.stringify(this.selectedBannerGroups)));
             saveActivity({
                 activity: evalForm,
                 relatedData: relatedData,
                 brands: brandItems,
-                bannerGroups: this.selectedBannerGroups
+                bannerGroups: this.selectedBannerGroups,
+                publish: publish
             })
             .then(result => {
-                console.log('[save.success] result', result);
                 this.showToast('success', 'Success', this.labels.saveSuccess.message);
 
                 this.wiredActivity = refreshApex(this.wiredActivity);
                 this.isWorking = false;
             })
             .catch(error => {
-                console.log('save.error] error', error);
                 this.error = error;
                 this.showToast('error', 'Warning!!', error.body.message);
             });
@@ -991,7 +959,6 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
 
         let brandList = [];
         const brandComponents = this.template.querySelectorAll('c-activity-pre-evaluation-brand');
-        console.log('[calculateSplits] brandComponents', brandComponents);
         brandComponents.forEach(bc => {
             let item = bc.getBrandItem();
             if (item.Split_Manually_Set__c) {
@@ -1005,16 +972,9 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
 
             brandList.push(item);
         });
-        console.log('calculateSplits] totalAmountSplit', totalAmountSplit);
-        console.log('[calculateSplits] manualSetAmount', manualSetAmountSplit);
-        console.log('[calculateSplits] manualSetPercent', manualSetPercentSplit);
-        console.log('[calculateSplits] manualCount', manualCount);
-        console.log('[calculateSplits] numberOfBrands', numberOfBrands);
 
         let remainingPercentSplit = 100 - manualSetPercentSplit;
         let remainingAmountSplit = this.projectedAPSpend - manualSetAmountSplit;
-        console.log('[calculateSplits] remainingPercentSplit', remainingPercentSplit);
-        console.log('[calculateSplits] remainingAmountSplit', remainingAmountSplit);
         
         this.defaultPercentSplit = (100 / (numberOfBrands - manualCount)).toFixed(2);
         this.defaultAmountSplit = (this.projectedAPSpend * (this.defaultPercentSplit / 100)).toFixed(2);
@@ -1026,7 +986,6 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
 
             let pRemainder = parseFloat((100 - ((this.defaultPercentSplit * remainingCount) + manualSetPercentSplit)).toFixed(2));
             let aRemainder = parseFloat((this.projectedAPSpend - ((this.defaultAmountSplit * remainingCount) + manualSetAmountSplit)).toFixed(2));
-            console.log('[calculateSplits] pRemainder, aRemainder', pRemainder, aRemainder);
 
             let newList = [];
             brandList.forEach((b, idx, arr) => {
@@ -1034,7 +993,6 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
                     newList.push(b);
                 } else {
                     let t = {...b};
-                    console.log('[calculateSplits] t.percentSplit, t.amountSplit', t.Percent_Split__c, t.Amount_Split__c);
                     t.Percent_Split__c = this.defaultPercentSplit;
                     t.Amount_Split__c = this.defaultAmountSplit;
                     if (idx == arr.length - 1) {
@@ -1050,9 +1008,6 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
             this.brandInputList = [...newList];
             
         }
-        console.log('[calculateSplits] defaultPercentSplit', this.defaultPercentSplit);
-        console.log('[calculateSplits] defaultAmountSplit', this.defaultAmountSplit);        
-        console.log('[calculateSplits] brandInputList', this.brandInputList);        
 
     }
 
@@ -1075,10 +1030,6 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
             this.totalProjectedSalesVolume += parseFloat(item.Projected_Sales_Volume__c);            
         });
 
-        console.log('[updateTotals] totalIncrementalBrandProfit', this.totalIncrementalBrandProfit);
-        console.log('[updateTotals] projectedAPSpend', this.projectedAPSpend);
-
         this.totalROI = (this.totalIncrementalBrandProfit / this.projectedAPSpend) * 100;
-        console.log('[updateTotals] totalROI', this.totalROI);
     }
 }

@@ -84,7 +84,7 @@ public with sharing class PreEvaluationForm_Controller {
     }
 
     @AuraEnabled 
-    public static String save(Promotion_Activity__c activity, List<Promotion_Activity_Related_Data__c> relatedData, List<Promotion_Activity_Related_Data__c> brands, List<String> bannerGroups) {
+    public static String save(Promotion_Activity__c activity, List<Promotion_Activity_Related_Data__c> relatedData, List<Promotion_Activity_Related_Data__c> brands, List<String> bannerGroups, Boolean publish) {
         String msg = 'OK';
         try {
             System.debug('status: ' + activity.Status__c);
@@ -143,6 +143,10 @@ public with sharing class PreEvaluationForm_Controller {
                 }
 
                 upsert relatedBannerGroups;
+            }
+
+            if (publish) {
+                sendPDFEmail(activity, true);
             }
         } catch(Exception ex) {
             msg = ex.getMessage();
