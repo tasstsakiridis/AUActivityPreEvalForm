@@ -9,7 +9,9 @@
     <lightning-card>
         <h2 slot="title">
             <p>{activityName} [{status}]</p>
+            <p class="slds-text-title_caps">{promotionActivityNumber}</p>
         </h2>
+
         <div slot="footer">
             
             <lightning-button-group>
@@ -64,11 +66,18 @@
                         <lightning-input type="text" label={labels.name.label} value={activityName} disabled={isLocked}
                             onchange={handleActivityNameChange}></lightning-input>
                     </lightning-layout-item>
-                    <lightning-layout-item size="4">
+                    <lightning-layout-item size="2" padding="around-small">
                         <lightning-input name="i_Publish" type="toggle"
                             label="Make activity available for field activation after it has been approved?" checked={publishActivity}
                             message-toggle-active={labels.yes.label} message-toggle-inactive={labels.no.label}
                             onchange={handlePublishActivityChange}></lightning-input>
+                    
+                    </lightning-layout-item>
+                    <lightning-layout-item size="2" padding="around-small">
+                        <lightning-input name="i_STIRelevant" type="toggle"
+                            label={labels.stiRelevant.label} checked={stiRelevant}
+                            message-toggle-active={labels.yes.label} message-toggle-inactive={labels.no.label}
+                            onchange={handleSTIRelevantChange}></lightning-input>
                     
                     </lightning-layout-item>
                 </lightning-layout>

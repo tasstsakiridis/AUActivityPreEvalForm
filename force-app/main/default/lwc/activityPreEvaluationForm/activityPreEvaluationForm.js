@@ -78,6 +78,8 @@ import LABEL_SEND_PDF_SUCCESS_MESSAGE from '@salesforce/label/c.Send_PDF_Success
 import LABEL_SPLIT_ERROR_MESSAGE from '@salesforce/label/c.PreEval_Split_Error';
 import LABEL_START_DATE from '@salesforce/label/c.Start_Date';
 import LABEL_START_DATE_HELP from '@salesforce/label/c.PreEval_StartDate_Help';
+import LABEL_STI_RELEVANT from '@salesforce/label/c.STI_Relevant';
+import LABEL_STI_RELEVANT_HELP from '@salesforce/label/c.PreEval_STI_Relevant_Help';
 import LABEL_STRATEGIC_PILLAR from '@salesforce/label/c.StrategicPillar';
 import LABEL_STRATEGIC_PILLAR_HELP from '@salesforce/label/c.PreEval_StrategicPillar_Help';
 import LABEL_SUBMIT_FOR_APPROVAL from '@salesforce/label/c.Submit_For_Approval';
@@ -117,6 +119,7 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
         selected                        : { label: LABEL_SELECTED },
         splitError                      : { message: LABEL_SPLIT_ERROR_MESSAGE },
         startDate                       : { label: LABEL_START_DATE, help: LABEL_START_DATE_HELP },
+        stiRelevant                     : { label: LABEL_STI_RELEVANT, help: LABEL_STI_RELEVANT_HELP },
         strategicPillar                 : { label: LABEL_STRATEGIC_PILLAR, help: LABEL_STRATEGIC_PILLAR_HELP },
         submitForApproval               : { label: LABEL_SUBMIT_FOR_APPROVAL, submittedMessage: LABEL_APPROVAL_SUBMITTED.replace('%0', 'Pre-Evaluation Form') },
         summary                         : { label: LABEL_SUMMARY },
@@ -160,6 +163,7 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
     status = 'Draft';
     isLocked = false;
     activityName;
+    promotionActivityNumber;
     recordTypeId;
     typeOfSpend;
     typeOfSpendOptions;
@@ -177,6 +181,7 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
     mechanic;
     activityDescription;
     publishActivity = false;
+    stiRelevant = false;
 
     defaultPercentSplit = 0;
     defaultAmountSplit = 0;
@@ -252,6 +257,7 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
             this.error = undefined;
             this.theActivity = value.data;
             this.recordTypeId = value.data.RecordTypeId;
+            this.promotionActivityNumber = value.data.Promotion_Activity_Number__c;
             this.finishedLoadingForm = true;
             if (this.finishedLoadingBannerGroups && this.finishedLoadingObjectInfo && this.finishedLoadingBrandsAndProducts) {
                 this.loadPreEvaluationForm();
@@ -652,6 +658,9 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
     handlePublishActivityChange(event) {
         this.publishActivity = event.detail.checked;
     }
+    handleSTIRelevantChange(event) {
+        this.stiRelevant = event.detail.checked;
+    }
     handleTypeOfSpendChange(event) {
         this.typeOfSpend = event.detail.value;
         if (this.typeOfSpend == 'Non Working') {
@@ -754,6 +763,7 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
         this.activityDescription = this.theActivity.Description__c;
         this.publishActivity = this.theActivity.Publish_Activity__c;
         this.status = this.theActivity.Status__c;
+        this.stiRelevant = this.theActivity.STI_Relevant__c;
 
         this.selectedSegmentTypes = this.theActivity.Segment_Type__c == undefined ? [] : this.theActivity.Segment_Type__c.split(';');
 
@@ -890,6 +900,7 @@ export default class ActivityPreEvaluationForm extends NavigationMixin(Lightning
             evalForm.Activity_Mechanic_Comments__c = this.mechanic;
             evalForm.Description__c = this.activityDescription;
             evalForm.Publish_Activity__c = this.publishActivity;  
+            evalForm.STI_Relevant__c = this.stiRelevant;
             evalForm.Segment_Type__c = this.selectedSegmentTypes.join(';');         
             
             evalForm.Promo_Brands__c = '';

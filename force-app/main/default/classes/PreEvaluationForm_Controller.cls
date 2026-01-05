@@ -4,6 +4,7 @@ public with sharing class PreEvaluationForm_Controller {
         return [SELECT Id, Name, RecordTypeId, RecordType.Name, Status__c, Promotion_Activity_Number__c, Channel__c, Market__c, Market_Filter__c, 
                         CreatedById, CreatedBy.Name, Promo_Brands__c, Type_of_Spend__c, Segment_Type__c, Banner_Group__c, Projected_AP_Spend__c, Consumer_Driver__c,
                         Strategic_Pillar__c, Begin_Date__c, End_Date__c, Activity_Mechanic_Comments__c, Description__c, Is_Approved__c, Publish_Activity__c,
+                        STI_Relevant__c,
                         (SELECT Id, Brand__c, Brand__r.Name, Brand__r.Primary_Logo__c, Banner_Group__c, Banner_Group__r.Name, RecordTypeId, RecordType.Name, Number_of_Outlets__c, Percentage_of_Customer_Universe__c,
                                 Incremental_Distribution_Points__c, Baseline_Sales_Volume_9L__c, Baseline_SNS__c, Baseline_GP__c, Baseline_Brand_Profit__c,
                                 Projected_Sales_Volume__c, Projected_SNS__c, Projected_GP__c, Projected_Brand_Profit__c, Incremental_Brand_Profit__c,
